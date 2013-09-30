@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2013-09-30T16:06:45.087Z</updated>
+  <updated>2013-09-30T16:13:13.139Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -12,11 +12,11 @@
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
   <entry>
-    <title type="html"><![CDATA[菜鸟学R语言：用R做数据分析（零基础）之基础知识]]></title>
+    <title type="html"><![CDATA[菜鸟学R语言：用R做数据分析（零基础）之数据类型]]></title>
     <link href="http://yangliufr.com/2013/09/29/r-introduction-i/"/>
     <id>http://yangliufr.com/2013/09/29/r-introduction-i/</id>
     <published>2013-09-29T21:52:40.000Z</published>
-    <updated>2013-09-30T16:06:17.000Z</updated>
+    <updated>2013-09-30T16:12:42.000Z</updated>
     <content type="html"><![CDATA[<p>接着<a href="http://yangliufr.com/2013/09/24/r-introduction/">上一篇</a>来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：</p>
 <ol>
 <li>为上课做好笔记</li>
