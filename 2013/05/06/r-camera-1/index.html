@@ -85,15 +85,14 @@
 <p><img src="/img/c1.png" alt="R"></p>
 <p>单击图中左下区域，右键选择“全选”，复制文本框中的数据，由于连图片也一起复制了，因此我们要粘贴到新建的一个txt文档中，以清除图片，并保留原文档的排列格式。然后在txt文档中直接全选复制粘贴到新建的excel里（注意粘贴时点击excel的第一个单元格），不作任何处理，另存为文本（text tab delimited）格式到Rstudio的工作路径即可。</p>
 <p>下面就要转到Rstudio了，读取该txt文档，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>cd=read.table(<span class="string">"camera data.txt"</span>,header=<span class="literal">F</span>,sep=<span class="string">"\t"</span>)
 </pre></td></tr></table></figure>
-
 
 <p>你会发现有很多NA、空白和重复值，没关系，下一步就要取其精华了。</p>
 <p><img src="/img/c2.png" alt="R"></p>
 <p>先看每一款机型的名称、总分和排名共占有6个单元格，而整个表一共有1284行，因此共有1284/6=214款机型（当然这一步可以用函数代替，但我觉得对于格式杂乱的静态网页数据，还是具体问题具体分析的好）。下面就要写个循环来分别提取相机名称、相机总分和相机排名三列数据了。</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -130,16 +129,15 @@ colnames(cd1) = c(<span class="string">"ranks"</span>,<span class="string">"came
 <p>像这样用鼠标选中数据区域，拉到最底下复制粘贴，和刚才的操作一样，该页面共有256款机型，包括了未测试的，我们选择每页显示50个项目，这样只需要重复操作6次就可得到所有数据，我承认这是非常笨的方法，只适合菜鸟。但我觉得对于这种非动态更新的网页静态数据，没有万金油的方法可以套，毕竟主动权掌握在网页设计者手中。所以，我认为掌握一些笨方法对于极小数据量是很有用的。然后我们就得到了，</p>
 <p><img src="/img/c5.png" alt="R"></p>
 <p>同样，也有很多空行和NA值，并且有几十款机型由于各种原因，DxOmark没有评分，因此我们只选需要的，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre>cdb=cdb[which(cdb$Mpix != <span class="string">'NA'</span>),] <span class="comment">#发现数据框规律，通过反选Mpix为NA的列</span>
 cdbtested=cdb[which(cdb$Image == <span class="string">'TESTED'</span>),] <span class="comment">#选择经过测试的机型</span>
 </pre></td></tr></table></figure>
 
-
 <p>恰巧，得到的cdbtested也是214款机器。<br><img src="/img/c6.png" alt="R"></p>
 <p>接下来，要重新对cd1和cdbtested进行重新排列和合并。</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -149,16 +147,14 @@ cdbtd=cdbtested[order(cdbtested[,<span class="number">2</span>]),]
 cdnew=cbind(cd1ordered,cdbtd[,-<span class="number">1</span>])
 </pre></td></tr></table></figure>
 
-
 <p>你会发现数据框是字符格式，而且有的单元格是数字+单位的形式，为了对数据进行分析，我们需要去掉单位，将其转换为numeric格式。例如，把portrait分数中的22 bits，改成22。</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>cdnew[,<span class="number">4</span>] = sub(<span class="string">'.....$'</span>,<span class="string">''</span>,cdnew[,<span class="number">4</span>])
 </pre></td></tr></table></figure>
 
-
 <p>其他依次类推。</p>
 <p>下面，我们要把需要进行数据运算分析的列，从<code>character</code>转换成<code>numeric</code>，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -168,14 +164,12 @@ cdnew1=data.frame(lapply(cdnew1,as.character),stringsAsFactors=<span class="lite
 cdnew1[,c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">15</span>)] =as.numeric(as.matrix(cdnew1[,c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">15</span>)]))
 </pre></td></tr></table></figure>
 
-
 <p>并修改一些数据转换产生的错误，比如4:3大小的传感器，被R识别为某种运算，所有4:3的单元格都成了0.16875，因此，也要排除这些转换错误，还好，数据量比较小，容易发现。这可能是我对数据格式不熟悉，造成的，应该可以通过修改代码解决。然后选择</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre>cdnew1[which(cdnew1[,<span class="number">13</span>]==<span class="string">'0.16875'</span>),<span class="number">13</span>] = <span class="string">'4:3'</span>
 cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</span>),<span class="number">15</span>] = <span class="literal">NA</span> <span class="comment">#一些空值为0，我们也不需要，所以一并转换为NA</span>
 </pre></td></tr></table></figure>
-
 
 <p>以上就完成了所有数据的采集过程，我用了一晚上，因为很多基础的知识不熟悉，需要搜索才能解决，其实后来再看R in Action这本书的时候，发现如果要用好R，还是要重头学起，不能断章取义（以上代码多少也有断章取义的，只做到解决问题，至于代码效率就没有考虑，也没有能力考虑了）。</p>
 <p>接下来，要考虑如何分析这些数据了。先谈谈自己的看法，性价比这个东西很难界定，所以每个人要先设定自己的阈值，比如价格设在500美元，机器重量设在500g，就很满意了。当然，类似于像素等其他参数也可以考虑。这样的话，我考虑的性价比就包括了价格、机身重量和性能三项。公式很简单，</p>

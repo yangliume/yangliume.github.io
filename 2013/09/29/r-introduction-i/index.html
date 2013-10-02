@@ -91,7 +91,7 @@
 <hr>
 <h2>R 基础知识</h2>
 <h3>四则运算</h3>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -103,9 +103,8 @@
 <span class="number">5</span>^<span class="number">5</span>
 </pre></td></tr></table></figure>
 
-
 <p>这几行代码就充分展现出了R的优势之一，<strong>即时互动</strong>。大家只要在console中输入以上一行代码，就可以直接得到结果，省去了传统语言编译的过程（并不是说R中不存在编译）。</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -123,7 +122,6 @@
 [<span class="number">1</span>] <span class="number">3125</span>
 </pre></td></tr></table></figure>
 
-
 <p>以上就是运行结果。</p>
 <hr>
 <h2>R object (R 的对象)</h2>
@@ -137,52 +135,19 @@
 <li>逻辑向量</li>
 </ul>
 <p>下面来创建一个含有数值1,3,5,7的向量</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>
-&gt; v &lt;- c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>) <span class="comment">#c() 是combine，集合的意思</span>
+<pre><code class="lang-r">&gt; v &lt;- c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>) <span class="comment">#c() 是combine，集合的意思</span>
 &gt; x &lt;- c(<span class="number">0.5</span>, <span class="number">0.6</span>) <span class="comment">## numeric</span>
 &gt; x &lt;- c(<span class="literal">TRUE</span>, <span class="literal">FALSE</span>) <span class="comment">## logical</span>
 &gt; x &lt;- c(<span class="literal">T</span>, <span class="literal">F</span>) <span class="comment">## logical</span>
 &gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>) <span class="comment">## character</span>
 &gt; x &lt;- <span class="number">9</span>:<span class="number">29</span> <span class="comment">## integer</span>
-&gt; x &lt;- c(<span class="number">1</span>+<span class="number">0i</span>, <span class="number">2</span>+<span class="number">4i</span>) <span class="comment">## complex</span>
-</pre></td></tr></table></figure>
-
-
+&gt; x &lt;- c(<span class="number">1</span>+<span class="number">0i</span>, <span class="number">2</span>+<span class="number">4i</span>) <span class="comment">## complex</span></code></pre>
 <p>但，如果把两种向量<code>c()</code>到一起，会得到什么样的向量集合呢？</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>
-&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span>
+<pre><code class="lang-r">&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span>
 &gt; y &lt;- c(<span class="literal">TRUE</span>, <span class="number">2</span>) <span class="comment">## numeric</span>
-&gt; y &lt;- c(<span class="string">"a"</span>, <span class="literal">TRUE</span>) <span class="comment">## character</span>
-</pre></td></tr></table></figure>
-
-
+&gt; y &lt;- c(<span class="string">"a"</span>, <span class="literal">TRUE</span>) <span class="comment">## character</span></code></pre>
 <p>你会发现，这时向量集会被强制（coercion）转成同一类，为了符合向量的定义。这时，如果你需要提取其中的<strong>假向量</strong>用于运算，那就需要<code>as.**</code>functions，其中<code>**</code>可以是<code>numeric``logical``character``complex</code>等。如下，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre>
-&gt; x &lt;- <span class="number">0</span>:<span class="number">6</span>
+<pre><code class="lang-r">&gt; x &lt;- <span class="number">0</span>:<span class="number">6</span>
 &gt; class(x) <span class="comment">#class()用于查看向量的类</span>
 [<span class="number">1</span>] <span class="string">"integer"</span>
 &gt; as.numeric(x)
@@ -192,58 +157,23 @@
 &gt; as.character(x)
 [<span class="number">1</span>] <span class="string">"0"</span> <span class="string">"1"</span> <span class="string">"2"</span> <span class="string">"3"</span> <span class="string">"4"</span> <span class="string">"5"</span> <span class="string">"6"</span>
 &gt; as.complex(x)
-[<span class="number">1</span>] <span class="number">0</span>+<span class="number">0i</span> <span class="number">1</span>+<span class="number">0i</span> <span class="number">2</span>+<span class="number">0i</span> <span class="number">3</span>+<span class="number">0i</span> <span class="number">4</span>+<span class="number">0i</span> <span class="number">5</span>+<span class="number">0i</span> <span class="number">6</span>+<span class="number">0i</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">1</span>] <span class="number">0</span>+<span class="number">0i</span> <span class="number">1</span>+<span class="number">0i</span> <span class="number">2</span>+<span class="number">0i</span> <span class="number">3</span>+<span class="number">0i</span> <span class="number">4</span>+<span class="number">0i</span> <span class="number">5</span>+<span class="number">0i</span> <span class="number">6</span>+<span class="number">0i</span></code></pre>
 <p>如果使用<code>as.**</code>function把某类向量转化为另一类，则会得到<code>NA</code>s。如，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>
-&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)
+<pre><code class="lang-r">&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)
 &gt; as.numeric(x)
 [<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
 Warning message:
 NAs introduced by coercion
 &gt; as.logical(x)
-[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span></code></pre>
 <p>有时你可能还需要空白向量，可以用<code>vector()</code>来创建，例如创建一个长度为10的数值向量<code>x</code>，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>
-&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)
+<pre><code class="lang-r">&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)
 &gt; x
-[<span class="number">1</span>] <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">1</span>] <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span></code></pre>
 <hr>
 <h3>matrix （矩阵）</h3>
 <p>矩阵（pl. matrices）具有维度（dimension）属性（attribute）的向量。该维度属性本身是一个长度为2的整数向量（nrow,ncol），行数和列数。</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>
-&gt; m &lt;- matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
+<pre><code class="lang-r">&gt; m &lt;- matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
 &gt; m
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
 [<span class="number">1</span>,] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
@@ -252,63 +182,24 @@ NAs introduced by coercion
 [<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span>
 &gt; attributes(m)
 $dim
-[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span></code></pre>
 <p>在R中建矩阵是遵从<strong>列优先（column-wise）</strong>的原则，即，优先按照顺序从左上角开始向右一列一列地填充。如，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>
-&gt; m &lt;- matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
+<pre><code class="lang-r">&gt; m &lt;- matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
 &gt; m
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
 [<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span></code></pre>
 <p>在了解了这个特性之后，我们就可使用<code>dim()</code>来为向量集创建矩阵了，大家只要注意<strong>列优先</strong>原则即可，如，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre>
-&gt; m &lt;- <span class="number">1</span>:<span class="number">10</span>
+<pre><code class="lang-r">&gt; m &lt;- <span class="number">1</span>:<span class="number">10</span>
 &gt; m
 [<span class="number">1</span>] <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span> <span class="number">10</span>
 &gt; dim(m) &lt;- c(<span class="number">2</span>, <span class="number">5</span>)
 &gt; m
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>] [,<span class="number">4</span>] [,<span class="number">5</span>]
 [<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span></code></pre>
 <p>此外，在R中，你也可以使用<code>cbind()</code>（column-binding）和<code>rbind()</code>（row-binding）functions来创建矩阵。如，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre>
-&gt; x &lt;- <span class="number">1</span>:<span class="number">3</span>
+<pre><code class="lang-r">&gt; x &lt;- <span class="number">1</span>:<span class="number">3</span>
 &gt; y &lt;- <span class="number">10</span>:<span class="number">12</span>
 &gt; cbind(x, y)
 x y
@@ -318,10 +209,7 @@ x y
 &gt; rbind(x, y)
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
 x <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>
-y <span class="number">10</span> <span class="number">11</span> <span class="number">12</span>
-</pre></td></tr></table></figure>
-
-
+y <span class="number">10</span> <span class="number">11</span> <span class="number">12</span></code></pre>
 <p>好了，今天就到这里吧，可能这种方式对那些以结果为导向的初学者来说，进度太慢，而且枯燥乏味吧。但是，我想对于想要学好R的零基础同学来说，这样会给大家一个更全面完整的认识吧。我个人认为，还是好好了解这些基础知识更好点，因为我之前就是结果导向，有时为了除bug，会耗费很长时间，其实就是类似的对<strong>对象</strong>、<strong>向量</strong>等基础知识一知半解造成的。如今，返回来再看这个会给自己建立一个体系，饶有趣味。</p>
 
     

@@ -89,7 +89,7 @@
 <p><img src="/img/cc2_thumb.png" alt="camera2"></p>
 <p>为了核对商品名和价格，并和之前的数据库进行合并，所以商品名也要抓取。同理。</p>
 <p>价格抓取的函数如下：</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -131,16 +131,14 @@
 }
 </pre></td></tr></table></figure>
 
-
 <p>然后，执行该函数，获得的数据框如下，</p>
 <p><img src="/img/cc3_thumb.png" alt="camera3"></p>
 <p>看出里面有乱码，无所谓，去掉就好了，反正就算是汉字也是要去掉的。然后进行一下合并处理。</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre>r1[,<span class="number">2</span>] = sub(<span class="string">'^..'</span>,<span class="string">''</span>,r1[,<span class="number">2</span>])
 r1[,<span class="number">2</span>] = gsub(<span class="string">','</span>,<span class="string">''</span>,r1[,<span class="number">2</span>])
 </pre></td></tr></table></figure>
-
 
 <p>这样抓取过程就差不多了。下面就要考虑如何处理这些数据了。由于本人逃过很多数理统计课去打篮球了，为了避免不同相机的性能评分差异和价格差异不同，需要更多数据对其进行标准化后，才能得出可信的性价比。所以，干脆对其进行排序，得出排名作为其分数，这里使用的是R中的rank函数，很简单，代码就不放了。此外，为了针对不同用户，并对每一款相机负责的态度，我们先不进行全部排名，而是分类排名。</p>
 <h3>普通便携相机</h3>

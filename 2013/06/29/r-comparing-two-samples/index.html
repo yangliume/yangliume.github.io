@@ -100,31 +100,7 @@
 <p>所以，首先要确定你的数据是独立的（<code>unpaired</code>）还是配对的（<code>paired</code>）。举个例子，有两杯水，一杯是纯净水A，一杯是自来水B，实验第一天我们测一下其中氯离子浓度，十天后，再测一次。如果你要比较第十天，A与B之间的差异，就要进行独立检验；如果你要比较第一天的B和第十天的B有什么不同，那就要进行配对检验。</p>
 <p>选择好了数据形式之后，要检验其是否符合正态分布、方差齐性等t检验的零假设条件，才能最终确定使用哪种方法得到我们想要的p值。因此，这里就存在一个变数，如果各组数据都符合或都不符合零假设，都还好，就怕有的符合有的不符合，这样在有很多对数据都要进行两两比较时，就比较麻烦了。</p>
 <p>我就针对我的个人需求写了个小函数，减少了工作量，提高了成就感，即先用<code>levene</code>检验判断方差齐性，<code>p &gt; 0.05</code>的表示方差齐，然后才能进行t检验，否则进行相对应的非参数检验。在这里分享出来：</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-</pre></td><td class="code"><pre>
-p_value = <span class="keyword">function</span>(x,y,z){
+<pre><code class="lang-r">p_value = <span class="keyword">function</span>(x,y,z){
   x=data.frame(x)
   y=data.frame(y)
   c=nrow(x)
@@ -145,28 +121,14 @@ p_value = <span class="keyword">function</span>(x,y,z){
       wilcox.test(data[<span class="number">1</span>:c,<span class="number">1</span>],data[(c+<span class="number">1</span>):(c+d),<span class="number">1</span>],paired=z)$p.value
     }
   }
-}
-</pre></td></tr></table></figure>
-
-
+}</code></pre>
 <p>使用起来很简单，从数据框中选择两组数据，然后标记是独立样本（<code>TRUE</code> 或 <code>T</code>）还是配对样本（<code>FALSE</code> 或 <code>F</code>）。例如，</p>
-<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>
-&gt; a=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">0</span>)
+<pre><code class="lang-r">&gt; a=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">0</span>)
 &gt; b=c(<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">4</span>)
 &gt; p_value(a,b,<span class="literal">TRUE</span>) <span class="comment">#for unpaired data</span>
 [<span class="number">1</span>] <span class="number">0.8316408</span>
 &gt; p_value(a,b,<span class="literal">FALSE</span>) <span class="comment">#for paired data</span>
-[<span class="number">1</span>] <span class="number">0.9358497</span>
-</pre></td></tr></table></figure>
-
-
+[<span class="number">1</span>] <span class="number">0.9358497</span></code></pre>
 <p>最后，大家可以根据需要修改。</p>
 
     
