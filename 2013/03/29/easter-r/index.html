@@ -109,7 +109,7 @@
 </ol>
 <p>得出答数即可定出复活节的日期。若为正数，月份为4月；如为负数，月份为3月；若为0，则为3月31日。</p>
 <p>好吧，我读到这的时候，鼠标已经很自然的去点R studio了，因为我只会用简单的数据分析函数，还没用过R的自定义function功能，正巧dapeng同学前几天写了相关的文章，于是我参考了一下R in Nutshell，写了个自定义函数。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -141,19 +141,19 @@
 
 
 <p>运行以上代码之后，就可以随便输入1900~2099之间的任意数字，得出那一年的复活节日期了，当然要用以下格式才行，比如我要看2013年的是哪一天：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>easter(<span class="number">2013</span>)
 </pre></td></tr></table></figure>
 
 
 <p>所得到的结果为：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>[<span class="number">1</span>] <span class="string">"31, March"</span>
 </pre></td></tr></table></figure>
 
 
 <p>好玩吧？所用到的关键函数是：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 </pre></td><td class="code"><pre><span class="keyword">function</span>() {}

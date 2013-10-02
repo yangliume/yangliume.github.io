@@ -88,9 +88,10 @@
 
 </li>
 </ol>
+<hr>
 <h2>R 基础知识</h2>
 <h3>四则运算</h3>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -104,7 +105,7 @@
 
 
 <p>这几行代码就充分展现出了R的优势之一，<strong>即时互动</strong>。大家只要在console中输入以上一行代码，就可以直接得到结果，省去了传统语言编译的过程（并不是说R中不存在编译）。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -124,6 +125,7 @@
 
 
 <p>以上就是运行结果。</p>
+<hr>
 <h2>R object (R 的对象)</h2>
 <h3>vector (向量)</h3>
 <p>向量（<code>vector</code>）是R中最基本的对象。R的对象中大部分能且只能包含同一类的若干个元素，但是<code>list</code>除外，可以包含若干类的若干个元素，这也是为什么要有<code>list</code>的原因。常见的向量有：</p>
@@ -135,7 +137,7 @@
 <li>逻辑向量</li>
 </ul>
 <p>下面来创建一个含有数值1,3,5,7的向量</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -155,7 +157,7 @@
 
 
 <p>但，如果把两种向量<code>c()</code>到一起，会得到什么样的向量集合呢？</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -167,7 +169,7 @@
 
 
 <p>你会发现，这时向量集会被强制（coercion）转成同一类，为了符合向量的定义。这时，如果你需要提取其中的<strong>假向量</strong>用于运算，那就需要<code>as.**</code>functions，其中<code>**</code>可以是<code>numeric``logical``character``complex</code>等。如下，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -195,7 +197,7 @@
 
 
 <p>如果使用<code>as.**</code>function把某类向量转化为另一类，则会得到<code>NA</code>s。如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -215,7 +217,7 @@ NAs introduced by coercion
 
 
 <p>有时你可能还需要空白向量，可以用<code>vector()</code>来创建，例如创建一个长度为10的数值向量<code>x</code>，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -226,9 +228,10 @@ NAs introduced by coercion
 </pre></td></tr></table></figure>
 
 
+<hr>
 <h3>matrix （矩阵）</h3>
 <p>矩阵（pl. matrices）具有维度（dimension）属性（attribute）的向量。该维度属性本身是一个长度为2的整数向量（nrow,ncol），行数和列数。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -254,7 +257,7 @@ $dim
 
 
 <p>在R中建矩阵是遵从<strong>列优先（column-wise）</strong>的原则，即，优先按照顺序从左上角开始向右一列一列地填充。如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -270,7 +273,7 @@ $dim
 
 
 <p>在了解了这个特性之后，我们就可使用<code>dim()</code>来为向量集创建矩阵了，大家只要注意<strong>列优先</strong>原则即可，如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -292,7 +295,7 @@ $dim
 
 
 <p>此外，在R中，你也可以使用<code>cbind()</code>（column-binding）和<code>rbind()</code>（row-binding）functions来创建矩阵。如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><figcaption><span>linenos:false</span></figcaption><table><tr><td class="gutter"><pre>1
 2
 3
 4
