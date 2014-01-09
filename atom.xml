@@ -4,13 +4,53 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2013-12-06T09:27:04.705Z</updated>
+  <updated>2014-01-09T11:52:50.613Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
     <email><![CDATA[youngleoyzu@gmail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[可以去河里采样了吗？]]></title>
+    <link href="http://yangliufr.com/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/"/>
+    <id>http://yangliufr.com/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/</id>
+    <published>2014-01-09T00:00:00.000Z</published>
+    <updated>2014-01-09T10:56:49.000Z</updated>
+    <content type="html"><![CDATA[<p>新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。</p>
+<a id="more"></a>
+
+<p>法国政府网站上有各个水文站公布的数据的，我们一般打开网站看看水位超过0.8m没有，就可以决定要不要去了。</p>
+<p><img src="/img/Garonne-water-level.png" alt="Garonne water level from France goverment"></p>
+<p>网站上也很贴心的给出了表格数据，每天、每三天和每七天的数据，看到table，我就想抓。于是就写了个非常简单的脚本。</p>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">library</span>(XML)
+
+station_url = <span class="string">"http://www.vigicrues.gouv.fr/niveau3.php?idstation=1818&typegraphe=h&AffProfondeur=24&nbrstations=5&ong=2&Submit=Refaire+le+tableau+-+Valider+la+s%C3%A9lection"</span> <span class="comment">#the site we care about</span>
+table_station_url = as.data.frame(readHTMLTable(station_url)[<span class="number">1</span>])
+table_station_url[,<span class="number">2</span>] = as.numeric(as.character(table_station_url[,<span class="number">2</span>]))
+<span class="keyword">if</span>(mean(table_station_url[,<span class="number">2</span>]) &gt;= <span class="number">0.8</span>){
+  print(<span class="string">"No way! It's dangerous!"</span>)
+  <span class="keyword">else</span>{
+    print(<span class="string">"Yeah! It's ready to go!!"</span>)
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>题外话，最近在学python，从头学，因为我还挺喜欢抓取网站数据的。有国内同学想做奢侈品代购，我也写了个R脚本，抓取prada官网的价格和有无存货（里面对我来说，稍微有点技术含量的就是，找到了个有规律的json地址，于是存货与否就搞定了）。但这都只是凤毛麟角，要抓取不学python怎么行？</p>
+]]></content>
+    <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[如何用zotero在论文中引用R]]></title>
     <link href="http://yangliufr.com/2013/12/05/how-to-cite-r-in-your-paper-or-publication/"/>
@@ -22,12 +62,32 @@
 <p>后来有一阵子直到前几天，我为了能让PC端和iPad上能够云端同步，方便在iPad上阅读，查阅了很多文章资料，包括<a href="www.infotech.ac.cn/fileup/PDF/20120915.pdf‎">这篇难得的对口味的中文文献</a>，给了我很大帮助。最终，我选择了EndNote，并在淘宝上买了所谓的付费版。如果你手中也有iPad，也希望用她来作为你的科研生产力工具的话，我仍推荐你用EndNote，至于今天为什么我用回zotero，那是后话了。</p>
 <a id="more"></a>
 
-<h3>为什么要在论文里引用R？</h3>
+<h3 id="-4e3a-4ec0-4e48-8981-5728-8bba-6587-91cc-5f15-7528-R-ff1f-">为什么要在论文里引用R？</h3>
 <p>很简单，因为我用R来做数据分析和作图。</p>
-<h3>怎么引用呢？</h3>
+<h3 id="-600e-4e48-5f15-7528-5462-ff1f-">怎么引用呢？</h3>
 <p>本文所有内容对于那些手动插入引文的同学是毫无意义的。仅针对使用文献管理软件的同学，让你的文献库里面有R的身影。</p>
 <p>其实这个问题，R早就想过，估计用latex和knitr写论文的同学直接在R中使用<code>citation()</code>即可，</p>
-<pre><code class="lang-r">&gt; citation()
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>&gt; citation()
 
 To cite R <span class="keyword">in</span> publications use:
 
@@ -46,16 +106,28 @@ A BibTeX entry <span class="keyword">for</span> LaTeX users is
   }
 
 We have invested a lot of time and effort <span class="keyword">in</span> creating R, please cite it when using it <span class="keyword">for</span> data analysis. See
-also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword">for</span> citing R packages.</code></pre>
+also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword">for</span> citing R packages.
+</pre></td></tr></table></figure>
+
 <p>接下来，要稍微修改一下上面这段代码，把<code>organization</code>改为<code>publisher</code>（否则，zotero不识别原本organization的信息）。即，</p>
-<pre><code class="lang-r">  @Manual{,
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>  @Manual{,
     title = {R: A Language and Environment <span class="keyword">for</span> Statistical Computing},
     author = {R Core Team},
     publisher = {R Foundation <span class="keyword">for</span> Statistical Computing},
     address = {Vienna, Austria},
     year = {<span class="number">2013</span>},
     url = {http://www.R-project.org/},
-  }</code></pre>
+  }
+</pre></td></tr></table></figure>
+
 <p>然后，ctrl+C 拷贝全部即可，这也许就是zotero神奇的地方，然后打开zotero，点击齿轮图标，选择“从粘贴板导入（import from clipboard）”，如下图，</p>
 <p><img src="/img/zotero-r-1.png" alt="clipboard"></p>
 <p>这样就成功创建了一个引文记录，但是，还没有完全成功，因为此时在“作者（author）”一栏是有问题的，zotero或者EndNote都会自动把作者识别为Team R.Core，即Team是名，R.Core是姓。这时，就只能手动修改，让她有名无姓即可，即把R Core Team放在作者栏的第一格，并在末尾添加一个逗号“,”，如下图所示，</p>
@@ -76,11 +148,11 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
     <content type="html"><![CDATA[<p>七月下旬去的韩国首尔参加学术会议，一直没有写点啥。最近，因为广州恒大队要在亚冠决赛中与首尔FC队交锋，看到对方主教练的挑衅言论和韩国媒体的一些报道，才想起来这个国家我去过。那就说说我的感受吧。</p>
 <a id="more"></a>
 
-<h3>空姐</h3>
+<h3 id="-7a7a-59d0-">空姐</h3>
 <p>飞机上我坐最后一排，后面就是空姐坐的位置和备餐间了。那位空姐长得跟金喜善差不多，我也不知道是整容还是怎么的，典型的韩国广告中的女明星模样，当然，服务还是很到位的，即便是旁边一堆不太听话的上海旅游团大妈，她还是微笑服务。关于上海大妈我就不吐槽了，毕竟今天是说韩国。</p>
-<h3>仁川机场</h3>
+<h3 id="-4ec1-5ddd-673a-573a-">仁川机场</h3>
 <p>仁川机场相比浦东机场，从我个人感受上小一些，跟图卢兹的差不多。因为不需要走太多的路，过了海关出来走不了多远就到了乘坐大巴的地方了。对，只有大巴，没有地铁站在仁川机场。大巴很准时，座位很宽敞，很舒服，韩国大宇汽车嘛。只坐了三个人司机到点就开车了。</p>
-<h3>中国人聚集地</h3>
+<h3 id="-4e2d-56fd-4eba-805a-96c6-5730-">中国人聚集地</h3>
 <p>因为我去开会的学校是汉阳大学（Hanyang University），不在首尔市区，在一个叫安山的地方，类似于北京通县或上海松江或南京仙林之类的，所以我要转地铁和公交。地铁售票机有韩语、英语和中文的界面和操作提示，我还觉得这挺好。可以买完票就傻了，地铁开车方向的提示牌上只有韩文，我就不知道怎么坐了。情急之下，我就找了一个面善的男生用英语问了下我要去安山坐哪个方向的地铁，他似乎听不懂，我给他看我iPad里面的英文地铁路线图，他似乎懂了，招呼我一起上车，并用蹩脚的英文说他也要去那。</p>
 <p>在地铁上，我继续问，并拿出组委会给我的宾馆地址给他看，想着这韩文的东西你总能看懂了吧。没想到他还是看不懂，憋了半天看懂了biology的韩语。我就纳闷了，我不会被卖了吧，这地儿也太偏了，韩国人都不知道在哪儿。</p>
 <p>情急之下，这位“韩国友人”掏出了iPhone，想看下他存的地铁路线图，我想也对，韩国人看英文不一定方便，看他韩文的地铁图吧。没想到，手机界面是中文，我想，这哥们在学中文吗？因为以前我也装逼把手机界面调成英文来着。然后我就用英文问他说“你在学中文吗，我是中国人”，他似乎终于挺懂我的一整句英语了，并且用很纯正的东北口音回答我，我也是中国人。</p>
@@ -88,18 +160,18 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 <p>holy moley christ jesus</p>
 </blockquote>
 <p>我内心的OS就是这样。闹了半天两个中国人在韩国用英语交谈了半天。他告诉我，在我上地铁的那个地方，很多中国人开的店，周围也住着很多中国人，你随便找个人问路，肯定能找到中国人。后来他还帮了我很大的忙，借给我手机给组织者打电话，因为已经晚上9点多，我只好打车过去。走得急，只说了谢谢却没有留联系方式，我相信好人肯定有好报的。</p>
-<h3>入住</h3>
+<h3 id="-5165-4f4f-">入住</h3>
 <p>然后我就到了学校的宾馆，通过话的那个负责人是个刚上博一的韩国学生，英语很不错，也是美式口音。最后安顿在了他们学生宿舍，有十几层的一栋楼，很大很大，男女生分别在两边，一楼中间有食堂、7-11等，很方便了。宿舍是两人间的，我一个人住，有空调，相当于宾馆的标间了，条件很不错。网速超快的，要知道用的是免费wifi。迅雷离线下了不少东西。然后就等着第二天开会了。</p>
-<h3>会议过程</h3>
+<h3 id="-4f1a-8bae-8fc7-7a0b-">会议过程</h3>
 <p>本来在出发前发邮件安排我在会议第四天讲，但是，开会第一天发下来的安排表，把我们这个section调到了第二天。演讲过程很顺利，会后受到几位老师的好评，当然就当做客套话来听就好。国立台湾海洋大学的一位老师还问我是不是在美国待过，又不小心把我的美国梦点燃了起来。</p>
 <p>整个会议流程下来，我是唯一一个来自法国的代表，因为年初注册的时候，很多欧洲的老师怕南北朝会有战争的风险，没有报名参加。顿时觉得，他们真会为经济危机找借口。</p>
 <p>此外，由于我以前毕业院校非一流，在会议后的聚餐会上，我主动跟国内海大和厦大的团队问好，他们说已经注意到我的名字，以为有可能是什么华侨之类。谈话间，还是感受得到他们对于在本学科发展的同学的关怀和鼓励，并希望能够有人能够做得好。其实，对我也算是一针强心剂受益匪浅。另外，来自厦大的蔡教授对我更是关爱有加，希望以后能有机会合作。</p>
 <p>会后，得了个奖，250美元，作为travel support。我很果断的要了欧元，折合190欧元，回到家，关上门，暗地里用人民币做中间币种算了下，赚了15块哎！果然，还是没摆脱250的束缚。</p>
-<h3>汉阳大学</h3>
+<h3 id="-6c49-9633-5927-5b66-">汉阳大学</h3>
 <p>我很惊讶在汉阳大学，已经有很多外籍教授在此执教了，而且都是底栖生物无脊椎动物这一块的老师，在会议上出现的有四五位老师吧。我不知道是不是类似于国内的千人计划还是什么。就在这个学科来讲，因为大类属于生态学，没有直接的经济效益，而且也牵扯到出海采样等，需要大量资金的，居然可以引进数位外籍教师。我觉得，挂名与否已经不重要了。因为，这次国际会议是三年一届，已经召开了14届，这次第15届是第一次在亚洲举办。汉阳大学能有这个实力承办，已经说明他们有足够的学术基础。</p>
 <p>而且，从他们这几年做的项目成果可以看到，他们做的非常好。虽然大部分都是基础性的对韩国海岸线上小型底栖生物的调查性研究，但这正是考验学科功底深厚与否的最好验证，前面说了，这些基础性调查研究和分子生物学研究的重要性同样重要，因为在其他学科同学看来，影响因子高的文章就牛逼，低的就不行。有时，其实更多时候，要看你这个学科，甚至你这个研究方向的平均水准，不能一概而论。</p>
 <p>所以，我对这个学校的印象非常好，很扎实。底栖生物，尤其实效性底栖生物，无论在国外还是国内，做的人都相对较少，欧洲最多，美国其次，亚洲在这方面尤为缺乏。因为是底栖生物，又分大型和小型，一般来说，研究大型的多，笼统的相对来讲，大型的见效快。所以，亚洲发展中国家较多的情况下，资金相对不足，研究小型底栖生物的课题组就相对较少。不说能像汉阳大学这样的，国内所有在做的一双手是能数的过来的，当然国内个别大学的实力是高于汉阳大学的，例如第17届该会议的举办单位中国海洋大学。</p>
-<h3>总体印象</h3>
+<h3 id="-603b-4f53-5370-8c61-">总体印象</h3>
 <p>发达国家就是发达国家。跟法国都是法国车一样，首尔的公路上大多是韩国车，而且司机和行人的素质都很高，过马路的习惯很好，司机也不抢道。顿时觉得，这对于习惯在欧洲生活的人来到这里，除了语言和食物，没有太多的生活习惯差异。文化这个东西很难定义，主要看个人的生活习惯。一般大城市来说，大差不差了。因为毕竟过圣诞还是农历新年，差别并不大，过马路或者开车，这都是每天都要遇到的，差异化感受会更切身。</p>
 <p>唯一不满意的就是食物了，在学校食堂，条件也不错，就是整天泡菜，而且没有什么花样的蔬菜，除了白菜就是胡萝卜，肉类也少的可怜。同样是食堂，我们图卢兹三大的食堂都要好很多很多。不过一想，国际五大菜系里面有中国和法国的名字，哪儿轮得到韩国，无论他们有多想加入进来。</p>
 <p>还有，欧洲一体化的进程已经很深入了，以前的关注点都在欧美。这次在首尔，感受到中日韩这东亚三国，必须团结起来，化解矛盾，多交流，才能共同进步。民间的交流有很多了，超出了我的刻板印象。可能以前总是盲目崇拜欧美吧，对亚洲尤其东亚文化圈的关注很少，即便有也没有如此切身的体会。同样的语言不通，法国和德国，以及其他说法语和德语的国家，总有很多交流的机会和绿色通道。相信韩国、日本与中国的交流也有不少，只是以前真没从这方面多想过。同样是三种很不一样却又有些渊源的语言，中文、日文、韩文，如果日本当年没有侵略韩国、中国，如果韩国不去到处申请中国的文化遗产，我想，东亚已经一定是世界经济文化的另一个共同体。</p>
@@ -122,8 +194,8 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </li>
 </ol>
 <hr>
-<h2>R 基础知识</h2>
-<h3>四则运算</h3>
+<h2 id="R_-57fa-7840-77e5-8bc6-">R 基础知识</h2>
+<h3 id="-56db-5219-8fd0-7b97-">四则运算</h3>
 <figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -157,8 +229,8 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 
 <p>以上就是运行结果。</p>
 <hr>
-<h2>R object (R 的对象)</h2>
-<h3>vector (向量)</h3>
+<h2 id="R_object_-28-R_-7684-5bf9-8c61-29-">R object (R 的对象)</h2>
+<h3 id="vector_-28-5411-91cf-29-">vector (向量)</h3>
 <p>向量（<code>vector</code>）是R中最基本的对象。R的对象中大部分能且只能包含同一类的若干个元素，但是<code>list</code>除外，可以包含若干类的若干个元素，这也是为什么要有<code>list</code>的原因。常见的向量有：</p>
 <ul>
 <li>字符向量</li>
@@ -168,19 +240,44 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 <li>逻辑向量</li>
 </ul>
 <p>下面来创建一个含有数值1,3,5,7的向量</p>
-<pre><code class="lang-r">&gt; v &lt;- c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>) <span class="comment">#c() 是combine，集合的意思</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>&gt; v &lt;- c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>) <span class="comment">#c() 是combine，集合的意思</span>
 &gt; x &lt;- c(<span class="number">0.5</span>, <span class="number">0.6</span>) <span class="comment">## numeric</span>
 &gt; x &lt;- c(<span class="literal">TRUE</span>, <span class="literal">FALSE</span>) <span class="comment">## logical</span>
 &gt; x &lt;- c(<span class="literal">T</span>, <span class="literal">F</span>) <span class="comment">## logical</span>
 &gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>) <span class="comment">## character</span>
 &gt; x &lt;- <span class="number">9</span>:<span class="number">29</span> <span class="comment">## integer</span>
-&gt; x &lt;- c(<span class="number">1</span>+<span class="number">0i</span>, <span class="number">2</span>+<span class="number">4i</span>) <span class="comment">## complex</span></code></pre>
+&gt; x &lt;- c(<span class="number">1</span>+<span class="number">0i</span>, <span class="number">2</span>+<span class="number">4i</span>) <span class="comment">## complex</span>
+</pre></td></tr></table></figure>
+
 <p>但，如果把两种向量<code>c()</code>到一起，会得到什么样的向量集合呢？</p>
-<pre><code class="lang-r">&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span>
 &gt; y &lt;- c(<span class="literal">TRUE</span>, <span class="number">2</span>) <span class="comment">## numeric</span>
-&gt; y &lt;- c(<span class="string">"a"</span>, <span class="literal">TRUE</span>) <span class="comment">## character</span></code></pre>
+&gt; y &lt;- c(<span class="string">"a"</span>, <span class="literal">TRUE</span>) <span class="comment">## character</span>
+</pre></td></tr></table></figure>
+
 <p>你会发现，这时向量集会被强制（coercion）转成同一类，为了符合向量的定义。这时，如果你需要提取其中的<strong>假向量</strong>用于运算，那就需要<code>as.**</code>functions，其中<code>**</code>可以是<code>numeric``logical``character``complex</code>等。如下，</p>
-<pre><code class="lang-r">&gt; x &lt;- <span class="number">0</span>:<span class="number">6</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>&gt; x &lt;- <span class="number">0</span>:<span class="number">6</span>
 &gt; class(x) <span class="comment">#class()用于查看向量的类</span>
 [<span class="number">1</span>] <span class="string">"integer"</span>
 &gt; as.numeric(x)
@@ -190,23 +287,49 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 &gt; as.character(x)
 [<span class="number">1</span>] <span class="string">"0"</span> <span class="string">"1"</span> <span class="string">"2"</span> <span class="string">"3"</span> <span class="string">"4"</span> <span class="string">"5"</span> <span class="string">"6"</span>
 &gt; as.complex(x)
-[<span class="number">1</span>] <span class="number">0</span>+<span class="number">0i</span> <span class="number">1</span>+<span class="number">0i</span> <span class="number">2</span>+<span class="number">0i</span> <span class="number">3</span>+<span class="number">0i</span> <span class="number">4</span>+<span class="number">0i</span> <span class="number">5</span>+<span class="number">0i</span> <span class="number">6</span>+<span class="number">0i</span></code></pre>
+[<span class="number">1</span>] <span class="number">0</span>+<span class="number">0i</span> <span class="number">1</span>+<span class="number">0i</span> <span class="number">2</span>+<span class="number">0i</span> <span class="number">3</span>+<span class="number">0i</span> <span class="number">4</span>+<span class="number">0i</span> <span class="number">5</span>+<span class="number">0i</span> <span class="number">6</span>+<span class="number">0i</span>
+</pre></td></tr></table></figure>
+
 <p>如果使用<code>as.**</code>function把某类向量转化为另一类，则会得到<code>NA</code>s。如，</p>
-<pre><code class="lang-r">&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)
 &gt; as.numeric(x)
 [<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
 Warning message:
 NAs introduced by coercion
 &gt; as.logical(x)
-[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span></code></pre>
+[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
+</pre></td></tr></table></figure>
+
 <p>有时你可能还需要空白向量，可以用<code>vector()</code>来创建，例如创建一个长度为10的数值向量<code>x</code>，</p>
-<pre><code class="lang-r">&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)
 &gt; x
-[<span class="number">1</span>] <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span></code></pre>
+[<span class="number">1</span>] <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>
+</pre></td></tr></table></figure>
+
 <hr>
-<h3>matrix （矩阵）</h3>
+<h3 id="matrix_-ff08-77e9-9635-ff09-">matrix （矩阵）</h3>
 <p>矩阵（pl. matrices）具有维度（dimension）属性（attribute）的向量。该维度属性本身是一个长度为2的整数向量（nrow,ncol），行数和列数。</p>
-<pre><code class="lang-r">&gt; m &lt;- matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>&gt; m &lt;- matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
 &gt; m
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
 [<span class="number">1</span>,] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
@@ -215,24 +338,54 @@ NAs introduced by coercion
 [<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span>
 &gt; attributes(m)
 $dim
-[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span></code></pre>
+[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span>
+</pre></td></tr></table></figure>
+
 <p>在R中建矩阵是遵从<strong>列优先（column-wise）</strong>的原则，即，优先按照顺序从左上角开始向右一列一列地填充。如，</p>
-<pre><code class="lang-r">&gt; m &lt;- matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>&gt; m &lt;- matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
 &gt; m
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
 [<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span></code></pre>
+[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span>
+</pre></td></tr></table></figure>
+
 <p>在了解了这个特性之后，我们就可使用<code>dim()</code>来为向量集创建矩阵了，大家只要注意<strong>列优先</strong>原则即可，如，</p>
-<pre><code class="lang-r">&gt; m &lt;- <span class="number">1</span>:<span class="number">10</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>&gt; m &lt;- <span class="number">1</span>:<span class="number">10</span>
 &gt; m
 [<span class="number">1</span>] <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span> <span class="number">10</span>
 &gt; dim(m) &lt;- c(<span class="number">2</span>, <span class="number">5</span>)
 &gt; m
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>] [,<span class="number">4</span>] [,<span class="number">5</span>]
 [<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span></code></pre>
+[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span>
+</pre></td></tr></table></figure>
+
 <p>此外，在R中，你也可以使用<code>cbind()</code>（column-binding）和<code>rbind()</code>（row-binding）functions来创建矩阵。如，</p>
-<pre><code class="lang-r">&gt; x &lt;- <span class="number">1</span>:<span class="number">3</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>&gt; x &lt;- <span class="number">1</span>:<span class="number">3</span>
 &gt; y &lt;- <span class="number">10</span>:<span class="number">12</span>
 &gt; cbind(x, y)
 x y
@@ -242,7 +395,9 @@ x y
 &gt; rbind(x, y)
 [,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
 x <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>
-y <span class="number">10</span> <span class="number">11</span> <span class="number">12</span></code></pre>
+y <span class="number">10</span> <span class="number">11</span> <span class="number">12</span>
+</pre></td></tr></table></figure>
+
 <p>好了，今天就到这里吧，可能这种方式对那些以结果为导向的初学者来说，进度太慢，而且枯燥乏味吧。但是，我想对于想要学好R的零基础同学来说，这样会给大家一个更全面完整的认识吧。我个人认为，还是好好了解这些基础知识更好点，因为我之前就是结果导向，有时为了除bug，会耗费很长时间，其实就是类似的对<strong>对象</strong>、<strong>向量</strong>等基础知识一知半解造成的。如今，返回来再看这个会给自己建立一个体系，饶有趣味。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
@@ -255,7 +410,7 @@ y <span class="number">10</span> <span class="number">11</span> <span class="num
     <updated>2013-10-02T13:08:58.000Z</updated>
     <content type="html"><![CDATA[<p><em>最近在上<a href="http://coursera.org" target="_blank">coursera</a>的课，九月初的时候选了几门，现在陆续开课了。因为第一年自学数据分析和R收效甚微，想系统的学学，于是选了Statistics One （12周）和 Computing for Data Analysis （4周）。我会陆续分享我学到的知识和感想。</em><br><a id="more"></a></p>
 <hr>
-<h2>前言</h2>
+<h2 id="-524d-8a00-">前言</h2>
 <blockquote>
 <p>What makes R different?</p>
 </blockquote>
@@ -442,14 +597,14 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <updated>2013-09-29T21:42:47.000Z</updated>
     <content type="html"><![CDATA[<p>近日打开新浪就看到这类话题，貌似一个叫王旭明的人在为教育事业出谋划策，我等受教育多年的人士定有一些要表达的，且听我一一道来。<br><a id="more"></a></p>
 <p>点题，英语课确实需要取消。</p>
-<h3>英语特长生？</h3>
+<h3 id="-82f1-8bed-7279-957f-751f-ff1f-">英语特长生？</h3>
 <p>伴随着取消还要取消高考中考的英语考试，只考语文、数学以及文理的其他科目即可，而英语可以走如今艺术特长生的路，各大学外语专业，或者所有专业，可以给出一部分名额，用来招收英语特长生。第一，这样可以保证外语人才的不流失，而且提高生源质量。第二，其他专业也可根据学科发展需要招收一定的外语特长生，给予特殊的培养方案。为什么要如此设置？</p>
-<h3>外语不是知识，只是个工具而已</h3>
+<h3 id="-5916-8bed-4e0d-662f-77e5-8bc6-ff0c-53ea-662f-4e2a-5de5-5177-800c-5df2-">外语不是知识，只是个工具而已</h3>
 <p>工具，不是生活必需品。谁家可能都有个锤子、螺丝刀的，就算没有，敲开邻居大爷的门，借一把临时救个急也不会影响生活。而语文数学，就是生活必需品，你去超市菜市场买东西，不会说话不认字可不行，算不清自己有多少钱、该带多少钱也不行。你不会外语，可以，生活继续，不受影响，需要用的时候找会的人帮忙即可。</p>
 <p>不喜欢学英语的人，可以不受此限制，而根据自己其他的优势选择喜欢的专业；而喜欢英语或者英语好的人，也有等同的机会选择，而有专门的培养计划让其能充分用到英语。教育的细分、多样化，在我十几亿人口的泱泱大国，是何等重要。</p>
-<h3>现在的英语教育救了多少人，就害了多少人</h3>
+<h3 id="-73b0-5728-7684-82f1-8bed-6559-80b2-6551-4e86-591a-5c11-4eba-ff0c-5c31-5bb3-4e86-591a-5c11-4eba-">现在的英语教育救了多少人，就害了多少人</h3>
 <p>道理很简单，能把英语学以致用的人，大一统的英语教育就等于惠其一生；反之，在英语还是招考、用人单位等的评价标准时，其他找不到门路或者没有舞台发挥的人，英语教育等于浪费了他们的青春。教育本不应将一部分人的成功建立在另一部分人的失败的基础上。教育，应因材施教。</p>
-<h3>法国又是个啥情况</h3>
+<h3 id="-6cd5-56fd-53c8-662f-4e2a-5565-60c5-51b5-">法国又是个啥情况</h3>
 <p>之前有缘接触过初中没上完就来法国独闯的一个浙江温州小伙子，他目前已经通过自己的努力进入到了法国的高等教育体系中，选择的专业也是令人羡慕的某工程类专业。他了解中国教育，也深谙法国教育。据他介绍，法国也有类似高考的制度，具体考试科目和一年考几次，我不是很清楚。但学生考完后，会分成两拨，一拨成绩很突出的，如果他们愿意，可以进入到下一轮的考试备战中，考更专业的科学知识，以后进入大学就是走科学家、工程师的道路；另一拨，也可以进入大学，学习的就是技术类专业。其实，可以简单理解为，第一次考试，是高中毕业考试，你过了一定分数线，加上自己兴趣所在，可以选择继续参加选拔考试，据说竞争激烈程度不亚于中国的高考。这两拨人是有机会进入同一所大学的，只是选择专业范围上互不相同。</p>
 <p>好了，介绍半天，跟英语屁关系没有。我第一次听到这个，感到法国的教育确实非常人性化。即便如此，现在法国人在法国找工作，英语水平也会作为考核指标来参考，大学里也有英语课程，学生需要考过一定级别才能毕业（之前脚受伤在医院跟实习医生聊天了解到的）。你要知道，英法两国可是有着错综复杂的关系的，不亚于中日关系。但毕竟英语是世界最通用的语言，没有之一。虽然法国年龄大的普通人是不喜欢在公共场合说英语，但他们的年轻人接受的英语普及度已经很高了。就不分析原因了，肯定和经济文化和国际局势都有关。</p>
 <p>就我个人而言，我肯定是受益于英语的，目前国际上最先进的资料都是用英语写的，我很享受其中。但我要说个题外话，就是日本。日本的物理学、机械电子等学科是绝对领先世界其他国家的包括美国，我注意到，日本索尼、任天堂等公司在新产品发布会上，主讲人是日本人，会用流利的美式英语介绍产品。但当播放产品介绍短片时，里面会偶尔出现产品设计工程师的介绍片段，这些工程师无一例外都是日本人，也无一例外都说的日语，下面配上英文字幕。为什么？大家自己心里都有自己的判断。<br>每个人都是教育家</p>
@@ -483,7 +638,7 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 <p>下午跟老师汇报完，虽然还不是很满意，但终于没有跟我太多压力，我主动表示回国后会把演讲文本写好发过来，并录制一段演讲视频发过来作为参考。最终敲定稿子之后，他们才能舒一口气吧，毕竟我是代表整个实验室去参加的。我想，如果我能把导师的演讲技术学到，以后就能到处“忽悠”了。目前，我非常急迫的意识到了这一点，这比写论文难得多。</p>
 <p>我从内心里很重视这次会议，我刚到法国的第三天就进实验室了，第一周就开始讨论试验计划，经导师介绍后，第一个月就决定要参加这次在韩国举办的三年一届的会议。中间当然也经历了一段调整期，不知道要学什么，怎么学。还好目前已经进入了状态，从自我膨胀到自我怀疑，到了自我反省的阶段了。对我来说，估计还要来一两次如此的循环。</p>
 <p>一首打油诗，以表此时的心情。</p>
-<p>依依不舍地离开，<br>时间怎样停下来，<br>一片云彩都不带，<br>弥足珍贵是现在。<br>窗内才子望窗外，<br>碧蓝天空邃似海，<br>雄鹰翱翔高又快，<br>心里却念家乡菜。</p>
+<p>依依不舍地离开，<br>时间怎样停下来，<br>一片云彩都不带，<br>弥足珍贵是现在。<br>窗内才子望窗外，<br>碧蓝天空邃似海，<br>雄鹰翱翔高又快，<br>心里却念家乡菜。  </p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/一些思考/" term="一些思考"/>
   </entry>
@@ -499,27 +654,49 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 <thead>
 <tr>
 <th></th>
-<th align="right">符合零假设</th>
-<th align="center">不符合零假设</th>
+<th style="text-align:right">符合零假设</th>
+<th style="text-align:center">不符合零假设</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>比较两组独立样本</td>
-<td align="right">独立t检验</td>
-<td align="center">Mann-Whitney检验</td>
+<td style="text-align:right">独立t检验</td>
+<td style="text-align:center">Mann-Whitney检验</td>
 </tr>
 <tr>
 <td>比较两组配对样本</td>
-<td align="right">配对t检验</td>
-<td align="center">Wilcoxon检验</td>
+<td style="text-align:right">配对t检验</td>
+<td style="text-align:center">Wilcoxon检验</td>
 </tr>
 </tbody>
 </table>
 <p>所以，首先要确定你的数据是独立的（<code>unpaired</code>）还是配对的（<code>paired</code>）。举个例子，有两杯水，一杯是纯净水A，一杯是自来水B，实验第一天我们测一下其中氯离子浓度，十天后，再测一次。如果你要比较第十天，A与B之间的差异，就要进行独立检验；如果你要比较第一天的B和第十天的B有什么不同，那就要进行配对检验。</p>
 <p>选择好了数据形式之后，要检验其是否符合正态分布、方差齐性等t检验的零假设条件，才能最终确定使用哪种方法得到我们想要的p值。因此，这里就存在一个变数，如果各组数据都符合或都不符合零假设，都还好，就怕有的符合有的不符合，这样在有很多对数据都要进行两两比较时，就比较麻烦了。</p>
 <p>我就针对我的个人需求写了个小函数，减少了工作量，提高了成就感，即先用<code>levene</code>检验判断方差齐性，<code>p &gt; 0.05</code>的表示方差齐，然后才能进行t检验，否则进行相对应的非参数检验。在这里分享出来：</p>
-<pre><code class="lang-r">p_value = <span class="keyword">function</span>(x,y,z){
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>p_value = <span class="keyword">function</span>(x,y,z){
   x=data.frame(x)
   y=data.frame(y)
   c=nrow(x)
@@ -540,14 +717,24 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
       wilcox.test(data[<span class="number">1</span>:c,<span class="number">1</span>],data[(c+<span class="number">1</span>):(c+d),<span class="number">1</span>],paired=z)$p.value
     }
   }
-}</code></pre>
+}
+</pre></td></tr></table></figure>
+
 <p>使用起来很简单，从数据框中选择两组数据，然后标记是独立样本（<code>TRUE</code> 或 <code>T</code>）还是配对样本（<code>FALSE</code> 或 <code>F</code>）。例如，</p>
-<pre><code class="lang-r">&gt; a=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">0</span>)
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>&gt; a=c(<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">0</span>)
 &gt; b=c(<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">4</span>)
 &gt; p_value(a,b,<span class="literal">TRUE</span>) <span class="comment">#for unpaired data</span>
 [<span class="number">1</span>] <span class="number">0.8316408</span>
 &gt; p_value(a,b,<span class="literal">FALSE</span>) <span class="comment">#for paired data</span>
-[<span class="number">1</span>] <span class="number">0.9358497</span></code></pre>
+[<span class="number">1</span>] <span class="number">0.9358497</span>
+</pre></td></tr></table></figure>
+
 <p>最后，大家可以根据需要修改。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
@@ -605,10 +792,10 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <published>2013-05-17T00:00:00.000Z</published>
     <updated>2013-10-02T13:12:12.000Z</updated>
     <content type="html"><![CDATA[<p>上次写了<a href="http://yangliufr.com/2013/05/06/%e8%8f%9c%e9%b8%9f%e5%ad%a6r%e8%af%ad%e8%a8%80%ef%bc%9a%e7%94%a8r%e5%88%86%e6%9e%90%e5%93%aa%e6%ac%be%e7%9b%b8%e6%9c%ba%e6%80%a7%e4%bb%b7%e6%af%94%e6%9c%80%e9%ab%98/">如何用R分析哪款相机性价比最高</a>的文章，由于抓取的相机性能评分网站Dxomark.com上的价格数据不是实时更新的。所以，我又找了些方法学习如何抓取电商上的价格数据。<br><a id="more"></a></p>
-<h3>选哪个电商网站的商品价格</h3>
+<h3 id="-9009-54ea-4e2a-7535-5546-7f51-7ad9-7684-5546-54c1-4ef7-683c-">选哪个电商网站的商品价格</h3>
 <p>国内就全国而言比较良心的综合类电商就属“京东商城”和“亚马逊中国”了，像苏宁易购、一号店等的价格优势都各有偏重，价格更新不如京东和亚马逊能够及时反映数码产品快速变化的市场走势。然后，由于京东对网页抓取价格的行为进行了限制，对商品网页中的价格进行了图片加密，虽然页面显示是可以直接拷贝文本，但html源代码中只有图片链接。估计，用python的一些图片识别库是可以抓的，因为有网站做得挺好，比如“西贴（<a href="www.xitie.com/360buy/">www.xitie.com/360buy/</a>）”。</p>
 <p>所以，我选择了对价格战敏感度较低的亚马逊中国的商品进行价格抓取。此法同样适用于亚马逊其他网站，因为其网页源代码是类似的。</p>
-<h3>人工获取商品代码</h3>
+<h3 id="-4eba-5de5-83b7-53d6-5546-54c1-4ee3-7801-">人工获取商品代码</h3>
 <p>由于要对特定商品进行价格抓取，而不是一劳永逸的提供用户搜索，让用户选择商品。所以，必须预先获取商品的链接。幸好单反相机的商品品类不多，全靠我一个个复制粘贴而来。我没有选择全选搜索而来的链接，只选了商品代码，比如，</p>
 <p><a href="http://www.amazon.cn/gp/product/**B00C93NHHY**/ref=s9_simh_gw_p421_d0_i1?pf_rd_m=A1AJ19PSB66TGU&amp;pf_rd_s=center-3&amp;pf_rd_r=10TJ5625EJ46C17SN3ZN&amp;pf_rd_t=101&amp;pf_rd_p=58223152&amp;pf_rd_i=899254051" target="_blank">http://www.amazon.cn/gp/product/**B00C93NHHY**/ref=s9_simh_gw_p421_d0_i1?pf_rd_m=A1AJ19PSB66TGU&amp;pf_rd_s=center-3&amp;pf_rd_r=10TJ5625EJ46C17SN3ZN&amp;pf_rd_t=101&amp;pf_rd_p=58223152&amp;pf_rd_i=899254051</a></p>
 <p>链接中粗体部分就是我需要的代码，后面都是返利或者浏览行为追踪的代码。</p>
@@ -671,30 +858,30 @@ r1[,<span class="number">2</span>] = gsub(<span class="string">','</span>,<span 
 </pre></td></tr></table></figure>
 
 <p>这样抓取过程就差不多了。下面就要考虑如何处理这些数据了。由于本人逃过很多数理统计课去打篮球了，为了避免不同相机的性能评分差异和价格差异不同，需要更多数据对其进行标准化后，才能得出可信的性价比。所以，干脆对其进行排序，得出排名作为其分数，这里使用的是R中的rank函数，很简单，代码就不放了。此外，为了针对不同用户，并对每一款相机负责的态度，我们先不进行全部排名，而是分类排名。</p>
-<h3>普通便携相机</h3>
+<h3 id="-666e-901a-4fbf-643a-76f8-673a-">普通便携相机</h3>
 <table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot S100 </td><br>      <td>Compact </td><br>      <td>1794.1 </td><br>      <td>3</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix F600EXR </td><br>      <td>Compact </td><br>      <td>1250 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Canon Powershot S110 </td><br>      <td>Compact </td><br>      <td>2288 </td><br>      <td>1.5</td><br>   </tr><br>   <tr><br>      <td>Fujifilm XF1 </td><br>      <td>Compact </td><br>      <td>2549 </td><br>      <td>1.4</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC LX7 </td><br>      <td>Compact </td><br>      <td>2699 </td><br>      <td>1.285714</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix X10 </td><br>      <td>Compact </td><br>      <td>2788 </td><br>      <td>1.125</td><br>   </tr><br>   <tr><br>      <td>Canon Powershot G12 </td><br>      <td>Compact </td><br>      <td>2688 </td><br>      <td>0.75</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix F550EXR </td><br>      <td>Compact </td><br>      <td>1613.6 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot SX50 HS </td><br>      <td>Compact </td><br>      <td>3059 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon Powershot G15 </td><br>      <td>Compact </td><br>      <td>3099 </td><br>      <td>0.3</td><br>   </tr><br></table><br>可见，佳能的S100胜出，富士F600exr（国内型号F665exr）和佳能S110分列二三位。<br><br><img src="/img/canons100_thumb.jpg" alt="canons100"><br><br>###高端便携相机<br><br><table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Sony Cyber-shot DSC-RX100 </td><br>      <td>High-end compact </td><br>      <td>3772.9 </td><br>      <td>1.666667</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot S95 </td><br>      <td>High-end compact </td><br>      <td>2199 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Sony Cyber-shot DSC-RX1 </td><br>      <td>High-end compact </td><br>      <td>18988 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix X100 </td><br>      <td>High-end compact </td><br>      <td>6819 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot G1X </td><br>      <td>High-end compact </td><br>      <td>3939 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC LX5 </td><br>      <td>High-end compact </td><br>      <td>2198 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 V2 </td><br>      <td>High-end compact </td><br>      <td>5499 </td><br>      <td>0.6</td><br>   </tr><br></table>
 
 <p>果然是高端机，大家差距都不大，或者可以说是一分钱一分货，没啥好比的。索尼的黑卡相机RX100勇夺冠军，其他五款并列亚军，尼康V2位列最后并获得珍贵的季军。</p>
 <p><img src="/img/rx100.jpg" alt="rx100"></p>
-<h3>半专业单反</h3>
+<h3 id="-534a-4e13-4e1a-5355-53cd-">半专业单反</h3>
 <table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Nikon D7000 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>6188 </td><br>      <td>2.5</td><br>   </tr><br>   <tr><br>      <td>Nikon D7100 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>8199 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 60D </td><br>      <td>Semi-Pro DSLR </td><br>      <td>5399 </td><br>      <td>1.5</td><br>   </tr><br>   <tr><br>      <td>Nikon D600 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>11111 </td><br>      <td>1.428571</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 6D </td><br>      <td>Semi-Pro DSLR </td><br>      <td>10900 </td><br>      <td>1.166667</td><br>   </tr><br>   <tr><br>      <td>Nikon D800E </td><br>      <td>Semi-Pro DSLR </td><br>      <td>18199 </td><br>      <td>1.142857</td><br>   </tr><br>   <tr><br>      <td>Nikon D800 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>18199 </td><br>      <td>1.047619</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 99 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>17800 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 77 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>7474.9 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 5D Mark II </td><br>      <td>Semi-Pro DSLR </td><br>      <td>12590 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 5D Mark III </td><br>      <td>Semi-Pro DSLR </td><br>      <td>19488 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 7D </td><br>      <td>Semi-Pro DSLR </td><br>      <td>8499 </td><br>      <td>0.3</td><br>   </tr><br></table>
 
 <p>Dxomark把这些都叫做半专业，我不知道这星球上啥相机是专业的了。显然，在高端单反方面，DxoLab是尼康粉，佳能的无敌兔和无敌伞位列倒数第二和第三位，与之对应的尼康D800和D800E则排在中游，中规中矩。此外，索尼在高端单反方面一直处于中下游，因此，对该结果并不意外，所以的策略显然更多在微单上了。冠亚军分别被尼康的D7000和D7100获得。</p>
 <p><img src="/img/d7000.jpg" alt="d7000"></p>
-<h3>入门单反</h3>
+<h3 id="-5165-95e8-5355-53cd-">入门单反</h3>
 <table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Nikon D3200 </td><br>      <td>Entry-level DSLR </td><br>      <td>3070 </td><br>      <td>11</td><br>   </tr><br>   <tr><br>      <td>Nikon D5100 </td><br>      <td>Entry-level DSLR </td><br>      <td>3550 </td><br>      <td>3.333333</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 600D </td><br>      <td>Entry-level DSLR </td><br>      <td>3399 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 58 </td><br>      <td>Entry-level DSLR </td><br>      <td>3605.6 </td><br>      <td>1.5</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 57 </td><br>      <td>Entry-level DSLR </td><br>      <td>3999 </td><br>      <td>1.285714</td><br>   </tr><br>   <tr><br>      <td>Nikon D5200 </td><br>      <td>Entry-level DSLR </td><br>      <td>4499 </td><br>      <td>1.090909</td><br>   </tr><br>   <tr><br>      <td>Nikon D90 </td><br>      <td>Entry-level DSLR </td><br>      <td>4208 </td><br>      <td>0.666667</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 1100D </td><br>      <td>Entry-level DSLR </td><br>      <td>3600 </td><br>      <td>0.625</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 65 </td><br>      <td>Entry-level DSLR </td><br>      <td>4899 </td><br>      <td>0.625</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 550D </td><br>      <td>Entry-level DSLR </td><br>      <td>4299 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 650D </td><br>      <td>Entry-level DSLR </td><br>      <td>3880 </td><br>      <td>0.416667</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 700D </td><br>      <td>Entry-level DSLR </td><br>      <td>4081 </td><br>      <td>0.125</td><br>   </tr><br></table>
 
 <p>对尼康D3200获得冠军很意外，领先第二名足足6分之多，显然在性价比方面与其他11部相机拉开了差距。但也要理性看待，因为入门单反的价格基本集中在3000至5000之间，这也是普通用户开始考虑入手单反的心理价位区间。所以，既然是入门单反，根据自己喜好买就行，差别没有这张表上的那么差异大。</p>
 <p><img src="/img/d3200.jpg" alt="d3200"></p>
-<h3>微单（微型单反）</h3>
+<h3 id="-5fae-5355-ff08-5fae-578b-5355-53cd-ff09-">微单（微型单反）</h3>
 <p>我是有意把这个排名放在最后的，因为我觉得微单是普通用户享受摄影乐趣的最终归宿。具体原因可以再写一篇文章来阐述。</p>
 <table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 J1 </td><br>      <td>Hybrid </td><br>      <td>2319 </td><br>      <td>11.5</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN E-PM2 </td><br>      <td>Hybrid </td><br>      <td>2999 </td><br>      <td>2.75</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-3N </td><br>      <td>Hybrid </td><br>      <td>3099 </td><br>      <td>2.571429</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-5R </td><br>      <td>Hybrid </td><br>      <td>3580 </td><br>      <td>2.05</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN EPM1 </td><br>      <td>Hybrid </td><br>      <td>2499 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 J2 </td><br>      <td>Hybrid </td><br>      <td>2859 </td><br>      <td>1.6</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 S1 </td><br>      <td>Hybrid </td><br>      <td>3182.3 </td><br>      <td>1.4375</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN EPL3 </td><br>      <td>Hybrid </td><br>      <td>2599 </td><br>      <td>1.25</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-6 </td><br>      <td>Hybrid </td><br>      <td>5076 </td><br>      <td>1.138889</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-5N </td><br>      <td>Hybrid </td><br>      <td>4999 </td><br>      <td>1.117647</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-7 </td><br>      <td>Hybrid </td><br>      <td>6890 </td><br>      <td>1.1</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN E-PL5 </td><br>      <td>Hybrid </td><br>      <td>4199 </td><br>      <td>1.03125</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GF2 </td><br>      <td>Hybrid </td><br>      <td>3399 </td><br>      <td>0.888889</td><br>   </tr><br>   <tr><br>      <td>Olympus OM-D E-M5 </td><br>      <td>Hybrid </td><br>      <td>6380 </td><br>      <td>0.763158</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 V1 </td><br>      <td>Hybrid </td><br>      <td>3639 </td><br>      <td>0.727273</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GX1 </td><br>      <td>Hybrid </td><br>      <td>4099 </td><br>      <td>0.666667</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC-GH3 </td><br>      <td>Hybrid </td><br>      <td>9998 </td><br>      <td>0.659091</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GH2 </td><br>      <td>Hybrid </td><br>      <td>9400 </td><br>      <td>0.619048</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GF5 </td><br>      <td>Hybrid </td><br>      <td>2499 </td><br>      <td>0.6</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 J3 </td><br>      <td>Hybrid </td><br>      <td>3670.9 </td><br>      <td>0.416667</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN EP3 </td><br>      <td>Hybrid </td><br>      <td>3899 </td><br>      <td>0.230769</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GF3 </td><br>      <td>Hybrid </td><br>      <td>3975 </td><br>      <td>0.107143</td><br>   </tr><br></table>
 
 <p><img src="/img/j1.jpg" alt="j1"></p>
 <p>好家伙，尼康又夺魁了，很意外。在日本市场，可能尼康J1很畅销，但在大陆这款相机是非常小众的。微单方面，用户群最大的就是奥林巴斯的PEN系列和索尼的Nex系列。两家的旗舰级机器，奥林巴斯OM-D E-M5和索尼Nex 7的性价比分别排在中下游和中游水平。而在入门微单方面，奥巴的E-PM2战胜了索尼Nex 3N，分列本榜亚季军，但差距不大。用户再选择的时候，就要重点考虑两家的镜头群问题了，当然，这也是买微单的时候最需要考虑的。此外，过去很长一段时间索尼家热销的Nex 5N已经退出了目前市场上最具性价比相机的竞争了，其后续机型Nex 5R已经取代了她。</p>
-<h3>便携性</h3>
+<h3 id="-4fbf-643a-6027-">便携性</h3>
 <p>如果将机身重量作为便携性标准加入到性价比中，那么排名会是什么样的呢？下次再来讨论吧，顺便讲讲我个人的一点点业余的拍摄经验。</p>
-<h3>后记：</h3>
+<h3 id="-540e-8bb0-ff1a-">后记：</h3>
 <p>请注意，本文中的价格数据时基于2013年5月17日的亚马逊中国的当日价格，并且基本所有相机都是机身价格，如果亚马逊中没有机身卖，那就是搭配狗头（最廉价）的套餐价格。所以，可能对结果产生影响，大家就当做娱乐看待，各家的粉丝也不要喷我。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
@@ -867,7 +1054,7 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
 <p><a href="http://www.greenpeace.org/eastasia/living-with-danger-report/" target="_blank">调查结果</a>显示，中国有着非常普遍的严重环境问题，大量含有磷肥废料（磷石膏）的有毒化学物质，竟被开放地丢弃在了当地得几座村庄旁边。</p>
 <p>样品分析结果显示，氟化物（一种潜在的有毒物质）含量在当地几个采集点都超出了国家对有毒废弃物规定的安全标准。其中，有一处20米高的废渣，就临堆放在村庄旁边，废渣的沥出液中氟化物超出国标7倍之多。</p>
 <p>当地村民已经被磷肥生产企业和政府的不作为行为激怒了，自发组织购买了一辆铲车，开始了去除有毒废物的行动。</p>
-<p>下面这个纪录片名为“How China&#39;s fertilizer industry is endangering villager lives（中国化肥工业正危及村民生命）”</p>
+<p>下面这个纪录片名为“How China’s fertilizer industry is endangering villager lives（中国化肥工业正危及村民生命）”</p>
 <p>YouTube视频：<a href="http://www.youtube.com/watch?feature=player_embedded&amp;v=vZJBBldOTeQ" target="_blank">请点击</a></p>
 <p>尽管我们并不鼓励村民做出这种有潜在危险的行为，但村民用行动告诉大家，他们仍爱着这片土地和村庄，但他们的心在滴血。同时，这也在向当地政府释放出挑战的信号，对其不为人民服务的行为做出了警告。</p>
 <p>绿色和平（东亚）的这次调查所提供的视频证据，是对重工业化已经渗透进农业和食品生产系统中无法自拔的又一个鲜活事例。化工集约农业<a href="http://www.greenpeace.to/greenpeace/wp-content/uploads/2012/06/Tirado-and-Allsopp-2012-Phosphorus-in-Agriculture-Technical-Report-02-2012.pdf" target="_blank">使用了大量的合成化肥</a>，其生产中产生大量废弃物，对环境和人类生存造成了极大的破坏和威胁。</p>
@@ -898,13 +1085,13 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
     <published>2013-03-29T00:00:00.000Z</published>
     <updated>2013-10-02T13:10:16.000Z</updated>
     <content type="html"><![CDATA[<p>为什么说“又”呢，因为法国的假日太多了。<br><a id="more"></a></p>
-<h4>1. 法国一年有多少假期？</h4>
+<h4 id="1-_-6cd5-56fd-4e00-5e74-6709-591a-5c11-5047-671f-ff1f-">1. 法国一年有多少假期？</h4>
 <p>对于我这种上班就是放假，放假还想上班，闲不住的人来说，法国的假期很人“抓狂“，来法国不到一年，没数过有多少假期，不过不<a href="http://fr.hujiang.com/new/p115379/" target="_blank">搜</a>不知道：</p>
 <blockquote>
 <p>法国共有11个法定假日，分别是国庆节、圣诞节、元旦、五一劳动节、万圣节、圣灵降临节、复活节、耶稣升天节、圣母升天节以及一战停战日和二战停战日。如果假日当天是星期二或星期四，那么这一天可以“带”上星期一或星期五与双休日连休。</p>
 </blockquote>
 <p>彻头彻尾的”懒人国“啊，不过如此弹丸之国的经济总量世界第五，也就暂且放他一马吧。尤其是我所在的图卢兹——空客航天城，作为非专业人士看来，就是一个普通的欧洲小城。</p>
-<h4>2. 复活节是干吗的？可以吃吗？</h4>
+<h4 id="2-_-590d-6d3b-8282-662f-5e72-5417-7684-ff1f-53ef-4ee5-5403-5417-ff1f-">2. 复活节是干吗的？可以吃吗？</h4>
 <p>作为一个人文知识极度匮乏的理科生，一个在资本主义的水深火热中生存的无宗教信仰的社会主义好青年，复活节对我来说就是，不要去单位了。</p>
 <p>我专门查了下<a href="http://baike.baidu.com/view/1462.htm" target="_blank">复活节</a>（法语，La Pâque），</p>
 <blockquote>
@@ -994,7 +1181,7 @@ paste()
     <link href="http://yangliufr.com/2013/03/25/3-22-ten-truth-about-world-water-day/"/>
     <id>http://yangliufr.com/2013/03/25/3-22-ten-truth-about-world-water-day/</id>
     <published>2013-03-25T00:00:00.000Z</published>
-    <updated>2013-09-28T13:39:24.000Z</updated>
+    <updated>2013-09-27T17:15:32.000Z</updated>
     <content type="html"><![CDATA[<p><em>译者的话：中国的环境问题由来已久，全球制造业向国内转移的大浪潮，传统污染企业的添油加醋，以及环保监管无力等因素综合造成了目前的现状。如果不是因为北京出现如此严重的雾霾天气，PM2.5这个环境科学名词也不会这样家喻户晓。我们又有多少时间停歇在空气质量上呢，在2013年的世界水日上，绿色和平（GreenPeace）国际网站上刊登了这样一篇文章，本人将其全文翻译如下，以飨读者。</em><br><a id="more"></a><br>本文全文由<a href="http://yangliufr.com/">刘杨</a>编译自<a href="http://www.greenpeace.org/international/en/news/Blogs/makingwaves/world-water-day-10-devastating-facts/blog/44430/" target="_blank">greenpeace.org</a></p>
 <blockquote>
 <p>原文作者<a href="http://www.greenpeace.org/china/zh/about/team/staff/ma-tianjie/" target="_blank">Tianjie Ma（马天杰，该组织污染项目防治经理）</a></p>
@@ -1066,24 +1253,5 @@ paste()
 <p>最后，我这绝不是诺基亚的软文，大家要是觉得能看出软文的味道，哪天我去找诺基亚收钱。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/一些思考/" term="一些思考"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[＂大数据时代＂样本 = 总体？]]></title>
-    <link href="http://yangliufr.com/2013/03/19/the-era-of-big-data-sample-overall/"/>
-    <id>http://yangliufr.com/2013/03/19/the-era-of-big-data-sample-overall/</id>
-    <published>2013-03-19T00:00:00.000Z</published>
-    <updated>2013-09-27T19:33:36.000Z</updated>
-    <content type="html"><![CDATA[<p>「大数据时代」这本书刚看了五分之一，看到一个说法很发人深思。</p>
-<blockquote>
-<p>全数据模式，样本=总体</p>
-</blockquote>
-<p>书中写道：“采样一直有一个被我们广泛承认却又总有意避开的缺陷……采样忽视了细节考察。虽然我们别无选择，只能利用采样分析法来进行考察，但是在很多领域，从收集部分数据到收集尽可能多的数据的转变已经发生了。如果可能的话，我们会收集所有的数据。”<br><a id="more"></a><br>然后作者举了几个例子证明这一观点。谷歌通过分析美国几十亿条互联网检索记录（用户检索感冒药等相关信息），成功预测了某个州的流感蔓延趋势；Farecast公司通过12000个初始样本起家，为用户预测一年中某一航线的最低机票价格，从而平均为每个用户节省了50美元；分析师通过分析11年中超过64000场相扑比赛记录寻找异常性，发现由于特殊的比赛积分制度，日本相扑运动员会在自己积分不受影响的情况下消极比赛主动输给对手，并在下一场与同一对手的较量中得到对手的恩惠。</p>
-<p>我就有一个问题，拥有多少数据算多？用赵本山小品中的一句话说，要多少是多，要什么自行车？</p>
-<p>根据作者给出的这几个例子来看，似乎，能分析出更多的细节，而这些细节是用传统的抽样方法分析不出来的这样的数据就可以称之为大数据，当然这是非常笼统的。我想作者的意思是，随着计算机和互联网的处理能力和数据存储能力以及存储量的不断发展，对大数据的分析与洞察是大势所趋，必然会挖掘出更多有价值信息。因此，不严谨的说，在现有技术条件下能够得到的数据量的相对最大值就是大数据，就可以称之为总体，而不仅仅是样本了。</p>
-<p>但继续随着科技的发展、人们对事物认知水平的深入提高，过去的总体可能会慢慢再次变成样本，人们对数据总体有了新的认识，数据间的关联性比人类现在想象的还要复杂，打个比方，在未来的大大大数据时代，我左手刚要抬起去端起咖啡杯，而右手正要点击搜索框，大脑中准备搜索关键词“红色”的时候，二次元空间的另一头就有智慧生命通过分析知道我想看毛片了。这是肿么做到的呢？他们通过汇总我从石器时代的祖先到现在我的基因序列，与左手肱二头肌上的肌皮神经释放的神经元信号强度进行一次匹配，在与右手食指指甲缝里氧气浓度的变化量进行二次比对，结合大脑每个细胞的瞬时渗透压分析出的并翻译成了若干种语言的电子信号，得出了我要看毛片的结论，至于这个“毛片”是爱情动作片还是大型纪录片“毛泽东”，还需要当时空气中的二氧化硅质量分数，来确定我是否在为人民“服务”。</p>
-<p>调侃而已，言归正传，我看这本书的动机就是想用大数据时代的统计精神来指导我的科研实践，而当我看到这一章的时候，起初内心是非常兴奋的，因为会有更多的信息被挖掘出来，为人类造福是肯定的。但一瞬间之后，就开始对自己现在做的所谓的采样调查性质的实验产生了必要性和可行性方面的思考，担忧自己的实验学科会在不远的将来会完全被计算机模型模拟而取代。仔细想想，如果科技水平还未达到上一段提到的那种水平时，我们所得到的总体还都是样本，我们也永远得不到真在的总体，除非人类的大脑达到极限或已经被机器征服。所以，实验学科当然还要快速发展下去。其实原书中也提到，大数据时代的样本=总体的概念对于社会科学的发展是颠覆性的，因为这门学科过去过分依赖样本分析、研究和调查问卷，而现在人文社会科学领域从业者可以搜集到很多过去搜集不到的信息，因此这个大数据时代是属于他们的。</p>
-<p>毕竟，人还是要先把人研究透了，机器永远是人的仆人。</p>
-]]></content>
-    <category scheme="http://yangliufr.com/tags/读书笔记/" term="读书笔记"/>
   </entry>
 </feed>

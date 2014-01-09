@@ -41,7 +41,7 @@
   <div class="wrapper">
     <header id="header"><div class="title">
   <h1><a href="/">Yang Liu fr</a></h1>
-  <p><a href="/">a meiobenthologist's blog</a></p>
+  <p><a href="/">a meiobenthologist&#39;s blog</a></p>
 </div>
 <nav class="nav">
   <ul>
@@ -77,20 +77,38 @@
     
       <p>刚开始学R，连菜鸟都算不上，姑且希望毕业前能算个菜鸟吧。</p>
 <p>= 和 &lt;- 或者 -&gt; 有什么区别呢？<br><a id="more"></a><br>有fortran或c语言基础的同学应该都会有这个疑问，并且被&lt;-这种反人类的赋值符号折腾的苦恼不已，你需要在键盘上完成四个动作才能打出这个符号：1.按住shift，2.按下&gt;键，3.松开shift，4.按下-键，更何况我用的法语键盘，各种痛苦估计只有用德语键盘的童鞋能理解吧。而“=”，就只需要按一次。说起二者的区别，yihui大神在其博文中有很好的阐释，高屋建瓴。对于零基础初学者拜读一下大神的文章是不无裨益的，但我想把我理解的区别从文中提炼出来，毕竟大部分R的使用者，尤其像我这种半路和尚，只会用到冰山一角，从底层去理解R有些没有必要，不能完全体会到大神洋洋洒洒的行文中忽冷忽热的调侃。所以，各位半路和尚（尼姑）们：</p>
-<pre><code class="lang-r">x = <span class="number">2</span>  <span class="comment">#给x赋值为2</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>x = <span class="number">2</span>  <span class="comment">#给x赋值为2</span>
 x &lt; -<span class="number">1</span> <span class="comment">#判断x是否小于-1，返回逻辑值</span>
 x &lt;- <span class="number">1</span> <span class="comment">#覆盖x先前的赋值，重新给x赋值为1</span>
-x        <span class="comment">#显示x</span></code></pre>
+x        <span class="comment">#显示x</span>
+</pre></td></tr></table></figure>
+
 <p>运行结果是</p>
-<pre><code class="lang-r">[<span class="number">1</span>] <span class="literal">FALSE</span>
-[<span class="number">1</span>] <span class="number">1</span></code></pre>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>[<span class="number">1</span>] <span class="literal">FALSE</span>
+[<span class="number">1</span>] <span class="number">1</span>
+</pre></td></tr></table></figure>
+
 <p>所以我们可以总结一下，</p>
-<pre><code class="lang-r">x &lt;- <span class="number">1</span>  <span class="comment">#给x赋值为1</span>
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>x &lt;- <span class="number">1</span>  <span class="comment">#给x赋值为1</span>
 x&lt;-<span class="number">1</span>    <span class="comment">#给x赋值为1</span>
 x&lt;- <span class="number">1</span>   <span class="comment">#给x赋值为1</span>
 x &lt;-<span class="number">1</span>   <span class="comment">#给x赋值为1</span>
 x&lt; -<span class="number">1</span>   <span class="comment">#判断x是否小于-1，并返回逻辑值</span>
-x &lt; -<span class="number">1</span>  <span class="comment">#判断x是否小于-1，并返回逻辑值</span></code></pre>
+x &lt; -<span class="number">1</span>  <span class="comment">#判断x是否小于-1，并返回逻辑值</span>
+</pre></td></tr></table></figure>
+
 <p>你应该可以发现其中的区别，所以养成一个好习惯，在运算符号前后都要加上空格是避免语法错误的根本解决方法。一旦你养成了这个习惯，那么 “=”和“&lt;-”就没有区别了。</p>
 <p>大神yihui似乎是个等号党，关于“=”除了赋值之外，还具有传递函数的功能，因此造成歧义这一块我是看不懂的，这些都仅仅存在与神神的脑海里。总之，如果你之前学习的是R in nutshell，并已经习惯了在赋值功能上使用箭头&lt;-的话，那么你就养成前后空格的好习惯就好，因为该书作者认为&lt;-的赋值符号更直观更好理解；如果你从别的语言转过来，习惯用等号=的话，那就继续用吧。</p>
 
@@ -144,7 +162,7 @@ x &lt; -<span class="number">1</span>  <span class="comment">#判断x是否小�
   
     <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
   
-    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>8</small></li>
+    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>9</small></li>
   
     <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
   
@@ -160,6 +178,10 @@ x &lt; -<span class="number">1</span>  <span class="comment">#判断x是否小�
   <ul class="entry">
     
       <li>
+        <a href="/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/">可以去河里采样了吗？</a>
+      </li>
+    
+      <li>
         <a href="/2013/12/05/how-to-cite-r-in-your-paper-or-publication/">如何用zotero在论文中引用R</a>
       </li>
     
@@ -173,10 +195,6 @@ x &lt; -<span class="number">1</span>  <span class="comment">#判断x是否小�
     
       <li>
         <a href="/2013/09/24/r-introduction/">菜鸟学R语言：用R做数据分析（零基础）之前言</a>
-      </li>
-    
-      <li>
-        <a href="/2013/09/12/yes-cancel-english-education/">赞成取消英语课</a>
       </li>
     
   </ul>
@@ -206,7 +224,7 @@ x &lt; -<span class="number">1</span>  <span class="comment">#判断x是否小�
   </div>
   <footer id="footer"><div class="copyright">
   
-  &copy; 2013 <a href="/">Yang Liu</a>
+  &copy; 2014 <a href="/">Yang Liu</a>
   
 </div>
 <div class="theme-copyright">
