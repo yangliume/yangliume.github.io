@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-01-14T13:20:02.278Z</updated>
+  <updated>2014-01-14T13:49:46.631Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -16,7 +16,7 @@
     <link href="http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/"/>
     <id>http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/</id>
     <published>2014-01-14T00:00:00.000Z</published>
-    <updated>2014-01-14T13:14:27.000Z</updated>
+    <updated>2014-01-14T13:48:10.000Z</updated>
     <content type="html"><![CDATA[<p>上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇<a href="http://logos.name/archives/52" target="_blank">博文</a>，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。</p>
 <a id="more"></a>
 
@@ -200,7 +200,7 @@ constellation = <span class="keyword">function</span>(x,y){
     <link href="http://yangliufr.com/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/"/>
     <id>http://yangliufr.com/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/</id>
     <published>2014-01-09T00:00:00.000Z</published>
-    <updated>2014-01-09T12:25:19.000Z</updated>
+    <updated>2014-01-14T13:49:37.000Z</updated>
     <content type="html"><![CDATA[<p>新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。</p>
 <a id="more"></a>
 
@@ -241,7 +241,7 @@ table_station_url[,<span class="number">2</span>] = as.numeric(as.character(tabl
     <link href="http://yangliufr.com/2013/12/05/how-to-cite-r-in-your-paper-or-publication/"/>
     <id>http://yangliufr.com/2013/12/05/how-to-cite-r-in-your-paper-or-publication/</id>
     <published>2013-12-05T00:00:00.000Z</published>
-    <updated>2014-01-14T13:14:41.000Z</updated>
+    <updated>2014-01-14T13:49:28.000Z</updated>
     <content type="html"><![CDATA[<p>一些题外话：</p>
 <p>之前的<a href="http://yangliufr.com/2013/04/03/zotero-1/">zotero教程</a>没能继续下去，因为我没什么信心去改变用户习惯，例如很多人写论文插入引文时，还会手写插入而不愿意去用文献管理软件。可能是我想太多了。</p>
 <p>后来有一阵子直到前几天，我为了能让PC端和iPad上能够云端同步，方便在iPad上阅读，查阅了很多文章资料，包括<a href="http://www.infotech.ac.cn/fileup/PDF/20120915.pdf‎" target="_blank">这篇难得的对口味的中文文献</a>，给了我很大帮助。最终，我选择了EndNote，并在淘宝上买了所谓的付费版。如果你手中也有iPad，也希望用她来作为你的科研生产力工具的话，我仍推荐你用EndNote，至于今天为什么我用回zotero，那是后话了。</p>
