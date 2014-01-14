@@ -206,6 +206,7 @@ data_player_all_full[data_player_all_full$birthdate == <span class="string">""</
 35
 36
 37
+38
 </pre></td><td class="code"><pre>c= do.call(rbind.data.frame, strsplit(data_player_all_full$birthdate,<span class="string">"/"</span>))
 names(c) = c(<span class="string">'birthmonth'</span>,<span class="string">'birthday'</span>,<span class="string">'birthyear'</span>)
 c$birthmonth = as.numeric(as.character(c$birthmonth))
@@ -241,7 +242,8 @@ constellation = <span class="keyword">function</span>(x,y){
 }
 
 <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(data_player_all_full$birthmonth)) {
-  data_player_all_full$constellation[i] = constellation(data_player_all_full$birthmonth[i],data_player_all_full$birthday[i])
+  data_player_all_full$constellation[i] = constellation(data_player_all_full$birthmonth[i],
+  data_player_all_full$birthday[i])
 }
 </pre></td></tr></table></figure>
 

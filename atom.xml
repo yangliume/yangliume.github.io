@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-01-14T13:53:35.960Z</updated>
+  <updated>2014-01-14T13:55:40.361Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -16,7 +16,7 @@
     <link href="http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/"/>
     <id>http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/</id>
     <published>2014-01-14T00:00:00.000Z</published>
-    <updated>2014-01-14T13:48:26.000Z</updated>
+    <updated>2014-01-14T13:50:35.000Z</updated>
     <content type="html"><![CDATA[<p>上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇<a href="http://logos.name/archives/52" target="_blank">博文</a>，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。</p>
 <a id="more"></a>
 
@@ -149,6 +149,7 @@ data_player_all_full[data_player_all_full$birthdate == <span class="string">""</
 35
 36
 37
+38
 </pre></td><td class="code"><pre>c= do.call(rbind.data.frame, strsplit(data_player_all_full$birthdate,<span class="string">"/"</span>))
 names(c) = c(<span class="string">'birthmonth'</span>,<span class="string">'birthday'</span>,<span class="string">'birthyear'</span>)
 c$birthmonth = as.numeric(as.character(c$birthmonth))
@@ -184,7 +185,8 @@ constellation = <span class="keyword">function</span>(x,y){
 }
 
 <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(data_player_all_full$birthmonth)) {
-  data_player_all_full$constellation[i] = constellation(data_player_all_full$birthmonth[i],data_player_all_full$birthday[i])
+  data_player_all_full$constellation[i] = constellation(data_player_all_full$birthmonth[i],
+  data_player_all_full$birthday[i])
 }
 </pre></td></tr></table></figure>
 
