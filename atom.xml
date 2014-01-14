@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-01-14T13:49:46.631Z</updated>
+  <updated>2014-01-14T13:53:35.960Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -16,7 +16,7 @@
     <link href="http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/"/>
     <id>http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/</id>
     <published>2014-01-14T00:00:00.000Z</published>
-    <updated>2014-01-14T13:48:10.000Z</updated>
+    <updated>2014-01-14T13:48:26.000Z</updated>
     <content type="html"><![CDATA[<p>上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇<a href="http://logos.name/archives/52" target="_blank">博文</a>，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。</p>
 <a id="more"></a>
 
@@ -47,9 +47,9 @@ get_url = getURL(url, encoding = <span class="string">"UTF-8"</span>)
 get_url_parse = htmlParse(get_url, encoding = <span class="string">"UTF-8"</span>)
 url_player_initial = xpathSApply(get_url_parse, <span class="string">"//tr/td[1]/a"</span>, <span class="keyword">function</span>(x) c(xmlAttrs(x)[[<span class="string">"href"</span>]]))
 url_modify = <span class="string">"http://www.basketball-reference.com"</span>
-url_player_all = sapply(url_player_initial, <span class="keyword">function</span>(x) paste(url_modify,x,sep=<span class="string">""</span>)) <span class="comment">##终于得到了所有字母链接</span>
+url_player_all = sapply(url_player_initial, <span class="keyword">function</span>(x) paste(url_modify,x,sep=<span class="string">""</span>))
 
-data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x) readHTMLTable(x)) <span class="comment">##读取每个字母链接里的html表数据</span>
+data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x) readHTMLTable(x))
 </pre></td></tr></table></figure>
 
 <p>在表中有粗体的名字，意思是现役球员，也可以单独标注出来，这里我就通过判断是否在2014年还在服役来确定是否现役，最后结果比直接抓取现役球员要少，可能因为有的球员有伤病，或者被下放到低级联赛锻炼一年等原因，合同停滞在2012/13年，大概有一百多位这样的球员。</p>
@@ -180,7 +180,7 @@ constellation = <span class="keyword">function</span>(x,y){
   <span class="keyword">if</span>(x ==  <span class="number">1</span>& y &gt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Aquarius"</span>) <span class="keyword">else</span>
   <span class="keyword">if</span>(x ==  <span class="number">2</span>& y &lt;= <span class="number">18</span>) <span class="keyword">return</span>(<span class="string">"Aquarius"</span>) <span class="keyword">else</span>
   <span class="keyword">if</span>(x ==  <span class="number">2</span>& y &gt;= <span class="number">19</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span>
-  <span class="keyword">if</span>(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span> <span class="keyword">return</span>(<span class="string">"Alien"</span>) <span class="comment">#in case of no data available</span>
+  <span class="keyword">if</span>(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span> <span class="keyword">return</span>(<span class="string">"Alien"</span>)
 }
 
 <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(data_player_all_full$birthmonth)) {

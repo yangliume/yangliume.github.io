@@ -104,9 +104,9 @@ get_url = getURL(url, encoding = <span class="string">"UTF-8"</span>)
 get_url_parse = htmlParse(get_url, encoding = <span class="string">"UTF-8"</span>)
 url_player_initial = xpathSApply(get_url_parse, <span class="string">"//tr/td[1]/a"</span>, <span class="keyword">function</span>(x) c(xmlAttrs(x)[[<span class="string">"href"</span>]]))
 url_modify = <span class="string">"http://www.basketball-reference.com"</span>
-url_player_all = sapply(url_player_initial, <span class="keyword">function</span>(x) paste(url_modify,x,sep=<span class="string">""</span>)) <span class="comment">##终于得到了所有字母链接</span>
+url_player_all = sapply(url_player_initial, <span class="keyword">function</span>(x) paste(url_modify,x,sep=<span class="string">""</span>))
 
-data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x) readHTMLTable(x)) <span class="comment">##读取每个字母链接里的html表数据</span>
+data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x) readHTMLTable(x))
 </pre></td></tr></table></figure>
 
 <p>在表中有粗体的名字，意思是现役球员，也可以单独标注出来，这里我就通过判断是否在2014年还在服役来确定是否现役，最后结果比直接抓取现役球员要少，可能因为有的球员有伤病，或者被下放到低级联赛锻炼一年等原因，合同停滞在2012/13年，大概有一百多位这样的球员。</p>
@@ -237,7 +237,7 @@ constellation = <span class="keyword">function</span>(x,y){
   <span class="keyword">if</span>(x ==  <span class="number">1</span>& y &gt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Aquarius"</span>) <span class="keyword">else</span>
   <span class="keyword">if</span>(x ==  <span class="number">2</span>& y &lt;= <span class="number">18</span>) <span class="keyword">return</span>(<span class="string">"Aquarius"</span>) <span class="keyword">else</span>
   <span class="keyword">if</span>(x ==  <span class="number">2</span>& y &gt;= <span class="number">19</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span>
-  <span class="keyword">if</span>(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span> <span class="keyword">return</span>(<span class="string">"Alien"</span>) <span class="comment">#in case of no data available</span>
+  <span class="keyword">if</span>(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span> <span class="keyword">return</span>(<span class="string">"Alien"</span>)
 }
 
 <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(data_player_all_full$birthmonth)) {
