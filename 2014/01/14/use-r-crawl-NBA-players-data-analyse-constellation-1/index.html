@@ -85,7 +85,7 @@
 <p>点开球员页面的<a href="www.basketball-reference.com/players/">链接</a>，发现是按照姓名排序的。</p>
 <p><img src="/img/basketball-reference-1.png" alt="basketball-reference-1"></p>
 <p>而且，点进去某个字母链接，就可以直接得到所有的球员，这是最赞的，也是对抓取技能要求最低的了。所以，第一步就要抓取这个页面上的所有字母链接，再打开每个字母链接，抓取所有数据。很纳闷，居然NBA球员没有姓Xavier的，导致X字母下面居然没有一个人。</p>
-<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -96,24 +96,24 @@
 9
 10
 11
-</pre></td><td class="code"><pre>library(XML)
-library(RCurl)
+</pre></td><td class="code"><pre><span class="keyword">library</span>(XML)
+<span class="keyword">library</span>(RCurl)
 
 url = <span class="string">"http://www.basketball-reference.com/players/"</span>
 get_url = getURL(url, encoding = <span class="string">"UTF-8"</span>)
 get_url_parse = htmlParse(get_url, encoding = <span class="string">"UTF-8"</span>)
-url_player_initial = xpathSApply(get_url_parse, <span class="string">"//tr/td[1]/a"</span>, <span class="function"><span class="keyword">function</span><span class="params">(x)</span> <span class="title">c</span><span class="params">(xmlAttrs<span class="params">(x)</span>[[<span class="string">"href"</span>]])</span>)
-<span class="title">url_modify</span> = "<span class="title">http</span>://<span class="title">www</span>.<span class="title">basketball</span>-<span class="title">reference</span>.<span class="title">com</span>"
-<span class="title">url_player_all</span> = <span class="title">sapply</span><span class="params">(url_player_initial, function<span class="params">(x)</span> paste<span class="params">(url_modify,x,sep=<span class="string">""</span>)</span>)</span> ##终于得到了所有字母链接
+url_player_initial = xpathSApply(get_url_parse, <span class="string">"//tr/td[1]/a"</span>, <span class="keyword">function</span>(x) c(xmlAttrs(x)[[<span class="string">"href"</span>]]))
+url_modify = <span class="string">"http://www.basketball-reference.com"</span>
+url_player_all = sapply(url_player_initial, <span class="keyword">function</span>(x) paste(url_modify,x,sep=<span class="string">""</span>)) <span class="comment">##终于得到了所有字母链接</span>
 
-<span class="title">data_player_all</span> = <span class="title">sapply</span><span class="params">(url_player_all, function<span class="params">(x)</span> readHTMLTable<span class="params">(x)</span>)</span> ##读取每个字母链接里的<span class="title">html</span>表数据</span>
+data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x) readHTMLTable(x)) <span class="comment">##读取每个字母链接里的html表数据</span>
 </pre></td></tr></table></figure>
 
 <p>在表中有粗体的名字，意思是现役球员，也可以单独标注出来，这里我就通过判断是否在2014年还在服役来确定是否现役，最后结果比直接抓取现役球员要少，可能因为有的球员有伤病，或者被下放到低级联赛锻炼一年等原因，合同停滞在2012/13年，大概有一百多位这样的球员。</p>
 <p><img src="/img/basketball-reference-2.png" alt="basketball-reference-2"></p>
 <h3 id="-5c06-6293-53d6-7684-8868-6570-636e-683c-5f0f-5316-">将抓取的表数据格式化</h3>
 <p>我不知道python的scrapy或者beautifulsoup是什么样，R抓取的网页数据，如果想拿来做数据分析，似乎都要这个过程，把抓下来的html节点，<code>as.numeric(as.character())</code>一下，不知道有木有更简便的方法啊？</p>
-<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -127,24 +127,24 @@ url_player_initial = xpathSApply(get_url_parse, <span class="string">"//tr/td[1]
 12
 13
 </pre></td><td class="code"><pre>data_player_all_full = as.data.frame(data_player_all[<span class="number">1</span>])
-<span class="function"><span class="title">for</span><span class="params">(i in <span class="number">2</span>:<span class="function_name">length</span>(data_player_all))</span>{
-  <span class="title">tmp</span> = <span class="title">as</span>.<span class="title">data</span>.<span class="title">frame</span><span class="params">(data_player_all[i])</span>
-  <span class="title">names</span><span class="params">(data_player_all_full)</span> = <span class="title">names</span><span class="params">(tmp)</span>
-  <span class="title">data_player_all_full</span> = <span class="title">rbind</span><span class="params">(data_player_all_full, tmp)</span>
+<span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">2</span>:length(data_player_all)){
+  tmp = as.data.frame(data_player_all[i])
+  names(data_player_all_full) = names(tmp)
+  data_player_all_full = rbind(data_player_all_full, tmp)
 }
 
-<span class="title">names</span><span class="params">(data_player_all_full)</span> = <span class="title">c</span><span class="params">(<span class="string">"player"</span>,<span class="string">"from"</span>,<span class="string">"to"</span>,<span class="string">"position"</span>,<span class="string">"height"</span>,<span class="string">"weight"</span>,<span class="string">"birthdate"</span>,<span class="string">"college"</span>)</span>
-<span class="title">data_player_all_full</span>$<span class="title">from</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(data_player_all_full$from))</span>
-<span class="title">data_player_all_full</span>$<span class="title">to</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(data_player_all_full$to))</span>
-<span class="title">data_player_all_full</span>$<span class="title">weight</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(data_player_all_full$weight))</span>
-<span class="title">data_player_all_full</span>$<span class="title">height</span> = <span class="title">sapply</span><span class="params">(data_player_all_full$height, <span class="variable">FUN</span>=<span class="keyword">fun</span><span class="function_name">ction</span>(x) <span class="function_name">sub</span>(<span class="string">"-"</span>,<span class="string">"."</span>,x))
-data_player_all_full$height = as.<span class="function_name">numeric</span>(as.<span class="function_name">character</span>(data_player_all_full$height))</span></span>
+names(data_player_all_full) = c(<span class="string">"player"</span>,<span class="string">"from"</span>,<span class="string">"to"</span>,<span class="string">"position"</span>,<span class="string">"height"</span>,<span class="string">"weight"</span>,<span class="string">"birthdate"</span>,<span class="string">"college"</span>)
+data_player_all_full$from = as.numeric(as.character(data_player_all_full$from))
+data_player_all_full$to = as.numeric(as.character(data_player_all_full$to))
+data_player_all_full$weight = as.numeric(as.character(data_player_all_full$weight))
+data_player_all_full$height = sapply(data_player_all_full$height, FUN=<span class="keyword">function</span>(x) sub(<span class="string">"-"</span>,<span class="string">"."</span>,x))
+data_player_all_full$height = as.numeric(as.character(data_player_all_full$height))
 </pre></td></tr></table></figure>
 
 <p>这一段纯粹为了擦屁股，但为了能分析数据，也是很至关重要的。</p>
 <h3 id="-54ea-4e2a-661f-5ea7-7684-NBA-7403-5458-6700-591a-ff1f-">哪个星座的NBA球员最多？</h3>
 <p>知道我有多无聊了吧。数据里的出生日期是英文格式，所以又需要把它转成数字格式，我没找到有函数可以方便的转换，应该没有这么智能的，于是还是手动转吧。</p>
-<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -155,8 +155,8 @@ data_player_all_full$height = as.<span class="function_name">numeric</span>(as.<
 9
 10
 11
-</pre></td><td class="code"><pre><span class="comment">## replace date to numeric</span>
-from = c(<span class="string">'January'</span>,<span class="string">'February'</span>,<span class="string">'March'</span>,<span class="string">'April'</span>,<span class="string">'May'</span>,<span class="string">'June'</span>,<span class="string">'July'</span>,<span class="string">'August'</span>,<span class="string">'September'</span>,<span class="string">'October'</span>,<span class="string">'November'</span>,<span class="string">'December'</span>,<span class="string">','</span>,<span class="string">' '</span>)
+</pre></td><td class="code"><pre>from = c(<span class="string">'January'</span>,<span class="string">'February'</span>,<span class="string">'March'</span>,<span class="string">'April'</span>,<span class="string">'May'</span>,<span class="string">'June'</span>,
+         <span class="string">'July'</span>,<span class="string">'August'</span>,<span class="string">'September'</span>,<span class="string">'October'</span>,<span class="string">'November'</span>,<span class="string">'December'</span>,<span class="string">','</span>,<span class="string">' '</span>)
 to = c(<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>,<span class="string">'6'</span>,<span class="string">'7'</span>,<span class="string">'8'</span>,<span class="string">'9'</span>,<span class="string">'10'</span>,<span class="string">'11'</span>,<span class="string">'12'</span>,<span class="string">''</span>,<span class="string">'/'</span>)
 gsub2 = <span class="keyword">function</span>(pattern, replacement,x,<span class="keyword">...</span>){
   <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(pattern))
@@ -165,11 +165,11 @@ gsub2 = <span class="keyword">function</span>(pattern, replacement,x,<span class
 }
 
 data_player_all_full$birthdate = gsub2(from, to, data_player_all_full$birthdate)
-data_player_all_full[data_player_all_full$birthdate == <span class="string">""</span>,]$birthdate = <span class="string">"00/00/0000"</span> <span class="comment">##replace NULL to 00/00/0000</span>
+data_player_all_full[data_player_all_full$birthdate == <span class="string">""</span>,]$birthdate = <span class="string">"00/00/0000"</span>
 </pre></td></tr></table></figure>
 
 <p>转完之后，再把mm/dd/yyyy格式的日期，分割成三列，用来根据月份和日期判断星座。</p>
-<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -207,62 +207,48 @@ data_player_all_full[data_player_all_full$birthdate == <span class="string">""</
 36
 37
 </pre></td><td class="code"><pre>c= do.call(rbind.data.frame, strsplit(data_player_all_full$birthdate,<span class="string">"/"</span>))
-<span class="function"><span class="title">names</span><span class="params">(c)</span> = <span class="title">c</span><span class="params">('birthmonth','birthday','birthyear')</span>
-<span class="title">c</span>$<span class="title">birthmonth</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(c$birthmonth))</span>
-<span class="title">c</span>$<span class="title">birthday</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(c$birthday))</span>
-<span class="title">c</span>$<span class="title">birthyear</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(c$birthyear))</span>
-<span class="title">data_player_all_full</span> = <span class="title">cbind</span><span class="params">(data_player_all_full,c)</span>
+names(c) = c(<span class="string">'birthmonth'</span>,<span class="string">'birthday'</span>,<span class="string">'birthyear'</span>)
+c$birthmonth = as.numeric(as.character(c$birthmonth))
+c$birthday = as.numeric(as.character(c$birthday))
+c$birthyear = as.numeric(as.character(c$birthyear))
+data_player_all_full = cbind(data_player_all_full,c)
 
-<span class="title">constellation</span> = <span class="title">function</span><span class="params">(x,y)</span>{
-  <span class="title">if</span><span class="params">(x == <span class="number">3</span> & y &gt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aries"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">4</span> & y &lt;= <span class="number">19</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aries"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">4</span> & y &gt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Taurus"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">5</span> & y &lt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Taurus"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">5</span> & y &gt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Gemini"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">6</span> & y &lt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Gemini"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">6</span> & y &gt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Cancer"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">7</span> & y &lt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Cancer"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">7</span> & y &gt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Leo"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">8</span> & y &lt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Leo"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">8</span> & y &gt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Virgo"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">9</span> & y &lt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Virgo"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">9</span> & y &gt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Libra"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">10</span>& y &lt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Libra"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">10</span>& y &gt;= <span class="number">24</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Scorpio"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">11</span>& y &lt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Scorpio"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">11</span>& y &gt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Sagittarius"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">12</span>& y &lt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Sagittarius"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x == <span class="number">12</span>& y &gt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Capricorn"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x ==  <span class="number">1</span>& y &lt;= <span class="number">19</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Capricorn"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x ==  <span class="number">1</span>& y &gt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aquarius"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x ==  <span class="number">2</span>& y &lt;= <span class="number">18</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aquarius"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x ==  <span class="number">2</span>& y &gt;= <span class="number">19</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Pisces"</span>)</span> <span class="title">else</span>
-  <span class="title">if</span><span class="params">(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Pisces"</span>)</span> <span class="title">else</span> <span class="title">return</span><span class="params">(<span class="string">"Alien"</span>)</span>
+constellation = <span class="keyword">function</span>(x,y){
+  <span class="keyword">if</span>(x == <span class="number">3</span> & y &gt;= <span class="number">21</span>) <span class="keyword">return</span>(<span class="string">"Aries"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">4</span> & y &lt;= <span class="number">19</span>) <span class="keyword">return</span>(<span class="string">"Aries"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">4</span> & y &gt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Taurus"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">5</span> & y &lt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Taurus"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">5</span> & y &gt;= <span class="number">21</span>) <span class="keyword">return</span>(<span class="string">"Gemini"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">6</span> & y &lt;= <span class="number">21</span>) <span class="keyword">return</span>(<span class="string">"Gemini"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">6</span> & y &gt;= <span class="number">22</span>) <span class="keyword">return</span>(<span class="string">"Cancer"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">7</span> & y &lt;= <span class="number">22</span>) <span class="keyword">return</span>(<span class="string">"Cancer"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">7</span> & y &gt;= <span class="number">23</span>) <span class="keyword">return</span>(<span class="string">"Leo"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">8</span> & y &lt;= <span class="number">22</span>) <span class="keyword">return</span>(<span class="string">"Leo"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">8</span> & y &gt;= <span class="number">23</span>) <span class="keyword">return</span>(<span class="string">"Virgo"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">9</span> & y &lt;= <span class="number">22</span>) <span class="keyword">return</span>(<span class="string">"Virgo"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">9</span> & y &gt;= <span class="number">23</span>) <span class="keyword">return</span>(<span class="string">"Libra"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">10</span>& y &lt;= <span class="number">23</span>) <span class="keyword">return</span>(<span class="string">"Libra"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">10</span>& y &gt;= <span class="number">24</span>) <span class="keyword">return</span>(<span class="string">"Scorpio"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">11</span>& y &lt;= <span class="number">21</span>) <span class="keyword">return</span>(<span class="string">"Scorpio"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">11</span>& y &gt;= <span class="number">22</span>) <span class="keyword">return</span>(<span class="string">"Sagittarius"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">12</span>& y &lt;= <span class="number">21</span>) <span class="keyword">return</span>(<span class="string">"Sagittarius"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x == <span class="number">12</span>& y &gt;= <span class="number">22</span>) <span class="keyword">return</span>(<span class="string">"Capricorn"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x ==  <span class="number">1</span>& y &lt;= <span class="number">19</span>) <span class="keyword">return</span>(<span class="string">"Capricorn"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x ==  <span class="number">1</span>& y &gt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Aquarius"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x ==  <span class="number">2</span>& y &lt;= <span class="number">18</span>) <span class="keyword">return</span>(<span class="string">"Aquarius"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x ==  <span class="number">2</span>& y &gt;= <span class="number">19</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span>
+  <span class="keyword">if</span>(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>) <span class="keyword">return</span>(<span class="string">"Pisces"</span>) <span class="keyword">else</span> <span class="keyword">return</span>(<span class="string">"Alien"</span>) <span class="comment">#in case of no data available</span>
 }
 
-<span class="title">for</span><span class="params">(i in <span class="number">1</span>:<span class="function_name">length</span>(data_player_all_full$birthmonth))</span> {
-  <span class="title">data_player_all_full</span>$<span class="title">constellation</span>[<span class="title">i</span>] = <span class="title">constellation</span><span class="params">(data_player_all_full$birthmonth[i],data_player_all_full$birthday[i])</span>
-}</span>
+<span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(data_player_all_full$birthmonth)) {
+  data_player_all_full$constellation[i] = constellation(data_player_all_full$birthmonth[i],data_player_all_full$birthday[i])
+}
 </pre></td></tr></table></figure>
 
 <p>好了，就这样。其实想想，应该可以直接通过字符串语句的来判断星座的，必须得有更好的方法。</p>
 <p>先做个简单的统计图，看看哪个星座的NBA球员最多。</p>
-<hr>
-<p> &nbsp;     Var1      Freq </p>
-<hr>
-<p> <strong>13</strong>     Virgo     386  </p>
-<p> <strong>4</strong>     Cancer     369  </p>
-<p> <strong>6</strong>     Gemini     363  </p>
-<p> <strong>9</strong>     Pisces     362  </p>
-<p> <strong>2</strong>    Aquarius    361  </p>
-<p> <strong>8</strong>      Libra     348  </p>
-<p> <strong>7</strong>       Leo      345  </p>
-<p> <strong>3</strong>      Aries     341  </p>
-<p> <strong>11</strong>    Scorpio    335  </p>
-<p> <strong>10</strong>  Sagittarius  321  </p>
-<p> <strong>12</strong>    Taurus     321  </p>
-<p> <strong>5</strong>    Capricorn   314  </p>
-<h2 id="_-3c-strong-3e-1-3c-2f-strong-3e-_Alien_36_"> <strong>1</strong>      Alien      36  </h2>
+<p><img src="/img/NBA-constellation.png" alt="NBA-constellation"></p>
+<p>看来处女座的NBA球员最多，而摩羯座的最少啊，不过差别不多啦。</p>
 
     
   </div>
