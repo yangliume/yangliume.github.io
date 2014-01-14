@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-01-14T10:54:41.764Z</updated>
+  <updated>2014-01-14T13:20:02.278Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -16,16 +16,16 @@
     <link href="http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/"/>
     <id>http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/</id>
     <published>2014-01-14T00:00:00.000Z</published>
-    <updated>2014-01-14T10:49:32.000Z</updated>
-    <content type="html"><![CDATA[<p>上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇<a href="logos.name/archives/52">博文</a>，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。</p>
+    <updated>2014-01-14T13:14:27.000Z</updated>
+    <content type="html"><![CDATA[<p>上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇<a href="http://logos.name/archives/52" target="_blank">博文</a>，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。</p>
 <a id="more"></a>
 
-<p>其实，论功能和解决问题的专注程度，我眼中的R是最简单直接的，可能因为我对python不熟悉吧，但有人表示<a href="www.talyarkoni.org/blog/2013/11/18/the-homogenization-of-scientific-computing-or-why-python-is-steadily-eating-other-languages-lunch/">python正在蚕食R在科研计算方面的蛋糕</a>，也验证了我平时如果想用R做除了分析数据，画图，抓取网页数据之外的事情时，比如建网站，打包程序等，发现R有点捉襟见肘的想法了。所以，我才动了要学python的念头，但学一门外语是多么不容易啊。</p>
+<p>其实，论功能和解决问题的专注程度，我眼中的R是最简单直接的，可能因为我对python不熟悉吧，但有人表示<a href="http://www.talyarkoni.org/blog/2013/11/18/the-homogenization-of-scientific-computing-or-why-python-is-steadily-eating-other-languages-lunch/" target="_blank">python正在蚕食R在科研计算方面的蛋糕</a>，也验证了我平时如果想用R做除了分析数据，画图，抓取网页数据之外的事情时，比如建网站，打包程序等，发现R有点捉襟见肘的想法了。所以，我才动了要学python的念头，但学一门外语是多么不容易啊。</p>
 <p>R应该是我计算机语言中的母语，虽然大学里学过fortran，但为了考试学的知识毕竟不是那么牢固。我学习R的过程，就是先有问题，再去寻找R中可能的解决方案的，然后在这个过程中慢慢体会这门语言的过程。感觉就像老板拍脑门要做个什么事，就告诉下属去做，然后给我结果一样，只不过我既是老板又是下属。</p>
 <p>接着第一段说，有了学django的挫败感之后，我为了寻找慰藉，又打开了Rstudio，希望能找回那顺畅熟悉的感觉。果然，同样的事情，很快就解决了，可谓驾轻就熟。可能django里牵扯到更多的编程思想，从model.py，view.py到setting.py，admin.py，这些只是网页后台框架，还要写app的model.py。在我上手试用后，感觉非常生涩，对library、function、model的命名规则不太习惯，说白了，压根没入门。所以，我还要多花时间去啃着块骨头。</p>
 <p>好了，以上都是本文的题外话或者前情提要吧。我既然又用回R来抓取数据了，就将代码分享出来吧。</p>
 <h3 id="-5148-5206-6790-518d-6293-53d6-">先分析再抓取</h3>
-<p>点开球员页面的<a href="www.basketball-reference.com/players/">链接</a>，发现是按照姓名排序的。</p>
+<p>点开球员页面的<a href="http://www.basketball-reference.com/players/" target="_blank">链接</a>，发现是按照姓名排序的。</p>
 <p><img src="/img/basketball-reference-1.png" alt="basketball-reference-1"></p>
 <p>而且，点进去某个字母链接，就可以直接得到所有的球员，这是最赞的，也是对抓取技能要求最低的了。所以，第一步就要抓取这个页面上的所有字母链接，再打开每个字母链接，抓取所有数据。很纳闷，居然NBA球员没有姓Xavier的，导致X字母下面居然没有一个人。</p>
 <figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
@@ -241,10 +241,10 @@ table_station_url[,<span class="number">2</span>] = as.numeric(as.character(tabl
     <link href="http://yangliufr.com/2013/12/05/how-to-cite-r-in-your-paper-or-publication/"/>
     <id>http://yangliufr.com/2013/12/05/how-to-cite-r-in-your-paper-or-publication/</id>
     <published>2013-12-05T00:00:00.000Z</published>
-    <updated>2014-01-14T08:09:33.000Z</updated>
+    <updated>2014-01-14T13:14:41.000Z</updated>
     <content type="html"><![CDATA[<p>一些题外话：</p>
-<p>之前的<a href="yangliufr.com/2013/04/03/zotero-1/">zotero教程</a>没能继续下去，因为我没什么信心去改变用户习惯，例如很多人写论文插入引文时，还会手写插入而不愿意去用文献管理软件。可能是我想太多了。</p>
-<p>后来有一阵子直到前几天，我为了能让PC端和iPad上能够云端同步，方便在iPad上阅读，查阅了很多文章资料，包括<a href="www.infotech.ac.cn/fileup/PDF/20120915.pdf‎">这篇难得的对口味的中文文献</a>，给了我很大帮助。最终，我选择了EndNote，并在淘宝上买了所谓的付费版。如果你手中也有iPad，也希望用她来作为你的科研生产力工具的话，我仍推荐你用EndNote，至于今天为什么我用回zotero，那是后话了。</p>
+<p>之前的<a href="http://yangliufr.com/2013/04/03/zotero-1/">zotero教程</a>没能继续下去，因为我没什么信心去改变用户习惯，例如很多人写论文插入引文时，还会手写插入而不愿意去用文献管理软件。可能是我想太多了。</p>
+<p>后来有一阵子直到前几天，我为了能让PC端和iPad上能够云端同步，方便在iPad上阅读，查阅了很多文章资料，包括<a href="http://www.infotech.ac.cn/fileup/PDF/20120915.pdf‎" target="_blank">这篇难得的对口味的中文文献</a>，给了我很大帮助。最终，我选择了EndNote，并在淘宝上买了所谓的付费版。如果你手中也有iPad，也希望用她来作为你的科研生产力工具的话，我仍推荐你用EndNote，至于今天为什么我用回zotero，那是后话了。</p>
 <a id="more"></a>
 
 <h3 id="-4e3a-4ec0-4e48-8981-5728-8bba-6587-91cc-5f15-7528-R-ff1f-">为什么要在论文里引用R？</h3>
