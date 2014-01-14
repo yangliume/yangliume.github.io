@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>用R抓取NBA球员数据 | Yang Liu fr</title>
+  <meta name="author" content="Yang Liu">
+  
+  <meta name="description" content="上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇博文，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <meta property="og:title" content="用R抓取NBA球员数据"/>
+  <meta property="og:site_name" content="Yang Liu fr"/>
+
+  <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44434779-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <div class="wrapper">
+    <header id="header"><div class="title">
+  <h1><a href="/">Yang Liu fr</a></h1>
+  <p><a href="/">a meiobenthologist&#39;s blog</a></p>
+</div>
+<nav class="nav">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">博文目录</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/resume">简历</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-01-14T00:00:00.000Z"><a href="/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/">2014 / 01 / 14</a></time>
+    
+    
+  
+    <h1 class="title">用R抓取NBA球员数据</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇<a href="logos.name/archives/52">博文</a>，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。</p>
+<a id="more"></a>
+
+<p>其实，论功能和解决问题的专注程度，我眼中的R是最简单直接的，可能因为我对python不熟悉吧，但有人表示<a href="www.talyarkoni.org/blog/2013/11/18/the-homogenization-of-scientific-computing-or-why-python-is-steadily-eating-other-languages-lunch/">python正在蚕食R在科研计算方面的蛋糕</a>，也验证了我平时如果想用R做除了分析数据，画图，抓取网页数据之外的事情时，比如建网站，打包程序等，发现R有点捉襟见肘的想法了。所以，我才动了要学python的念头，但学一门外语是多么不容易啊。</p>
+<p>R应该是我计算机语言中的母语，虽然大学里学过fortran，但为了考试学的知识毕竟不是那么牢固。我学习R的过程，就是先有问题，再去寻找R中可能的解决方案的，然后在这个过程中慢慢体会这门语言的过程。感觉就像老板拍脑门要做个什么事，就告诉下属去做，然后给我结果一样，只不过我既是老板又是下属。</p>
+<p>接着第一段说，有了学django的挫败感之后，我为了寻找慰藉，又打开了Rstudio，希望能找回那顺畅熟悉的感觉。果然，同样的事情，很快就解决了，可谓驾轻就熟。可能django里牵扯到更多的编程思想，从model.py，view.py到setting.py，admin.py，这些只是网页后台框架，还要写app的model.py。在我上手试用后，感觉非常生涩，对library、function、model的命名规则不太习惯，说白了，压根没入门。所以，我还要多花时间去啃着块骨头。</p>
+<p>好了，以上都是本文的题外话或者前情提要吧。我既然又用回R来抓取数据了，就将代码分享出来吧。</p>
+<h3 id="-5148-5206-6790-518d-6293-53d6-">先分析再抓取</h3>
+<p>点开球员页面的<a href="www.basketball-reference.com/players/">链接</a>，发现是按照姓名排序的。</p>
+<p><img src="/img/basketball-reference-1.png" alt="basketball-reference-1"></p>
+<p>而且，点进去某个字母链接，就可以直接得到所有的球员，这是最赞的，也是对抓取技能要求最低的了。所以，第一步就要抓取这个页面上的所有字母链接，再打开每个字母链接，抓取所有数据。很纳闷，居然NBA球员没有姓Xavier的，导致X字母下面居然没有一个人。</p>
+<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>library(XML)
+library(RCurl)
+
+url = <span class="string">"http://www.basketball-reference.com/players/"</span>
+get_url = getURL(url, encoding = <span class="string">"UTF-8"</span>)
+get_url_parse = htmlParse(get_url, encoding = <span class="string">"UTF-8"</span>)
+url_player_initial = xpathSApply(get_url_parse, <span class="string">"//tr/td[1]/a"</span>, <span class="function"><span class="keyword">function</span><span class="params">(x)</span> <span class="title">c</span><span class="params">(xmlAttrs<span class="params">(x)</span>[[<span class="string">"href"</span>]])</span>)
+<span class="title">url_modify</span> = "<span class="title">http</span>://<span class="title">www</span>.<span class="title">basketball</span>-<span class="title">reference</span>.<span class="title">com</span>"
+<span class="title">url_player_all</span> = <span class="title">sapply</span><span class="params">(url_player_initial, function<span class="params">(x)</span> paste<span class="params">(url_modify,x,sep=<span class="string">""</span>)</span>)</span> ##终于得到了所有字母链接
+
+<span class="title">data_player_all</span> = <span class="title">sapply</span><span class="params">(url_player_all, function<span class="params">(x)</span> readHTMLTable<span class="params">(x)</span>)</span> ##读取每个字母链接里的<span class="title">html</span>表数据</span>
+</pre></td></tr></table></figure>
+
+<p>在表中有粗体的名字，意思是现役球员，也可以单独标注出来，这里我就通过判断是否在2014年还在服役来确定是否现役，最后结果比直接抓取现役球员要少，可能因为有的球员有伤病，或者被下放到低级联赛锻炼一年等原因，合同停滞在2012/13年，大概有一百多位这样的球员。</p>
+<p><img src="/img/basketball-reference-2.png" alt="basketball-reference-2"></p>
+<h3 id="-5c06-6293-53d6-7684-8868-6570-636e-683c-5f0f-5316-">将抓取的表数据格式化</h3>
+<p>我不知道python的scrapy或者beautifulsoup是什么样，R抓取的网页数据，如果想拿来做数据分析，似乎都要这个过程，把抓下来的html节点，<code>as.numeric(as.character())</code>一下，不知道有木有更简便的方法啊？</p>
+<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>data_player_all_full = as.data.frame(data_player_all[<span class="number">1</span>])
+<span class="function"><span class="title">for</span><span class="params">(i in <span class="number">2</span>:<span class="function_name">length</span>(data_player_all))</span>{
+  <span class="title">tmp</span> = <span class="title">as</span>.<span class="title">data</span>.<span class="title">frame</span><span class="params">(data_player_all[i])</span>
+  <span class="title">names</span><span class="params">(data_player_all_full)</span> = <span class="title">names</span><span class="params">(tmp)</span>
+  <span class="title">data_player_all_full</span> = <span class="title">rbind</span><span class="params">(data_player_all_full, tmp)</span>
+}
+
+<span class="title">names</span><span class="params">(data_player_all_full)</span> = <span class="title">c</span><span class="params">(<span class="string">"player"</span>,<span class="string">"from"</span>,<span class="string">"to"</span>,<span class="string">"position"</span>,<span class="string">"height"</span>,<span class="string">"weight"</span>,<span class="string">"birthdate"</span>,<span class="string">"college"</span>)</span>
+<span class="title">data_player_all_full</span>$<span class="title">from</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(data_player_all_full$from))</span>
+<span class="title">data_player_all_full</span>$<span class="title">to</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(data_player_all_full$to))</span>
+<span class="title">data_player_all_full</span>$<span class="title">weight</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(data_player_all_full$weight))</span>
+<span class="title">data_player_all_full</span>$<span class="title">height</span> = <span class="title">sapply</span><span class="params">(data_player_all_full$height, <span class="variable">FUN</span>=<span class="keyword">fun</span><span class="function_name">ction</span>(x) <span class="function_name">sub</span>(<span class="string">"-"</span>,<span class="string">"."</span>,x))
+data_player_all_full$height = as.<span class="function_name">numeric</span>(as.<span class="function_name">character</span>(data_player_all_full$height))</span></span>
+</pre></td></tr></table></figure>
+
+<p>这一段纯粹为了擦屁股，但为了能分析数据，也是很至关重要的。</p>
+<h3 id="-54ea-4e2a-661f-5ea7-7684-NBA-7403-5458-6700-591a-ff1f-">哪个星座的NBA球员最多？</h3>
+<p>知道我有多无聊了吧。数据里的出生日期是英文格式，所以又需要把它转成数字格式，我没找到有函数可以方便的转换，应该没有这么智能的，于是还是手动转吧。</p>
+<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">## replace date to numeric</span>
+from = c(<span class="string">'January'</span>,<span class="string">'February'</span>,<span class="string">'March'</span>,<span class="string">'April'</span>,<span class="string">'May'</span>,<span class="string">'June'</span>,<span class="string">'July'</span>,<span class="string">'August'</span>,<span class="string">'September'</span>,<span class="string">'October'</span>,<span class="string">'November'</span>,<span class="string">'December'</span>,<span class="string">','</span>,<span class="string">' '</span>)
+to = c(<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>,<span class="string">'6'</span>,<span class="string">'7'</span>,<span class="string">'8'</span>,<span class="string">'9'</span>,<span class="string">'10'</span>,<span class="string">'11'</span>,<span class="string">'12'</span>,<span class="string">''</span>,<span class="string">'/'</span>)
+gsub2 = <span class="keyword">function</span>(pattern, replacement,x,<span class="keyword">...</span>){
+  <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(pattern))
+    x = gsub(pattern[i],replacement[i],x,<span class="keyword">...</span>)
+  x
+}
+
+data_player_all_full$birthdate = gsub2(from, to, data_player_all_full$birthdate)
+data_player_all_full[data_player_all_full$birthdate == <span class="string">""</span>,]$birthdate = <span class="string">"00/00/0000"</span> <span class="comment">##replace NULL to 00/00/0000</span>
+</pre></td></tr></table></figure>
+
+<p>转完之后，再把mm/dd/yyyy格式的日期，分割成三列，用来根据月份和日期判断星座。</p>
+<figure class="highlight lang-{r}"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="code"><pre>c= do.call(rbind.data.frame, strsplit(data_player_all_full$birthdate,<span class="string">"/"</span>))
+<span class="function"><span class="title">names</span><span class="params">(c)</span> = <span class="title">c</span><span class="params">('birthmonth','birthday','birthyear')</span>
+<span class="title">c</span>$<span class="title">birthmonth</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(c$birthmonth))</span>
+<span class="title">c</span>$<span class="title">birthday</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(c$birthday))</span>
+<span class="title">c</span>$<span class="title">birthyear</span> = <span class="title">as</span>.<span class="title">numeric</span><span class="params">(as.<span class="function_name">character</span>(c$birthyear))</span>
+<span class="title">data_player_all_full</span> = <span class="title">cbind</span><span class="params">(data_player_all_full,c)</span>
+
+<span class="title">constellation</span> = <span class="title">function</span><span class="params">(x,y)</span>{
+  <span class="title">if</span><span class="params">(x == <span class="number">3</span> & y &gt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aries"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">4</span> & y &lt;= <span class="number">19</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aries"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">4</span> & y &gt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Taurus"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">5</span> & y &lt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Taurus"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">5</span> & y &gt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Gemini"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">6</span> & y &lt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Gemini"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">6</span> & y &gt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Cancer"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">7</span> & y &lt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Cancer"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">7</span> & y &gt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Leo"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">8</span> & y &lt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Leo"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">8</span> & y &gt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Virgo"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">9</span> & y &lt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Virgo"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">9</span> & y &gt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Libra"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">10</span>& y &lt;= <span class="number">23</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Libra"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">10</span>& y &gt;= <span class="number">24</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Scorpio"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">11</span>& y &lt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Scorpio"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">11</span>& y &gt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Sagittarius"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">12</span>& y &lt;= <span class="number">21</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Sagittarius"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x == <span class="number">12</span>& y &gt;= <span class="number">22</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Capricorn"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x ==  <span class="number">1</span>& y &lt;= <span class="number">19</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Capricorn"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x ==  <span class="number">1</span>& y &gt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aquarius"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x ==  <span class="number">2</span>& y &lt;= <span class="number">18</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Aquarius"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x ==  <span class="number">2</span>& y &gt;= <span class="number">19</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Pisces"</span>)</span> <span class="title">else</span>
+  <span class="title">if</span><span class="params">(x ==  <span class="number">3</span>& y &lt;= <span class="number">20</span>)</span> <span class="title">return</span><span class="params">(<span class="string">"Pisces"</span>)</span> <span class="title">else</span> <span class="title">return</span><span class="params">(<span class="string">"Alien"</span>)</span>
+}
+
+<span class="title">for</span><span class="params">(i in <span class="number">1</span>:<span class="function_name">length</span>(data_player_all_full$birthmonth))</span> {
+  <span class="title">data_player_all_full</span>$<span class="title">constellation</span>[<span class="title">i</span>] = <span class="title">constellation</span><span class="params">(data_player_all_full$birthmonth[i],data_player_all_full$birthday[i])</span>
+}</span>
+</pre></td></tr></table></figure>
+
+<p>好了，就这样。其实想想，应该可以直接通过字符串语句的来判断星座的，必须得有更好的方法。</p>
+<p>先做个简单的统计图，看看哪个星座的NBA球员最多。</p>
+<hr>
+<p> &nbsp;     Var1      Freq </p>
+<hr>
+<p> <strong>13</strong>     Virgo     386  </p>
+<p> <strong>4</strong>     Cancer     369  </p>
+<p> <strong>6</strong>     Gemini     363  </p>
+<p> <strong>9</strong>     Pisces     362  </p>
+<p> <strong>2</strong>    Aquarius    361  </p>
+<p> <strong>8</strong>      Libra     348  </p>
+<p> <strong>7</strong>       Leo      345  </p>
+<p> <strong>3</strong>      Aries     341  </p>
+<p> <strong>11</strong>    Scorpio    335  </p>
+<p> <strong>10</strong>  Sagittarius  321  </p>
+<p> <strong>12</strong>    Taurus     321  </p>
+<p> <strong>5</strong>    Capricorn   314  </p>
+<h2 id="_-3c-strong-3e-1-3c-2f-strong-3e-_Alien_36_"> <strong>1</strong>      Alien      36  </h2>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  
+  <div class="tags">
+    <a href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div>
+  </div>
+  <div class="widget-wrapper">
+    <aside id="sidebar">
+  
+  
+    
+      
+      
+    
+      
+      
+
+<div class="widget tag first">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Journal Club/">Journal Club</a><small>1</small></li>
+  
+    <li><a href="/tags/一些思考/">一些思考</a><small>13</small></li>
+  
+    <li><a href="/tags/文献管理软件/">文献管理软件</a><small>1</small></li>
+  
+    <li><a href="/tags/科技的那些事/">科技的那些事</a><small>4</small></li>
+  
+    <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
+  
+    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>10</small></li>
+  
+    <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+    
+      
+      
+
+<div class="widget recent-posts">
+  <h3 class="title">最近的文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/">用R抓取NBA球员数据</a>
+      </li>
+    
+      <li>
+        <a href="/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/">可以去河里采样了吗？</a>
+      </li>
+    
+      <li>
+        <a href="/2013/12/05/how-to-cite-r-in-your-paper-or-publication/">如何用zotero在论文中引用R</a>
+      </li>
+    
+      <li>
+        <a href="/2013/10/04/my-view-of-south-korea/">我印象中的韩国：参加国际小型底栖生物会议有感</a>
+      </li>
+    
+      <li>
+        <a href="/2013/09/29/r-introduction-i/">菜鸟学R语言：用R做数据分析（零基础）之数据类型</a>
+      </li>
+    
+  </ul>
+</div>
+
+    
+      
+      
+
+<div class="widget blogroll">
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+  
+    
+    <li><a href="https://tumutanzi.com/" target="_blank">tumutanzi</a></li>
+  
+    
+    <li><a href="http://dapengde.com" target="_blank">dapengde</a></li>
+  
+  </ul>
+</div>
+
+    
+  
+</aside>
+<div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Yang Liu</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var disqus_shortname = 'yangliufr';
+
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
