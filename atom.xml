@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-01-28T20:28:13.786Z</updated>
+  <updated>2014-02-05T23:44:27.802Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -12,20 +12,55 @@
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
   <entry>
+    <title type="html"><![CDATA[菜鸟学R语言：结合文献数据库，分析学科发展概况]]></title>
+    <link href="http://yangliufr.com/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/"/>
+    <id>http://yangliufr.com/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/</id>
+    <published>2014-02-05T00:00:00.000Z</published>
+    <updated>2014-02-05T23:44:20.000Z</updated>
+    <content type="html"><![CDATA[<p>最近因为图卢兹总是下雨，河水水位居高不下，所以，我就赋闲了。我从来也不是一个务正业的人，有了时间，除了看文献之外，总要干点什么。这次时间充裕，加上导师让我不要着急，我心里只能嘀咕着，我可不想延期毕业。于是，有了时间自由支配，所以，就琢磨着完成一开始学R的时候想要完成的一个idea，就是，根据文献搜索结果，来进行分析预测学科发展走势。
+<a id="more"></a></p>
+<p>当然，想法总是丰满，现实总是骨感的。经过两天的钻研，也只能摸到个text mining（文本挖掘）课堂之外楼道转角楼梯口的男厕所的冰山一角。我对这方面的兴趣和知识储备是呈反比的，但丝毫没有影响我不务正业的脚步。这次，我就讲讲思路，代码就不贴了，有兴趣的可以自己搞出来，或者想办法联系我，大牛的话，就当做看看儿时的自己吧。</p>
+<h3 id="-endnote-">从EndNote中导出文献数据</h3>
+<p>为什么要用EndNote呢？我曾花了不少时间研究抓取谷歌学术的搜索结果，但是每次都很快被谷歌封掉IP。原因是，我没有对脚本进行浏览器伪装，和设置每次请求的间隔时间等。本着结果导向的思想，我转向了EndNote强大的软件内文献数据库搜索功能。</p>
+<p>所以，第一步就是确定你要搜索的关键词，在这里，我比较关注“meiofauna”，于是就在title或者keywords，或者全文中对此关键词进行搜索，得到包含它的文献题录。</p>
+<p><img src="/img/literature-analysis-1.png" alt="literature-analysis-1"></p>
+<p>我总共得到了623条文献题录，ctrl+A全选转移到library的某个group里面，然后点击这个group，再点击左上角的file——export，另存为xml格式文件即可。这样就把所有的文献题录都保存到一个文件中了。</p>
+<h3 id="-r-xml-">抓取有用信息的工作都由R的XML包来完成</h3>
+<p>这里不赘述了，我以前的几篇博文中提到过如何抓取网页数据，其中最主要的就是xpath的知识，firefox和chrome中都有插件可以找到网页中某个node的地址，这次是保存下来的文件，和之前稍有不同，也就是说不能偷懒了，建议大家去<a href="http://www.w3school.com.cn/xpath/" target="_blank">w3cschool的网站</a>看看。没有什么难点，除了这些具体的用哪个包，还有就是代码习惯，很重要很重要，很多时间出现bug，都是因为数据格式不对，很多变量保存来保存去的，用了一些function之后，格式就变了，所以，这种习惯需要一点一点养成，我还差得远呢，毕竟不是天天写。</p>
+<h3 id="-">用什么方法去分析抓取下来的数据呢？</h3>
+<p>我抓取下来的数据包括了每篇论文的标题、出版日期、摘要、作者单位地址，这四项最主要的内容。其中摘要是一个庞大的语料库，我也试着做了一下词频分析，但我做着做着，就感觉知识匮乏，搞不下去了。我的想法很简单，就是看横坐标时间为单位，某一些关键词的词频是随时间增大还是减少。我能把这些都实现，但是这个结果是不是真实的，还是需要强大的模型思维来奠基。</p>
+<p>于是，我转而关注作者的单位地址，从中提取出国家名称，从而计算国家名称出现的频率，看其随时间变化的趋势，这样，也能从时间跨度上了解某方向的进展，可以间接帮助自己以后去哪儿找博后定方向。</p>
+<p>这样，思路逐渐清晰。我问了谷歌，哪儿有全球国家名称列表，找到了个网站，用<code>readHTMLTable</code>这个函数来读取了国家名称，再用<code>grepl</code>来判断地址文本中是否含有某个国家的名称。这一步我要说一下，我原本的思路是，把地址文本分词，然后用<code>match</code>来判断，但这样处理的精确度完全依赖于分词的方法，而题录信息里的地址文本不是标准的有句号的文章，有的逗号后面有空格，有的没有空格或者多个空格，所以，很难用一种方法得到所有国家名称的匹配，再加上像south africa这样的国家，就让你不能用space作为分词依据。因此，在尝试了很长时间后，我放弃了。而现在用的<code>grepl</code>这个方法很有效，让我用5行代码就搞定了原来的几十行。</p>
+<h3 id="-googlevis-">用<code>googleVis</code>画图</h3>
+<p>这里参考了某大神的博客（需翻墙<a href="http://xccds1977.blogspot.fr/2011/09/test_901.html" target="_blank">link</a>），就没有使用<code>rworldmap</code>这个包，而使用了<code>googleVis</code>。因为前者要求在画图时，把国家名称转化为国家代码，虽然有<code>countrycode</code>这个包可以转换，但还是不如<code>googleVis</code>方便。于是，一气呵成，完成了以下以年代划分的五张图。</p>
+<p>1970~2014年，对meiofauna有研究的国家示意图。</p>
+<html><!-- IntensityMap generated in R 3.0.2 by googleVis 0.4.7 package -->  <!-- Thu Feb 06 00:34:13 2014 -->      <!-- jsHeader -->  <script type="text/javascript">     function gvisDataIntensityMapID22f07e9551de () {  var data = new google.visualization.DataTable();  var datajson =  [   [   &quot;AU&quot;,  0,  7,  2,  3,  5   ],  [   &quot;AT&quot;,  1,  1,  1,  0,  2   ],  [   &quot;BE&quot;,  3,  11,  11,  5,  23   ],  [   &quot;BR&quot;,  0,  4,  6,  4,  9   ],  [   &quot;CA&quot;,  2,  9,  3,  4,  6   ],  [   &quot;CL&quot;,  0,  0,  1,  2,  1   ],  [   &quot;CN&quot;,  1,  2,  0,  2,  3   ],  [   &quot;CR&quot;,  0,  1,  0,  1,  1   ],  [   &quot;HR&quot;,  2,  4,  2,  1,  2   ],  [   &quot;DK&quot;,  3,  1,  2,  0,  6   ],  [   &quot;EG&quot;,  1,  3,  0,  0,  1   ],  [   &quot;GB&quot;,  2,  13,  11,  11,  17   ],  [   &quot;FI&quot;,  1,  3,  2,  4,  2   ],  [   &quot;FR&quot;,  3,  13,  6,  6,  13   ],  [   &quot;DE&quot;,  3,  13,  14,  7,  18   ],  [   &quot;GR&quot;,  0,  1,  0,  0,  1   ],  [   &quot;HK&quot;,  1,  1,  1,  2,  1   ],  [   &quot;IN&quot;,  3,  11,  6,  4,  13   ],  [   &quot;ID&quot;,  0,  0,  0,  0,  1   ],  [   &quot;IR&quot;,  0,  1,  0,  0,  1   ],  [   &quot;IT&quot;,  4,  9,  13,  3,  16   ],  [   &quot;JM&quot;,  0,  0,  0,  0,  1   ],  [   &quot;JP&quot;,  0,  0,  0,  0,  3   ],  [   &quot;KE&quot;,  0,  0,  0,  0,  2   ],  [   &quot;LV&quot;,  0,  0,  0,  0,  1   ],  [   &quot;ML&quot;,  0,  0,  0,  0,  3   ],  [   &quot;MX&quot;,  0,  1,  1,  1,  1   ],  [   &quot;NL&quot;,  1,  8,  2,  2,  5   ],  [   &quot;NO&quot;,  0,  0,  1,  0,  2   ],  [   &quot;PL&quot;,  2,  5,  4,  0,  6   ],  [   &quot;PT&quot;,  0,  1,  2,  1,  3   ],  [   &quot;RU&quot;,  1,  1,  1,  0,  1   ],  [   &quot;SA&quot;,  0,  0,  0,  1,  1   ],  [   &quot;ZA&quot;,  6,  13,  8,  6,  5   ],  [   &quot;ES&quot;,  3,  8,  6,  2,  5   ],  [   &quot;SE&quot;,  2,  4,  6,  2,  11   ],  [   &quot;TZ&quot;,  0,  0,  0,  0,  1   ],  [   &quot;TH&quot;,  0,  0,  0,  0,  1   ],  [   &quot;TR&quot;,  0,  0,  0,  0,  1   ],  [   &quot;US&quot;,  18,  34,  24,  9,  33   ],  [   &quot;VE&quot;,  0,  0,  1,  0,  1   ],  [   &quot;RS&quot;,  0,  0,  0,  2,  2   ]   ];  data.addColumn(&#39;string&#39;,&#39;country1&#39;);  data.addColumn(&#39;number&#39;,&#39;1970~1980&#39;);  data.addColumn(&#39;number&#39;,&#39;1980~1990&#39;);  data.addColumn(&#39;number&#39;,&#39;1990~2000&#39;);  data.addColumn(&#39;number&#39;,&#39;2000~2010&#39;);  data.addColumn(&#39;number&#39;,&#39;2010~2014&#39;);  data.addRows(datajson);  return(data);  }     function drawChartIntensityMapID22f07e9551de() {  var data = gvisDataIntensityMapID22f07e9551de();  var options = {};  options[&quot;width&quot;] =    600;  options[&quot;colors&quot;] = [&#39;#4682b4&#39;, &#39;#4682b4&#39;, &#39;#4682b4&#39;, &#39;#4682b4&#39;, &#39;#4682b4&#39;];          var chart = new google.visualization.IntensityMap(      document.getElementById(&#39;IntensityMapID22f07e9551de&#39;)      );      chart.draw(data,options);          }         (function() {  var pkgs = window.<strong>gvisPackages = window.</strong>gvisPackages || [];  var callbacks = window.<strong>gvisCallbacks = window.</strong>gvisCallbacks || [];  var chartid = &quot;intensitymap&quot;;      var i, newPackage = true;  for (i = 0; newPackage &amp;&amp; i &lt; pkgs.length; i++) {  if (pkgs[i] === chartid)  newPackage = false;  }  if (newPackage)    pkgs.push(chartid);      callbacks.push(drawChartIntensityMapID22f07e9551de);  })();  function displayChartIntensityMapID22f07e9551de() {    var pkgs = window.<strong>gvisPackages = window.</strong>gvisPackages || [];    var callbacks = window.<strong>gvisCallbacks = window.</strong>gvisCallbacks || [];    window.clearTimeout(window.<strong>gvisLoad);    window.</strong>gvisLoad = setTimeout(function() {    var pkgCount = pkgs.length;    google.load(&quot;visualization&quot;, &quot;1&quot;, { packages:pkgs, callback: function() {    if (pkgCount != pkgs.length) {    return;  }  while (callbacks.length &gt; 0)  callbacks.shift()();  } });  }, 100);  }     </script>     <!-- jsChart -->    <script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartIntensityMapID22f07e9551de"></script>     <!-- divChart -->      <div id="IntensityMapID22f07e9551de"    style="width: 600px; height: 500px;">  </div></html>
+
+
+<h3 id="-">结论</h3>
+<p>初步分析可以看出，美国一直处于领先地位，德国、法国、西班牙、意大利和加拿大是仅次于美国，处于第二梯队，南美洲也从无到有持续发展着，非洲的南非一枝独秀，亚洲的印度是第一名，中国以及东亚国家在这方面非常落后，澳大利亚一直不温不火，应该也可以算是第二梯队。如果欧洲以欧盟为单位计算的话，应该会和美国持平。</p>
+<p>所以，国内还是很需要研究meiofauna的人才的。</p>
+<p><strong>后话：</strong></p>
+<p>其实，这篇文章所提供的思路可以举一反三的，比如，我可以每搜索一个关键词，导出一个xml文件，然后对若干个xml文件进行分析，这样就不是单一的单个关键词了，所分析的结果也更能代表具体的某个研究方向了。希望能对大家有所帮助。</p>
+]]></content>
+    <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
+  </entry>
+  <entry>
     <title type="html"><![CDATA[在巴黎的一夜——参加中法建交50周年纪念晚会]]></title>
     <link href="http://yangliufr.com/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/"/>
     <id>http://yangliufr.com/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/</id>
     <published>2014-01-28T00:00:00.000Z</published>
     <updated>2014-01-28T20:19:49.000Z</updated>
-    <content type="html"><![CDATA[<p>我想，我这篇博文的题目有一定的吸引力，但可能我将要写的内容会让你们失望了，因为我也是带着失望之情离开了第一次去的巴黎，这座很多人梦寐以求要去的城市。<br><a id="more"></a></p>
+    <content type="html"><![CDATA[<p>我想，我这篇博文的题目有一定的吸引力，但可能我将要写的内容会让你们失望了，因为我也是带着失望之情离开了第一次去的巴黎，这座很多人梦寐以求要去的城市。
+<a id="more"></a></p>
 <p>当时接到学校的邮件，要我们这些在图卢兹的中国留学生报名参加这次在巴黎大皇宫举办的纪念中法建交50周年的中国之夜晚会的时候，我和我的同学们都积极报名，感到非常荣幸和自豪，因为如此high-profiled的活动应该是机会难得，也很想看到宣传册中列举到的演出嘉宾朗朗的钢琴表演。对我个人来说，能有一次免费去巴黎参加如此重要活动的机会，一向对旅游提不起兴趣的我，也毫不犹豫的报了名，并跟导师请了两天假。</p>
-<h3 id="-5df4-9ece-5370-8c61-">巴黎印象</h3>
+<h3 id="-">巴黎印象</h3>
 <p>早上五点半起床，坐上了学校提供的开往巴黎的大巴车，混混沌沌的十个小时后，我们到了巴黎。印象，和图卢兹相比，巴黎就是一个字，大。一切都那么熟悉，但一切都仿佛大了一号。更宽的马路，更大的品牌专卖店，更多的景点，更宏伟的建筑。走在香榭丽舍大街上，感觉仿佛回到了国内一样，没有了在图卢兹紧凑狭窄的市中心街道，置身于一偏灯红酒绿之中了。巴黎，应该是世界人民眼中的法国，但不是法国人眼中的法国。相较而言，图卢兹则更有一番韵味在。下次，如果有时间，我还会再来细细品味这座城市。这次的到此一游显然是管中窥豹的。</p>
-<h3 id="-6392-961f-">排队</h3>
+<h3 id="-">排队</h3>
 <p>草草地对巴黎有了个第一印象之后，就要来到巴黎大皇宫前排队准备入场观演。近乎一百多米长的队伍井然有序的向前蠕动着，时间也慢慢跳过约定的入场时间，零上两度的气温，配上金黄的路灯和车水马龙，即便是冷，心还是热的。直到我们在将要通过最后一关-安检的时候，内心的火热正在悄然转变。我们被告知，会场里面已经客满，无法再容纳更多的客人入内观看表演，于是有大概一两百人，应该都是在法留学生，被挡在了大门之外，甚至其中大部分还在干燥但刺骨的寒风中等待着。</p>
 <p>时间就这样一分一分过去了，原定在六点半入场的活动，我们等了两个小时，也未能看到甚至听到任何负责人出面向我们解释。我们所能得到的信息就是，已经进去的同学发来的短信，有的说朗朗已经表演完了，有的说朗朗还在美国参加格莱美颁奖典礼，有的说这个活动可能要优先于社会上流人士观看，等等猜测和揣摩，以及慢慢发酵的愤怒。还在外面排队的其他同胞们，甚至用法语喊起了，“我们很饿，我们很冷！”（如果我没听错的话）。</p>
 <p>又过了十几分钟，我们终于进去了。没有看到大使，没有听到致辞，只有一些看似具有中国特色的表演，但都加入了法国人认为的时尚进去的草泥马艺术（四不像），然后，喝了点小酒，吃了点小点心之后，我和一部分同学就离开了，以此表达我们对活动组织者的不满。</p>
-<h3 id="-601d-8003-">思考</h3>
+<h3 id="-">思考</h3>
 <p><strong>为什么会造成与会人员都持有邀请函的情况下，还让这么多人未能按时进入会场，滞留在场外受冻不说，至始至终没有任何负责人出面对此进行解释？</strong></p>
 <p>我们不是看到免费的活动就来，看到有队伍就排的，我们来之前都持有着活动的邀请函，而且，不是所有人都能拿到这个邀请函，也是经过报名和筛选的。如果活动组织者为了不造成活动冷场，而对邀请函进行超发，想主观提升活动人气，但又没有任何准备应对如此屁股都能想到的突发情况，这又是为什么？是学生群体好欺负吗？这个话题，我不是很想去多想去展开谈，因为这有可能是我的臆想和片面的猜测，但这的确是可能性之一。</p>
 <p>作为我个人，我当时只是希望，能有一个人，任何有发言权的负责人，法方也好，中方也好，能够走出会场，来到外场对还在排队的人们解释一下情况，给予适当的安置，而不是仅仅调派警车来“镇压”可能的躁动。我想，如果我们不是中国学生，中国人，如果是意大利人或者就是他们法国人，他们会这么对待吗？我其实也在反思我自己，自己始终也没有那个思维和习惯去主动伸张自己遭遇的不公正对待。而更多的同学，选择的是逆来顺受，得到的经验就是，下次即便有邀请函，也要早早地来排队。我想，这也许就是中国人的聪明吧。其实，逆来顺受是对的，因为这最大限度的，最有效率和时效的保护了部分当事人的权利，但牺牲了“自然选择”之外那部分人的利益，这是人的本能，无可厚非。</p>
@@ -46,11 +81,11 @@
 <p>R应该是我计算机语言中的母语，虽然大学里学过fortran，但为了考试学的知识毕竟不是那么牢固。我学习R的过程，就是先有问题，再去寻找R中可能的解决方案的，然后在这个过程中慢慢体会这门语言的过程。感觉就像老板拍脑门要做个什么事，就告诉下属去做，然后给我结果一样，只不过我既是老板又是下属。</p>
 <p>接着第一段说，有了学django的挫败感之后，我为了寻找慰藉，又打开了Rstudio，希望能找回那顺畅熟悉的感觉。果然，同样的事情，很快就解决了，可谓驾轻就熟。可能django里牵扯到更多的编程思想，从model.py，view.py到setting.py，admin.py，这些只是网页后台框架，还要写app的model.py。在我上手试用后，感觉非常生涩，对library、function、model的命名规则不太习惯，说白了，压根没入门。所以，我还要多花时间去啃着块骨头。</p>
 <p>好了，以上都是本文的题外话或者前情提要吧。我既然又用回R来抓取数据了，就将代码分享出来吧。</p>
-<h3 id="-5148-5206-6790-518d-6293-53d6-">先分析再抓取</h3>
+<h3 id="-">先分析再抓取</h3>
 <p>点开球员页面的<a href="http://www.basketball-reference.com/players/" target="_blank">链接</a>，发现是按照姓名排序的。</p>
 <p><img src="/img/basketball-reference-1.png" alt="basketball-reference-1"></p>
 <p>而且，点进去某个字母链接，就可以直接得到所有的球员，这是最赞的，也是对抓取技能要求最低的了。所以，第一步就要抓取这个页面上的所有字母链接，再打开每个字母链接，抓取所有数据。很纳闷，居然NBA球员没有姓Xavier的，导致X字母下面居然没有一个人。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -76,9 +111,9 @@ data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x
 
 <p>在表中有粗体的名字，意思是现役球员，也可以单独标注出来，这里我就通过判断是否在2014年还在服役来确定是否现役，最后结果比直接抓取现役球员要少，可能因为有的球员有伤病，或者被下放到低级联赛锻炼一年等原因，合同停滞在2012/13年，大概有一百多位这样的球员。</p>
 <p><img src="/img/basketball-reference-2.png" alt="basketball-reference-2"></p>
-<h3 id="-5c06-6293-53d6-7684-8868-6570-636e-683c-5f0f-5316-">将抓取的表数据格式化</h3>
+<h3 id="-">将抓取的表数据格式化</h3>
 <p>我不知道python的scrapy或者beautifulsoup是什么样，R抓取的网页数据，如果想拿来做数据分析，似乎都要这个过程，把抓下来的html节点，<code>as.numeric(as.character())</code>一下，不知道有木有更简便的方法啊？</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -107,9 +142,9 @@ data_player_all_full$height = as.numeric(as.character(data_player_all_full$heigh
 </pre></td></tr></table></figure>
 
 <p>这一段纯粹为了擦屁股，但为了能分析数据，也是很至关重要的。</p>
-<h3 id="-54ea-4e2a-661f-5ea7-7684-NBA-7403-5458-6700-591a-ff1f-">哪个星座的NBA球员最多？</h3>
+<h3 id="-nba-">哪个星座的NBA球员最多？</h3>
 <p>知道我有多无聊了吧。数据里的出生日期是英文格式，所以又需要把它转成数字格式，我没找到有函数可以方便的转换，应该没有这么智能的，于是还是手动转吧。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -134,7 +169,7 @@ data_player_all_full[data_player_all_full$birthdate == <span class="string">""</
 </pre></td></tr></table></figure>
 
 <p>转完之后，再把mm/dd/yyyy格式的日期，分割成三列，用来根据月份和日期判断星座。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -231,7 +266,7 @@ constellation = <span class="keyword">function</span>(x,y){
 <p>法国政府网站上有各个水文站公布的数据的，我们一般打开网站看看水位超过0.8m没有，就可以决定要不要去了。</p>
 <p><img src="/img/Garonne-water-level.png" alt="Garonne water level from France goverment"></p>
 <p>网站上也很贴心的给出了表格数据，每天、每三天和每七天的数据，看到table，我就想抓。于是就写了个非常简单的脚本。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -271,12 +306,12 @@ table_station_url[,<span class="number">2</span>] = as.numeric(as.character(tabl
 <p>后来有一阵子直到前几天，我为了能让PC端和iPad上能够云端同步，方便在iPad上阅读，查阅了很多文章资料，包括<a href="http://www.infotech.ac.cn/fileup/PDF/20120915.pdf‎" target="_blank">这篇难得的对口味的中文文献</a>，给了我很大帮助。最终，我选择了EndNote，并在淘宝上买了所谓的付费版。如果你手中也有iPad，也希望用她来作为你的科研生产力工具的话，我仍推荐你用EndNote，至于今天为什么我用回zotero，那是后话了。</p>
 <a id="more"></a>
 
-<h3 id="-4e3a-4ec0-4e48-8981-5728-8bba-6587-91cc-5f15-7528-R-ff1f-">为什么要在论文里引用R？</h3>
+<h3 id="-r-">为什么要在论文里引用R？</h3>
 <p>很简单，因为我用R来做数据分析和作图。</p>
-<h3 id="-600e-4e48-5f15-7528-5462-ff1f-">怎么引用呢？</h3>
+<h3 id="-">怎么引用呢？</h3>
 <p>本文所有内容对于那些手动插入引文的同学是毫无意义的。仅针对使用文献管理软件的同学，让你的文献库里面有R的身影。</p>
 <p>其实这个问题，R早就想过，估计用latex和knitr写论文的同学直接在R中使用<code>citation()</code>即可，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -319,7 +354,7 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </pre></td></tr></table></figure>
 
 <p>接下来，要稍微修改一下上面这段代码，把<code>organization</code>改为<code>publisher</code>（否则，zotero不识别原本organization的信息）。即，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -357,11 +392,11 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
     <content type="html"><![CDATA[<p>七月下旬去的韩国首尔参加学术会议，一直没有写点啥。最近，因为广州恒大队要在亚冠决赛中与首尔FC队交锋，看到对方主教练的挑衅言论和韩国媒体的一些报道，才想起来这个国家我去过。那就说说我的感受吧。</p>
 <a id="more"></a>
 
-<h3 id="-7a7a-59d0-">空姐</h3>
+<h3 id="-">空姐</h3>
 <p>飞机上我坐最后一排，后面就是空姐坐的位置和备餐间了。那位空姐长得跟金喜善差不多，我也不知道是整容还是怎么的，典型的韩国广告中的女明星模样，当然，服务还是很到位的，即便是旁边一堆不太听话的上海旅游团大妈，她还是微笑服务。关于上海大妈我就不吐槽了，毕竟今天是说韩国。</p>
-<h3 id="-4ec1-5ddd-673a-573a-">仁川机场</h3>
+<h3 id="-">仁川机场</h3>
 <p>仁川机场相比浦东机场，从我个人感受上小一些，跟图卢兹的差不多。因为不需要走太多的路，过了海关出来走不了多远就到了乘坐大巴的地方了。对，只有大巴，没有地铁站在仁川机场。大巴很准时，座位很宽敞，很舒服，韩国大宇汽车嘛。只坐了三个人司机到点就开车了。</p>
-<h3 id="-4e2d-56fd-4eba-805a-96c6-5730-">中国人聚集地</h3>
+<h3 id="-">中国人聚集地</h3>
 <p>因为我去开会的学校是汉阳大学（Hanyang University），不在首尔市区，在一个叫安山的地方，类似于北京通县或上海松江或南京仙林之类的，所以我要转地铁和公交。地铁售票机有韩语、英语和中文的界面和操作提示，我还觉得这挺好。可以买完票就傻了，地铁开车方向的提示牌上只有韩文，我就不知道怎么坐了。情急之下，我就找了一个面善的男生用英语问了下我要去安山坐哪个方向的地铁，他似乎听不懂，我给他看我iPad里面的英文地铁路线图，他似乎懂了，招呼我一起上车，并用蹩脚的英文说他也要去那。</p>
 <p>在地铁上，我继续问，并拿出组委会给我的宾馆地址给他看，想着这韩文的东西你总能看懂了吧。没想到他还是看不懂，憋了半天看懂了biology的韩语。我就纳闷了，我不会被卖了吧，这地儿也太偏了，韩国人都不知道在哪儿。</p>
 <p>情急之下，这位“韩国友人”掏出了iPhone，想看下他存的地铁路线图，我想也对，韩国人看英文不一定方便，看他韩文的地铁图吧。没想到，手机界面是中文，我想，这哥们在学中文吗？因为以前我也装逼把手机界面调成英文来着。然后我就用英文问他说“你在学中文吗，我是中国人”，他似乎终于挺懂我的一整句英语了，并且用很纯正的东北口音回答我，我也是中国人。</p>
@@ -369,18 +404,18 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 <p>holy moley christ jesus</p>
 </blockquote>
 <p>我内心的OS就是这样。闹了半天两个中国人在韩国用英语交谈了半天。他告诉我，在我上地铁的那个地方，很多中国人开的店，周围也住着很多中国人，你随便找个人问路，肯定能找到中国人。后来他还帮了我很大的忙，借给我手机给组织者打电话，因为已经晚上9点多，我只好打车过去。走得急，只说了谢谢却没有留联系方式，我相信好人肯定有好报的。</p>
-<h3 id="-5165-4f4f-">入住</h3>
+<h3 id="-">入住</h3>
 <p>然后我就到了学校的宾馆，通过话的那个负责人是个刚上博一的韩国学生，英语很不错，也是美式口音。最后安顿在了他们学生宿舍，有十几层的一栋楼，很大很大，男女生分别在两边，一楼中间有食堂、7-11等，很方便了。宿舍是两人间的，我一个人住，有空调，相当于宾馆的标间了，条件很不错。网速超快的，要知道用的是免费wifi。迅雷离线下了不少东西。然后就等着第二天开会了。</p>
-<h3 id="-4f1a-8bae-8fc7-7a0b-">会议过程</h3>
+<h3 id="-">会议过程</h3>
 <p>本来在出发前发邮件安排我在会议第四天讲，但是，开会第一天发下来的安排表，把我们这个section调到了第二天。演讲过程很顺利，会后受到几位老师的好评，当然就当做客套话来听就好。国立台湾海洋大学的一位老师还问我是不是在美国待过，又不小心把我的美国梦点燃了起来。</p>
 <p>整个会议流程下来，我是唯一一个来自法国的代表，因为年初注册的时候，很多欧洲的老师怕南北朝会有战争的风险，没有报名参加。顿时觉得，他们真会为经济危机找借口。</p>
 <p>此外，由于我以前毕业院校非一流，在会议后的聚餐会上，我主动跟国内海大和厦大的团队问好，他们说已经注意到我的名字，以为有可能是什么华侨之类。谈话间，还是感受得到他们对于在本学科发展的同学的关怀和鼓励，并希望能够有人能够做得好。其实，对我也算是一针强心剂受益匪浅。另外，来自厦大的蔡教授对我更是关爱有加，希望以后能有机会合作。</p>
 <p>会后，得了个奖，250美元，作为travel support。我很果断的要了欧元，折合190欧元，回到家，关上门，暗地里用人民币做中间币种算了下，赚了15块哎！果然，还是没摆脱250的束缚。</p>
-<h3 id="-6c49-9633-5927-5b66-">汉阳大学</h3>
+<h3 id="-">汉阳大学</h3>
 <p>我很惊讶在汉阳大学，已经有很多外籍教授在此执教了，而且都是底栖生物无脊椎动物这一块的老师，在会议上出现的有四五位老师吧。我不知道是不是类似于国内的千人计划还是什么。就在这个学科来讲，因为大类属于生态学，没有直接的经济效益，而且也牵扯到出海采样等，需要大量资金的，居然可以引进数位外籍教师。我觉得，挂名与否已经不重要了。因为，这次国际会议是三年一届，已经召开了14届，这次第15届是第一次在亚洲举办。汉阳大学能有这个实力承办，已经说明他们有足够的学术基础。</p>
 <p>而且，从他们这几年做的项目成果可以看到，他们做的非常好。虽然大部分都是基础性的对韩国海岸线上小型底栖生物的调查性研究，但这正是考验学科功底深厚与否的最好验证，前面说了，这些基础性调查研究和分子生物学研究的重要性同样重要，因为在其他学科同学看来，影响因子高的文章就牛逼，低的就不行。有时，其实更多时候，要看你这个学科，甚至你这个研究方向的平均水准，不能一概而论。</p>
 <p>所以，我对这个学校的印象非常好，很扎实。底栖生物，尤其实效性底栖生物，无论在国外还是国内，做的人都相对较少，欧洲最多，美国其次，亚洲在这方面尤为缺乏。因为是底栖生物，又分大型和小型，一般来说，研究大型的多，笼统的相对来讲，大型的见效快。所以，亚洲发展中国家较多的情况下，资金相对不足，研究小型底栖生物的课题组就相对较少。不说能像汉阳大学这样的，国内所有在做的一双手是能数的过来的，当然国内个别大学的实力是高于汉阳大学的，例如第17届该会议的举办单位中国海洋大学。</p>
-<h3 id="-603b-4f53-5370-8c61-">总体印象</h3>
+<h3 id="-">总体印象</h3>
 <p>发达国家就是发达国家。跟法国都是法国车一样，首尔的公路上大多是韩国车，而且司机和行人的素质都很高，过马路的习惯很好，司机也不抢道。顿时觉得，这对于习惯在欧洲生活的人来到这里，除了语言和食物，没有太多的生活习惯差异。文化这个东西很难定义，主要看个人的生活习惯。一般大城市来说，大差不差了。因为毕竟过圣诞还是农历新年，差别并不大，过马路或者开车，这都是每天都要遇到的，差异化感受会更切身。</p>
 <p>唯一不满意的就是食物了，在学校食堂，条件也不错，就是整天泡菜，而且没有什么花样的蔬菜，除了白菜就是胡萝卜，肉类也少的可怜。同样是食堂，我们图卢兹三大的食堂都要好很多很多。不过一想，国际五大菜系里面有中国和法国的名字，哪儿轮得到韩国，无论他们有多想加入进来。</p>
 <p>还有，欧洲一体化的进程已经很深入了，以前的关注点都在欧美。这次在首尔，感受到中日韩这东亚三国，必须团结起来，化解矛盾，多交流，才能共同进步。民间的交流有很多了，超出了我的刻板印象。可能以前总是盲目崇拜欧美吧，对亚洲尤其东亚文化圈的关注很少，即便有也没有如此切身的体会。同样的语言不通，法国和德国，以及其他说法语和德语的国家，总有很多交流的机会和绿色通道。相信韩国、日本与中国的交流也有不少，只是以前真没从这方面多想过。同样是三种很不一样却又有些渊源的语言，中文、日文、韩文，如果日本当年没有侵略韩国、中国，如果韩国不去到处申请中国的文化遗产，我想，东亚已经一定是世界经济文化的另一个共同体。</p>
@@ -403,9 +438,9 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </li>
 </ol>
 <hr>
-<h2 id="R_-57fa-7840-77e5-8bc6-">R 基础知识</h2>
-<h3 id="-56db-5219-8fd0-7b97-">四则运算</h3>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<h2 id="r-">R 基础知识</h2>
+<h3 id="-">四则运算</h3>
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -418,7 +453,7 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </pre></td></tr></table></figure>
 
 <p>这几行代码就充分展现出了R的优势之一，<strong>即时互动</strong>。大家只要在console中输入以上一行代码，就可以直接得到结果，省去了传统语言编译的过程（并不是说R中不存在编译）。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -438,8 +473,8 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 
 <p>以上就是运行结果。</p>
 <hr>
-<h2 id="R_object_-28-R_-7684-5bf9-8c61-29-">R object (R 的对象)</h2>
-<h3 id="vector_-28-5411-91cf-29-">vector (向量)</h3>
+<h2 id="r-object-r-">R object (R 的对象)</h2>
+<h3 id="vector-">vector (向量)</h3>
 <p>向量（<code>vector</code>）是R中最基本的对象。R的对象中大部分能且只能包含同一类的若干个元素，但是<code>list</code>除外，可以包含若干类的若干个元素，这也是为什么要有<code>list</code>的原因。常见的向量有：</p>
 <ul>
 <li>字符向量</li>
@@ -449,7 +484,7 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 <li>逻辑向量</li>
 </ul>
 <p>下面来创建一个含有数值1,3,5,7的向量</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -466,7 +501,7 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </pre></td></tr></table></figure>
 
 <p>但，如果把两种向量<code>c()</code>到一起，会得到什么样的向量集合呢？</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 </pre></td><td class="code"><pre>&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span>
@@ -475,7 +510,7 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </pre></td></tr></table></figure>
 
 <p>你会发现，这时向量集会被强制（coercion）转成同一类，为了符合向量的定义。这时，如果你需要提取其中的<strong>假向量</strong>用于运算，那就需要<code>as.**</code>functions，其中<code>**</code>可以是<code>numeric``logical``character``complex</code>等。如下，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -500,7 +535,7 @@ also ‘citation(<span class="string">"pkgname"</span>)’ <span class="keyword"
 </pre></td></tr></table></figure>
 
 <p>如果使用<code>as.**</code>function把某类向量转化为另一类，则会得到<code>NA</code>s。如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -517,7 +552,7 @@ NAs introduced by coercion
 </pre></td></tr></table></figure>
 
 <p>有时你可能还需要空白向量，可以用<code>vector()</code>来创建，例如创建一个长度为10的数值向量<code>x</code>，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 </pre></td><td class="code"><pre>&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)
@@ -526,9 +561,9 @@ NAs introduced by coercion
 </pre></td></tr></table></figure>
 
 <hr>
-<h3 id="matrix_-ff08-77e9-9635-ff09-">matrix （矩阵）</h3>
+<h3 id="matrix-">matrix （矩阵）</h3>
 <p>矩阵（pl. matrices）具有维度（dimension）属性（attribute）的向量。该维度属性本身是一个长度为2的整数向量（nrow,ncol），行数和列数。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -551,7 +586,7 @@ $dim
 </pre></td></tr></table></figure>
 
 <p>在R中建矩阵是遵从<strong>列优先（column-wise）</strong>的原则，即，优先按照顺序从左上角开始向右一列一列地填充。如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -564,7 +599,7 @@ $dim
 </pre></td></tr></table></figure>
 
 <p>在了解了这个特性之后，我们就可使用<code>dim()</code>来为向量集创建矩阵了，大家只要注意<strong>列优先</strong>原则即可，如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -583,7 +618,7 @@ $dim
 </pre></td></tr></table></figure>
 
 <p>此外，在R中，你也可以使用<code>cbind()</code>（column-binding）和<code>rbind()</code>（row-binding）functions来创建矩阵。如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -617,9 +652,10 @@ y <span class="number">10</span> <span class="number">11</span> <span class="num
     <id>http://yangliufr.com/2013/09/24/r-introduction/</id>
     <published>2013-09-24T21:13:40.000Z</published>
     <updated>2013-10-02T13:08:58.000Z</updated>
-    <content type="html"><![CDATA[<p><em>最近在上<a href="http://coursera.org" target="_blank">coursera</a>的课，九月初的时候选了几门，现在陆续开课了。因为第一年自学数据分析和R收效甚微，想系统的学学，于是选了Statistics One （12周）和 Computing for Data Analysis （4周）。我会陆续分享我学到的知识和感想。</em><br><a id="more"></a></p>
+    <content type="html"><![CDATA[<p><em>最近在上<a href="http://coursera.org" target="_blank">coursera</a>的课，九月初的时候选了几门，现在陆续开课了。因为第一年自学数据分析和R收效甚微，想系统的学学，于是选了Statistics One （12周）和 Computing for Data Analysis （4周）。我会陆续分享我学到的知识和感想。</em>
+<a id="more"></a></p>
 <hr>
-<h2 id="-524d-8a00-">前言</h2>
+<h2 id="-">前言</h2>
 <blockquote>
 <p>What makes R different?</p>
 </blockquote>
@@ -633,7 +669,7 @@ y <span class="number">10</span> <span class="number">11</span> <span class="num
 <p>而R语言，则是整合了命令行窗口和编程语言界面的一种特殊的语言。有人认为，这有什么好的，让我选肯定选择有可视化界面的软件。但Roger认为，恰恰是具备前两种特点，才让R独树一帜。有传统编程语言知识的同学，和习惯与SAS或STATA的命令行操作打交道的同学都可以在R中找到自己熟悉上手的地方。也正因为R整合了这两种方式，对于菜鸟或者新手来说，可以先<strong>从命令行模式入门</strong>，利用其即时互动的模式，通过输入命令，快速得到自己想要的统计结果，随着你学习的深入，需求的增长，你可利用学过的传统编程语言知识，自己写一个满足自己需求的软件包。最终，集思广益，R软件包的功能一定会非常强大，当然目前已经非常强大了。</p>
 <p>所以，不像Excel功能相对单一，很难跟上数据统计分析的快速增长的需求，也不像Python那样入门门槛较高，需要接触到很多与数据统计分析无关的知识。R的这种由浅入深，可谓深得人心。</p>
 <p>下面贴出普林斯顿大学Andrew Conway老师在<a href="https://class.coursera.org/stats1-002/lecture/index" target="_blank">Statistics One</a>课程中提供的Introduction to R的入门脚本。我保留了英文原文的注释，因为对于新手来说，直接学习英文资料要来的更纯，很多<code>function</code>名记起来会更直接。下一篇，我再详细介绍一下以下这些功能。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -804,19 +840,21 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <id>http://yangliufr.com/2013/09/12/yes-cancel-english-education/</id>
     <published>2013-09-11T23:13:40.000Z</published>
     <updated>2013-09-29T21:42:47.000Z</updated>
-    <content type="html"><![CDATA[<p>近日打开新浪就看到这类话题，貌似一个叫王旭明的人在为教育事业出谋划策，我等受教育多年的人士定有一些要表达的，且听我一一道来。<br><a id="more"></a></p>
+    <content type="html"><![CDATA[<p>近日打开新浪就看到这类话题，貌似一个叫王旭明的人在为教育事业出谋划策，我等受教育多年的人士定有一些要表达的，且听我一一道来。
+<a id="more"></a></p>
 <p>点题，英语课确实需要取消。</p>
-<h3 id="-82f1-8bed-7279-957f-751f-ff1f-">英语特长生？</h3>
+<h3 id="-">英语特长生？</h3>
 <p>伴随着取消还要取消高考中考的英语考试，只考语文、数学以及文理的其他科目即可，而英语可以走如今艺术特长生的路，各大学外语专业，或者所有专业，可以给出一部分名额，用来招收英语特长生。第一，这样可以保证外语人才的不流失，而且提高生源质量。第二，其他专业也可根据学科发展需要招收一定的外语特长生，给予特殊的培养方案。为什么要如此设置？</p>
-<h3 id="-5916-8bed-4e0d-662f-77e5-8bc6-ff0c-53ea-662f-4e2a-5de5-5177-800c-5df2-">外语不是知识，只是个工具而已</h3>
+<h3 id="-">外语不是知识，只是个工具而已</h3>
 <p>工具，不是生活必需品。谁家可能都有个锤子、螺丝刀的，就算没有，敲开邻居大爷的门，借一把临时救个急也不会影响生活。而语文数学，就是生活必需品，你去超市菜市场买东西，不会说话不认字可不行，算不清自己有多少钱、该带多少钱也不行。你不会外语，可以，生活继续，不受影响，需要用的时候找会的人帮忙即可。</p>
 <p>不喜欢学英语的人，可以不受此限制，而根据自己其他的优势选择喜欢的专业；而喜欢英语或者英语好的人，也有等同的机会选择，而有专门的培养计划让其能充分用到英语。教育的细分、多样化，在我十几亿人口的泱泱大国，是何等重要。</p>
-<h3 id="-73b0-5728-7684-82f1-8bed-6559-80b2-6551-4e86-591a-5c11-4eba-ff0c-5c31-5bb3-4e86-591a-5c11-4eba-">现在的英语教育救了多少人，就害了多少人</h3>
+<h3 id="-">现在的英语教育救了多少人，就害了多少人</h3>
 <p>道理很简单，能把英语学以致用的人，大一统的英语教育就等于惠其一生；反之，在英语还是招考、用人单位等的评价标准时，其他找不到门路或者没有舞台发挥的人，英语教育等于浪费了他们的青春。教育本不应将一部分人的成功建立在另一部分人的失败的基础上。教育，应因材施教。</p>
-<h3 id="-6cd5-56fd-53c8-662f-4e2a-5565-60c5-51b5-">法国又是个啥情况</h3>
+<h3 id="-">法国又是个啥情况</h3>
 <p>之前有缘接触过初中没上完就来法国独闯的一个浙江温州小伙子，他目前已经通过自己的努力进入到了法国的高等教育体系中，选择的专业也是令人羡慕的某工程类专业。他了解中国教育，也深谙法国教育。据他介绍，法国也有类似高考的制度，具体考试科目和一年考几次，我不是很清楚。但学生考完后，会分成两拨，一拨成绩很突出的，如果他们愿意，可以进入到下一轮的考试备战中，考更专业的科学知识，以后进入大学就是走科学家、工程师的道路；另一拨，也可以进入大学，学习的就是技术类专业。其实，可以简单理解为，第一次考试，是高中毕业考试，你过了一定分数线，加上自己兴趣所在，可以选择继续参加选拔考试，据说竞争激烈程度不亚于中国的高考。这两拨人是有机会进入同一所大学的，只是选择专业范围上互不相同。</p>
 <p>好了，介绍半天，跟英语屁关系没有。我第一次听到这个，感到法国的教育确实非常人性化。即便如此，现在法国人在法国找工作，英语水平也会作为考核指标来参考，大学里也有英语课程，学生需要考过一定级别才能毕业（之前脚受伤在医院跟实习医生聊天了解到的）。你要知道，英法两国可是有着错综复杂的关系的，不亚于中日关系。但毕竟英语是世界最通用的语言，没有之一。虽然法国年龄大的普通人是不喜欢在公共场合说英语，但他们的年轻人接受的英语普及度已经很高了。就不分析原因了，肯定和经济文化和国际局势都有关。</p>
-<p>就我个人而言，我肯定是受益于英语的，目前国际上最先进的资料都是用英语写的，我很享受其中。但我要说个题外话，就是日本。日本的物理学、机械电子等学科是绝对领先世界其他国家的包括美国，我注意到，日本索尼、任天堂等公司在新产品发布会上，主讲人是日本人，会用流利的美式英语介绍产品。但当播放产品介绍短片时，里面会偶尔出现产品设计工程师的介绍片段，这些工程师无一例外都是日本人，也无一例外都说的日语，下面配上英文字幕。为什么？大家自己心里都有自己的判断。<br>每个人都是教育家</p>
+<p>就我个人而言，我肯定是受益于英语的，目前国际上最先进的资料都是用英语写的，我很享受其中。但我要说个题外话，就是日本。日本的物理学、机械电子等学科是绝对领先世界其他国家的包括美国，我注意到，日本索尼、任天堂等公司在新产品发布会上，主讲人是日本人，会用流利的美式英语介绍产品。但当播放产品介绍短片时，里面会偶尔出现产品设计工程师的介绍片段，这些工程师无一例外都是日本人，也无一例外都说的日语，下面配上英文字幕。为什么？大家自己心里都有自己的判断。
+每个人都是教育家</p>
 <p>因为，没有人比你更了解自己，或者自己的孩子。只是要注意一点，我们都只是个普通人，只要做个对社会有益的人就够了。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/一些思考/" term="一些思考"/>
@@ -827,7 +865,9 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <id>http://yangliufr.com/2013/09/06/the-world-is-full-of-ideas/</id>
     <published>2013-09-05T23:13:40.000Z</published>
     <updated>2013-09-28T13:41:45.000Z</updated>
-    <content type="html"><![CDATA[<p>开学了，今天和两位导师见了面开了会。新学期第一天上班的时候，我就发邮件给他们讲了我关于实验的“新”想法，老师的回复是it’s interesting。<br><a id="more"></a><br>这对我来说，就是可以在小会议上讨论了。因为正在写之前实验结果的讨论部分，所以看了很多文献，有很多想要做的。由于目前我的采样方法是取野外河流中的样本回到实验室直接做，我想设计一个设备，在实验室就可以模拟河流，而不需要拘束于野外的条件变化和不确定性了，毕竟考虑到生物实验周期长，万一天有不测风云（雨水多），一年就过去了。其实设备很简单，需要pvc板、小型浸没式水泵、管子、防水胶水、各种工具等，如果在国内，这些1000块钱以内肯定搞定了。但在这边，走实验室的预定程序很复杂周期长，确实耽误时间。我主要考虑这是一劳永逸的事情，因为我要等河流水位降到一定程度，才能去采样，如果花三个月做好这个装置，以后可以在水位高的时候也在做实验，反而更有效率。而且我是有了想法后去搜索文章，确认我这个方向有人在做实验室培养的实验，果然有，而且那个组06年搞了这个设备，做了可行性研究发了个&gt;3.0的，在生态学方面这个已经足够回国副教授了，然后09年那个组就发了nature子刊&gt;8.9。当然，他们发nature不可能是仅仅因为做了个装置，像他们做分子生物之类的，我们就不具备条件，只能找合作，但这个临时是找不来的。</p>
+    <content type="html"><![CDATA[<p>开学了，今天和两位导师见了面开了会。新学期第一天上班的时候，我就发邮件给他们讲了我关于实验的“新”想法，老师的回复是it’s interesting。
+<a id="more"></a>
+这对我来说，就是可以在小会议上讨论了。因为正在写之前实验结果的讨论部分，所以看了很多文献，有很多想要做的。由于目前我的采样方法是取野外河流中的样本回到实验室直接做，我想设计一个设备，在实验室就可以模拟河流，而不需要拘束于野外的条件变化和不确定性了，毕竟考虑到生物实验周期长，万一天有不测风云（雨水多），一年就过去了。其实设备很简单，需要pvc板、小型浸没式水泵、管子、防水胶水、各种工具等，如果在国内，这些1000块钱以内肯定搞定了。但在这边，走实验室的预定程序很复杂周期长，确实耽误时间。我主要考虑这是一劳永逸的事情，因为我要等河流水位降到一定程度，才能去采样，如果花三个月做好这个装置，以后可以在水位高的时候也在做实验，反而更有效率。而且我是有了想法后去搜索文章，确认我这个方向有人在做实验室培养的实验，果然有，而且那个组06年搞了这个设备，做了可行性研究发了个&gt;3.0的，在生态学方面这个已经足够回国副教授了，然后09年那个组就发了nature子刊&gt;8.9。当然，他们发nature不可能是仅仅因为做了个装置，像他们做分子生物之类的，我们就不具备条件，只能找合作，但这个临时是找不来的。</p>
 <p>会上，大导师首先就问，你为什么要再造一个工具？我答，因为我的研究计划里是研究河流的，目前我的方法是静水，所以我需要流动的水。然后我就讲了要多做几种处理，采样时间有调整，探究的东西不局限于之前的几个养分，可能还要加入污染物。但污染物这个方向似乎超出了导师的计划，导师还是回到了问题的本源，让我先把文章写好总结好，再根据第一篇文章的讨论部分提出的新假设，来紧贴主题的设计下一步实验，去验证第一次的结果和提出的其他假设。</p>
 <p>然后，小导师就帮忙圆场，说我这是conference effect，刚从韩国开完会回来，肯定头脑风暴了一下，有很多想法很好也很正常。而且关于这个装置，他们以前做过类似的出来，效果不好，然后就帮我去找来了，介绍了一下优缺点。我问了下，一起分析了不好的原因，确实有几个问题他们之前没考虑，设计上有问题，我已经考虑到了。但无论如何，我是不可能在我这三年内做这个了。顶多我用他们的这个失败装置改改再做一遍。</p>
 <p>好了，大概就是这个事情，我开始肯定会有失望，想想是怪自己太激进了？也不是，因为我们还要和流体物理实验室合作做另一个不同的项目，他们有大型的河流模拟装置，但那个只有一个，只能做一种处理，不符合我们要验证假设的实验设计。而我要设计的不光可以满足目前的需求，还能有助于与其他实验室的合作。Anyway，导师总是对的，我也没有错，只是观点的不一致。大导师已经60多了，见多识广，知道你这么浅尝辄止的可能后果，想一步一步走踏实了，但对于新思路可能接受起来慢一些，缺乏激情，这也是公派项目校方负责人跟我提醒过的，有点不energetic。</p>
@@ -843,7 +883,9 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <id>http://yangliufr.com/2013/07/05/live-a-one-month-vacation/</id>
     <published>2013-07-04T23:13:40.000Z</published>
     <updated>2013-09-29T21:41:03.000Z</updated>
-    <content type="html"><![CDATA[<p>一年前，国内硕士毕业的时候，别人都在留恋校园的感受，我却在那准备去内蒙古的国际会议，别人在收拾行李踏上回家的路，而我却只能望而却步，别人坐火车一去而不返，而我知道我走了，过两天还要回来面对空空的宿舍收拾行李。那种感觉特殊又难受。<br><a id="more"></a><br>这几天也这样，因为要去韩国开会，回国的票二月份就订好了。最近几天跟导师演练讲演了三次，有两次是昨天和今天，简直要把我推上悬崖似的。我必须一心二用，一边准备回国要带的各种东西，一边要静下心构思要演讲的内容，看似其实没什么啦，但对于处女座的男人，这似乎需要心中有把快刀，斩断眼前的乱麻，理清楚事情的优先级。而且韩国驻法国大使馆的工作效率问题，如果不在前天打电话催促，他们整个使馆的工作人员都去忙活接待来法的韩国企政要去了，只留下一个只会法语的大妈做接线员。明天就要走了，今天才拿到护照，你理解我的心情吧。</p>
+    <content type="html"><![CDATA[<p>一年前，国内硕士毕业的时候，别人都在留恋校园的感受，我却在那准备去内蒙古的国际会议，别人在收拾行李踏上回家的路，而我却只能望而却步，别人坐火车一去而不返，而我知道我走了，过两天还要回来面对空空的宿舍收拾行李。那种感觉特殊又难受。
+<a id="more"></a>
+这几天也这样，因为要去韩国开会，回国的票二月份就订好了。最近几天跟导师演练讲演了三次，有两次是昨天和今天，简直要把我推上悬崖似的。我必须一心二用，一边准备回国要带的各种东西，一边要静下心构思要演讲的内容，看似其实没什么啦，但对于处女座的男人，这似乎需要心中有把快刀，斩断眼前的乱麻，理清楚事情的优先级。而且韩国驻法国大使馆的工作效率问题，如果不在前天打电话催促，他们整个使馆的工作人员都去忙活接待来法的韩国企政要去了，只留下一个只会法语的大妈做接线员。明天就要走了，今天才拿到护照，你理解我的心情吧。</p>
 <p>下午跟老师汇报完，虽然还不是很满意，但终于没有跟我太多压力，我主动表示回国后会把演讲文本写好发过来，并录制一段演讲视频发过来作为参考。最终敲定稿子之后，他们才能舒一口气吧，毕竟我是代表整个实验室去参加的。我想，如果我能把导师的演讲技术学到，以后就能到处“忽悠”了。目前，我非常急迫的意识到了这一点，这比写论文难得多。</p>
 <p>我从内心里很重视这次会议，我刚到法国的第三天就进实验室了，第一周就开始讨论试验计划，经导师介绍后，第一个月就决定要参加这次在韩国举办的三年一届的会议。中间当然也经历了一段调整期，不知道要学什么，怎么学。还好目前已经进入了状态，从自我膨胀到自我怀疑，到了自我反省的阶段了。对我来说，估计还要来一两次如此的循环。</p>
 <p>一首打油诗，以表此时的心情。</p>
@@ -857,7 +899,8 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <id>http://yangliufr.com/2013/06/29/r-comparing-two-samples/</id>
     <published>2013-06-29T00:00:00.000Z</published>
     <updated>2013-10-02T13:12:43.000Z</updated>
-    <content type="html"><![CDATA[<p>用R时间久了，确实非常方便，因为很多自定义的东西可以写。可能其他商业统计软件也可以吧，但没有R开源，长话短说。<br><a id="more"></a></p>
+    <content type="html"><![CDATA[<p>用R时间久了，确实非常方便，因为很多自定义的东西可以写。可能其他商业统计软件也可以吧，但没有R开源，长话短说。
+<a id="more"></a></p>
 <p>比较两组数据的均值有无显著差异时，要选择适当的检验对其进行分析，如下表：</p>
 <table>
 <thead>
@@ -883,7 +926,7 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 <p>所以，首先要确定你的数据是独立的（<code>unpaired</code>）还是配对的（<code>paired</code>）。举个例子，有两杯水，一杯是纯净水A，一杯是自来水B，实验第一天我们测一下其中氯离子浓度，十天后，再测一次。如果你要比较第十天，A与B之间的差异，就要进行独立检验；如果你要比较第一天的B和第十天的B有什么不同，那就要进行配对检验。</p>
 <p>选择好了数据形式之后，要检验其是否符合正态分布、方差齐性等t检验的零假设条件，才能最终确定使用哪种方法得到我们想要的p值。因此，这里就存在一个变数，如果各组数据都符合或都不符合零假设，都还好，就怕有的符合有的不符合，这样在有很多对数据都要进行两两比较时，就比较麻烦了。</p>
 <p>我就针对我的个人需求写了个小函数，减少了工作量，提高了成就感，即先用<code>levene</code>检验判断方差齐性，<code>p &gt; 0.05</code>的表示方差齐，然后才能进行t检验，否则进行相对应的非参数检验。在这里分享出来：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -930,7 +973,7 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 </pre></td></tr></table></figure>
 
 <p>使用起来很简单，从数据框中选择两组数据，然后标记是独立样本（<code>TRUE</code> 或 <code>T</code>）还是配对样本（<code>FALSE</code> 或 <code>F</code>）。例如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -955,7 +998,9 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <published>2013-06-28T23:13:40.000Z</published>
     <updated>2013-09-29T21:41:24.000Z</updated>
     <content type="html"><![CDATA[<p>传统中草药有着很高的医药价值，但绿色和平-东亚的一项调查显示，这些中草药有很多农药残留，反而对人体健康又潜在危害。</p>
-<p>在中国，这些草药产品每天都会被搬上千家万户的餐桌上，早已成为中国烹饪文化遗产。人们会在汤或茶里放人参、红枣或者菊花，来治疗各种疾病。<br><a id="more"></a><br>不仅仅在中国，其他国家希望把中草药当做替代疗法的人们也非常多，<a href="http://www.who.int/bulletin/volumes/86/8/07-042820/en/" target="_blank">每年全球的市场价值达600亿美元</a>，增长迅速。</p>
+<p>在中国，这些草药产品每天都会被搬上千家万户的餐桌上，早已成为中国烹饪文化遗产。人们会在汤或茶里放人参、红枣或者菊花，来治疗各种疾病。
+<a id="more"></a>
+不仅仅在中国，其他国家希望把中草药当做替代疗法的人们也非常多，<a href="http://www.who.int/bulletin/volumes/86/8/07-042820/en/" target="_blank">每年全球的市场价值达600亿美元</a>，增长迅速。</p>
 <p>但在这份研究报告中，《中草药：给人治病的药剂还是杀虫剂？》，对65个中草药产品进行了抽样调查，发现所有产品中都有一定量的农药残留，而且有些农药是中国明令禁止使用的。</p>
 <p><img src="/img/pesticideherb_thumb.jpg" alt="herb-pesticide"></p>
 <p>很多中草药产品是在化学集约农业的模式下培养出来的，早就不是野生采摘的了，所以现在很难找到无毒无害食物。检测报告显示，很多被世界卫生组织认定的高毒性物质都又被监测出来，而且残留浓度已经超过欧洲食品安全标准。这类有害物可以在人体内进行生物积累，慢性农药中毒会导致痴呆、荷尔蒙紊乱和丧失生育功能。</p>
@@ -973,7 +1018,8 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <id>http://yangliufr.com/2013/06/27/math-equations-will-frigten-ecologist/</id>
     <published>2013-06-27T00:00:00.000Z</published>
     <updated>2013-09-29T21:41:12.000Z</updated>
-    <content type="html"><![CDATA[<p>上上周参加的实验室的Journal Club活动（每周有不同的人根据自己的研究或者已有的研究来介绍给大家，一起讨论），所讲论文题目是<a href="http://www.pnas.org/content/early/2012/06/22/1205259109.abstract" target="_blank">Heavy use of equations impedes communication among biologists</a>（重度在论文中使用数学公式，或阻碍理论生物学家和应用生物学家间的交流）。<br><a id="more"></a></p>
+    <content type="html"><![CDATA[<p>上上周参加的实验室的Journal Club活动（每周有不同的人根据自己的研究或者已有的研究来介绍给大家，一起讨论），所讲论文题目是<a href="http://www.pnas.org/content/early/2012/06/22/1205259109.abstract" target="_blank">Heavy use of equations impedes communication among biologists</a>（重度在论文中使用数学公式，或阻碍理论生物学家和应用生物学家间的交流）。
+<a id="more"></a></p>
 <p>这篇论文的作者是英国布里斯托大学（University of Bristol）生物科学学院的Tim Fawcett。他们分析了生物生态方向的[Ecology]和[Evolution]两本杂志中的650篇论文，并在摘要中写道，</p>
 <ul>
 <li>论文中数学公式的密度对该论文被引用率有显著影响，每页论文正文中每添加一个公式，就会使整篇论文的被引用率减少28%。</li>
@@ -1000,11 +1046,12 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
     <id>http://yangliufr.com/2013/05/17/r-camera-top-ten/</id>
     <published>2013-05-17T00:00:00.000Z</published>
     <updated>2013-10-02T13:12:12.000Z</updated>
-    <content type="html"><![CDATA[<p>上次写了<a href="http://yangliufr.com/2013/05/06/%e8%8f%9c%e9%b8%9f%e5%ad%a6r%e8%af%ad%e8%a8%80%ef%bc%9a%e7%94%a8r%e5%88%86%e6%9e%90%e5%93%aa%e6%ac%be%e7%9b%b8%e6%9c%ba%e6%80%a7%e4%bb%b7%e6%af%94%e6%9c%80%e9%ab%98/">如何用R分析哪款相机性价比最高</a>的文章，由于抓取的相机性能评分网站Dxomark.com上的价格数据不是实时更新的。所以，我又找了些方法学习如何抓取电商上的价格数据。<br><a id="more"></a></p>
-<h3 id="-9009-54ea-4e2a-7535-5546-7f51-7ad9-7684-5546-54c1-4ef7-683c-">选哪个电商网站的商品价格</h3>
+    <content type="html"><![CDATA[<p>上次写了<a href="http://yangliufr.com/2013/05/06/%e8%8f%9c%e9%b8%9f%e5%ad%a6r%e8%af%ad%e8%a8%80%ef%bc%9a%e7%94%a8r%e5%88%86%e6%9e%90%e5%93%aa%e6%ac%be%e7%9b%b8%e6%9c%ba%e6%80%a7%e4%bb%b7%e6%af%94%e6%9c%80%e9%ab%98/">如何用R分析哪款相机性价比最高</a>的文章，由于抓取的相机性能评分网站Dxomark.com上的价格数据不是实时更新的。所以，我又找了些方法学习如何抓取电商上的价格数据。
+<a id="more"></a></p>
+<h3 id="-">选哪个电商网站的商品价格</h3>
 <p>国内就全国而言比较良心的综合类电商就属“京东商城”和“亚马逊中国”了，像苏宁易购、一号店等的价格优势都各有偏重，价格更新不如京东和亚马逊能够及时反映数码产品快速变化的市场走势。然后，由于京东对网页抓取价格的行为进行了限制，对商品网页中的价格进行了图片加密，虽然页面显示是可以直接拷贝文本，但html源代码中只有图片链接。估计，用python的一些图片识别库是可以抓的，因为有网站做得挺好，比如“西贴（<a href="www.xitie.com/360buy/">www.xitie.com/360buy/</a>）”。</p>
 <p>所以，我选择了对价格战敏感度较低的亚马逊中国的商品进行价格抓取。此法同样适用于亚马逊其他网站，因为其网页源代码是类似的。</p>
-<h3 id="-4eba-5de5-83b7-53d6-5546-54c1-4ee3-7801-">人工获取商品代码</h3>
+<h3 id="-">人工获取商品代码</h3>
 <p>由于要对特定商品进行价格抓取，而不是一劳永逸的提供用户搜索，让用户选择商品。所以，必须预先获取商品的链接。幸好单反相机的商品品类不多，全靠我一个个复制粘贴而来。我没有选择全选搜索而来的链接，只选了商品代码，比如，</p>
 <p><a href="http://www.amazon.cn/gp/product/**B00C93NHHY**/ref=s9_simh_gw_p421_d0_i1?pf_rd_m=A1AJ19PSB66TGU&amp;pf_rd_s=center-3&amp;pf_rd_r=10TJ5625EJ46C17SN3ZN&amp;pf_rd_t=101&amp;pf_rd_p=58223152&amp;pf_rd_i=899254051" target="_blank">http://www.amazon.cn/gp/product/**B00C93NHHY**/ref=s9_simh_gw_p421_d0_i1?pf_rd_m=A1AJ19PSB66TGU&amp;pf_rd_s=center-3&amp;pf_rd_r=10TJ5625EJ46C17SN3ZN&amp;pf_rd_t=101&amp;pf_rd_p=58223152&amp;pf_rd_i=899254051</a></p>
 <p>链接中粗体部分就是我需要的代码，后面都是返利或者浏览行为追踪的代码。</p>
@@ -1015,7 +1062,7 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 <p><img src="/img/cc2_thumb.png" alt="camera2"></p>
 <p>为了核对商品名和价格，并和之前的数据库进行合并，所以商品名也要抓取。同理。</p>
 <p>价格抓取的函数如下：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -1060,37 +1107,457 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 <p>然后，执行该函数，获得的数据框如下，</p>
 <p><img src="/img/cc3_thumb.png" alt="camera3"></p>
 <p>看出里面有乱码，无所谓，去掉就好了，反正就算是汉字也是要去掉的。然后进行一下合并处理。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre>r1[,<span class="number">2</span>] = sub(<span class="string">'^..'</span>,<span class="string">''</span>,r1[,<span class="number">2</span>])
 r1[,<span class="number">2</span>] = gsub(<span class="string">','</span>,<span class="string">''</span>,r1[,<span class="number">2</span>])
 </pre></td></tr></table></figure>
 
 <p>这样抓取过程就差不多了。下面就要考虑如何处理这些数据了。由于本人逃过很多数理统计课去打篮球了，为了避免不同相机的性能评分差异和价格差异不同，需要更多数据对其进行标准化后，才能得出可信的性价比。所以，干脆对其进行排序，得出排名作为其分数，这里使用的是R中的rank函数，很简单，代码就不放了。此外，为了针对不同用户，并对每一款相机负责的态度，我们先不进行全部排名，而是分类排名。</p>
-<h3 id="-666e-901a-4fbf-643a-76f8-673a-">普通便携相机</h3>
-<table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot S100 </td><br>      <td>Compact </td><br>      <td>1794.1 </td><br>      <td>3</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix F600EXR </td><br>      <td>Compact </td><br>      <td>1250 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Canon Powershot S110 </td><br>      <td>Compact </td><br>      <td>2288 </td><br>      <td>1.5</td><br>   </tr><br>   <tr><br>      <td>Fujifilm XF1 </td><br>      <td>Compact </td><br>      <td>2549 </td><br>      <td>1.4</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC LX7 </td><br>      <td>Compact </td><br>      <td>2699 </td><br>      <td>1.285714</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix X10 </td><br>      <td>Compact </td><br>      <td>2788 </td><br>      <td>1.125</td><br>   </tr><br>   <tr><br>      <td>Canon Powershot G12 </td><br>      <td>Compact </td><br>      <td>2688 </td><br>      <td>0.75</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix F550EXR </td><br>      <td>Compact </td><br>      <td>1613.6 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot SX50 HS </td><br>      <td>Compact </td><br>      <td>3059 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon Powershot G15 </td><br>      <td>Compact </td><br>      <td>3099 </td><br>      <td>0.3</td><br>   </tr><br></table><br>可见，佳能的S100胜出，富士F600exr（国内型号F665exr）和佳能S110分列二三位。<br><br><img src="/img/canons100_thumb.jpg" alt="canons100"><br><br>###高端便携相机<br><br><table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Sony Cyber-shot DSC-RX100 </td><br>      <td>High-end compact </td><br>      <td>3772.9 </td><br>      <td>1.666667</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot S95 </td><br>      <td>High-end compact </td><br>      <td>2199 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Sony Cyber-shot DSC-RX1 </td><br>      <td>High-end compact </td><br>      <td>18988 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Fujifilm FinePix X100 </td><br>      <td>High-end compact </td><br>      <td>6819 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Canon PowerShot G1X </td><br>      <td>High-end compact </td><br>      <td>3939 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC LX5 </td><br>      <td>High-end compact </td><br>      <td>2198 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 V2 </td><br>      <td>High-end compact </td><br>      <td>5499 </td><br>      <td>0.6</td><br>   </tr><br></table>
+<h3 id="-">普通便携相机</h3>
+<table>
+   <tr>
+      <td>Model </td>
+      <td>Type </td>
+      <td>pricermb </td>
+      <td>ppratio</td>
+   </tr>
+   <tr>
+      <td>Canon PowerShot S100 </td>
+      <td>Compact </td>
+      <td>1794.1 </td>
+      <td>3</td>
+   </tr>
+   <tr>
+      <td>Fujifilm FinePix F600EXR </td>
+      <td>Compact </td>
+      <td>1250 </td>
+      <td>2</td>
+   </tr>
+   <tr>
+      <td>Canon Powershot S110 </td>
+      <td>Compact </td>
+      <td>2288 </td>
+      <td>1.5</td>
+   </tr>
+   <tr>
+      <td>Fujifilm XF1 </td>
+      <td>Compact </td>
+      <td>2549 </td>
+      <td>1.4</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC LX7 </td>
+      <td>Compact </td>
+      <td>2699 </td>
+      <td>1.285714</td>
+   </tr>
+   <tr>
+      <td>Fujifilm FinePix X10 </td>
+      <td>Compact </td>
+      <td>2788 </td>
+      <td>1.125</td>
+   </tr>
+   <tr>
+      <td>Canon Powershot G12 </td>
+      <td>Compact </td>
+      <td>2688 </td>
+      <td>0.75</td>
+   </tr>
+   <tr>
+      <td>Fujifilm FinePix F550EXR </td>
+      <td>Compact </td>
+      <td>1613.6 </td>
+      <td>0.5</td>
+   </tr>
+   <tr>
+      <td>Canon PowerShot SX50 HS </td>
+      <td>Compact </td>
+      <td>3059 </td>
+      <td>0.5</td>
+   </tr>
+   <tr>
+      <td>Canon Powershot G15 </td>
+      <td>Compact </td>
+      <td>3099 </td>
+      <td>0.3</td>
+   </tr>
+</table>
+可见，佳能的S100胜出，富士F600exr（国内型号F665exr）和佳能S110分列二三位。
+
+<img src="/img/canons100_thumb.jpg" alt="canons100">
+
+###高端便携相机
+
+<table>
+   <tr>
+      <td>Model </td>
+      <td>Type </td>
+      <td>pricermb </td>
+      <td>ppratio</td>
+   </tr>
+   <tr>
+      <td>Sony Cyber-shot DSC-RX100 </td>
+      <td>High-end compact </td>
+      <td>3772.9 </td>
+      <td>1.666667</td>
+   </tr>
+   <tr>
+      <td>Canon PowerShot S95 </td>
+      <td>High-end compact </td>
+      <td>2199 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Sony Cyber-shot DSC-RX1 </td>
+      <td>High-end compact </td>
+      <td>18988 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Fujifilm FinePix X100 </td>
+      <td>High-end compact </td>
+      <td>6819 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Canon PowerShot G1X </td>
+      <td>High-end compact </td>
+      <td>3939 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC LX5 </td>
+      <td>High-end compact </td>
+      <td>2198 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Nikon 1 V2 </td>
+      <td>High-end compact </td>
+      <td>5499 </td>
+      <td>0.6</td>
+   </tr>
+</table>
 
 <p>果然是高端机，大家差距都不大，或者可以说是一分钱一分货，没啥好比的。索尼的黑卡相机RX100勇夺冠军，其他五款并列亚军，尼康V2位列最后并获得珍贵的季军。</p>
 <p><img src="/img/rx100.jpg" alt="rx100"></p>
-<h3 id="-534a-4e13-4e1a-5355-53cd-">半专业单反</h3>
-<table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Nikon D7000 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>6188 </td><br>      <td>2.5</td><br>   </tr><br>   <tr><br>      <td>Nikon D7100 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>8199 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 60D </td><br>      <td>Semi-Pro DSLR </td><br>      <td>5399 </td><br>      <td>1.5</td><br>   </tr><br>   <tr><br>      <td>Nikon D600 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>11111 </td><br>      <td>1.428571</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 6D </td><br>      <td>Semi-Pro DSLR </td><br>      <td>10900 </td><br>      <td>1.166667</td><br>   </tr><br>   <tr><br>      <td>Nikon D800E </td><br>      <td>Semi-Pro DSLR </td><br>      <td>18199 </td><br>      <td>1.142857</td><br>   </tr><br>   <tr><br>      <td>Nikon D800 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>18199 </td><br>      <td>1.047619</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 99 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>17800 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 77 </td><br>      <td>Semi-Pro DSLR </td><br>      <td>7474.9 </td><br>      <td>1</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 5D Mark II </td><br>      <td>Semi-Pro DSLR </td><br>      <td>12590 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 5D Mark III </td><br>      <td>Semi-Pro DSLR </td><br>      <td>19488 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 7D </td><br>      <td>Semi-Pro DSLR </td><br>      <td>8499 </td><br>      <td>0.3</td><br>   </tr><br></table>
+<h3 id="-">半专业单反</h3>
+<table>
+   <tr>
+      <td>Model </td>
+      <td>Type </td>
+      <td>pricermb </td>
+      <td>ppratio</td>
+   </tr>
+   <tr>
+      <td>Nikon D7000 </td>
+      <td>Semi-Pro DSLR </td>
+      <td>6188 </td>
+      <td>2.5</td>
+   </tr>
+   <tr>
+      <td>Nikon D7100 </td>
+      <td>Semi-Pro DSLR </td>
+      <td>8199 </td>
+      <td>2</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 60D </td>
+      <td>Semi-Pro DSLR </td>
+      <td>5399 </td>
+      <td>1.5</td>
+   </tr>
+   <tr>
+      <td>Nikon D600 </td>
+      <td>Semi-Pro DSLR </td>
+      <td>11111 </td>
+      <td>1.428571</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 6D </td>
+      <td>Semi-Pro DSLR </td>
+      <td>10900 </td>
+      <td>1.166667</td>
+   </tr>
+   <tr>
+      <td>Nikon D800E </td>
+      <td>Semi-Pro DSLR </td>
+      <td>18199 </td>
+      <td>1.142857</td>
+   </tr>
+   <tr>
+      <td>Nikon D800 </td>
+      <td>Semi-Pro DSLR </td>
+      <td>18199 </td>
+      <td>1.047619</td>
+   </tr>
+   <tr>
+      <td>Sony SLT Alpha 99 </td>
+      <td>Semi-Pro DSLR </td>
+      <td>17800 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Sony SLT Alpha 77 </td>
+      <td>Semi-Pro DSLR </td>
+      <td>7474.9 </td>
+      <td>1</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 5D Mark II </td>
+      <td>Semi-Pro DSLR </td>
+      <td>12590 </td>
+      <td>0.5</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 5D Mark III </td>
+      <td>Semi-Pro DSLR </td>
+      <td>19488 </td>
+      <td>0.5</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 7D </td>
+      <td>Semi-Pro DSLR </td>
+      <td>8499 </td>
+      <td>0.3</td>
+   </tr>
+</table>
 
 <p>Dxomark把这些都叫做半专业，我不知道这星球上啥相机是专业的了。显然，在高端单反方面，DxoLab是尼康粉，佳能的无敌兔和无敌伞位列倒数第二和第三位，与之对应的尼康D800和D800E则排在中游，中规中矩。此外，索尼在高端单反方面一直处于中下游，因此，对该结果并不意外，所以的策略显然更多在微单上了。冠亚军分别被尼康的D7000和D7100获得。</p>
 <p><img src="/img/d7000.jpg" alt="d7000"></p>
-<h3 id="-5165-95e8-5355-53cd-">入门单反</h3>
-<table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Nikon D3200 </td><br>      <td>Entry-level DSLR </td><br>      <td>3070 </td><br>      <td>11</td><br>   </tr><br>   <tr><br>      <td>Nikon D5100 </td><br>      <td>Entry-level DSLR </td><br>      <td>3550 </td><br>      <td>3.333333</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 600D </td><br>      <td>Entry-level DSLR </td><br>      <td>3399 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 58 </td><br>      <td>Entry-level DSLR </td><br>      <td>3605.6 </td><br>      <td>1.5</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 57 </td><br>      <td>Entry-level DSLR </td><br>      <td>3999 </td><br>      <td>1.285714</td><br>   </tr><br>   <tr><br>      <td>Nikon D5200 </td><br>      <td>Entry-level DSLR </td><br>      <td>4499 </td><br>      <td>1.090909</td><br>   </tr><br>   <tr><br>      <td>Nikon D90 </td><br>      <td>Entry-level DSLR </td><br>      <td>4208 </td><br>      <td>0.666667</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 1100D </td><br>      <td>Entry-level DSLR </td><br>      <td>3600 </td><br>      <td>0.625</td><br>   </tr><br>   <tr><br>      <td>Sony SLT Alpha 65 </td><br>      <td>Entry-level DSLR </td><br>      <td>4899 </td><br>      <td>0.625</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 550D </td><br>      <td>Entry-level DSLR </td><br>      <td>4299 </td><br>      <td>0.5</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 650D </td><br>      <td>Entry-level DSLR </td><br>      <td>3880 </td><br>      <td>0.416667</td><br>   </tr><br>   <tr><br>      <td>Canon EOS 700D </td><br>      <td>Entry-level DSLR </td><br>      <td>4081 </td><br>      <td>0.125</td><br>   </tr><br></table>
+<h3 id="-">入门单反</h3>
+<table>
+   <tr>
+      <td>Model </td>
+      <td>Type </td>
+      <td>pricermb </td>
+      <td>ppratio</td>
+   </tr>
+   <tr>
+      <td>Nikon D3200 </td>
+      <td>Entry-level DSLR </td>
+      <td>3070 </td>
+      <td>11</td>
+   </tr>
+   <tr>
+      <td>Nikon D5100 </td>
+      <td>Entry-level DSLR </td>
+      <td>3550 </td>
+      <td>3.333333</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 600D </td>
+      <td>Entry-level DSLR </td>
+      <td>3399 </td>
+      <td>2</td>
+   </tr>
+   <tr>
+      <td>Sony SLT Alpha 58 </td>
+      <td>Entry-level DSLR </td>
+      <td>3605.6 </td>
+      <td>1.5</td>
+   </tr>
+   <tr>
+      <td>Sony SLT Alpha 57 </td>
+      <td>Entry-level DSLR </td>
+      <td>3999 </td>
+      <td>1.285714</td>
+   </tr>
+   <tr>
+      <td>Nikon D5200 </td>
+      <td>Entry-level DSLR </td>
+      <td>4499 </td>
+      <td>1.090909</td>
+   </tr>
+   <tr>
+      <td>Nikon D90 </td>
+      <td>Entry-level DSLR </td>
+      <td>4208 </td>
+      <td>0.666667</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 1100D </td>
+      <td>Entry-level DSLR </td>
+      <td>3600 </td>
+      <td>0.625</td>
+   </tr>
+   <tr>
+      <td>Sony SLT Alpha 65 </td>
+      <td>Entry-level DSLR </td>
+      <td>4899 </td>
+      <td>0.625</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 550D </td>
+      <td>Entry-level DSLR </td>
+      <td>4299 </td>
+      <td>0.5</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 650D </td>
+      <td>Entry-level DSLR </td>
+      <td>3880 </td>
+      <td>0.416667</td>
+   </tr>
+   <tr>
+      <td>Canon EOS 700D </td>
+      <td>Entry-level DSLR </td>
+      <td>4081 </td>
+      <td>0.125</td>
+   </tr>
+</table>
 
 <p>对尼康D3200获得冠军很意外，领先第二名足足6分之多，显然在性价比方面与其他11部相机拉开了差距。但也要理性看待，因为入门单反的价格基本集中在3000至5000之间，这也是普通用户开始考虑入手单反的心理价位区间。所以，既然是入门单反，根据自己喜好买就行，差别没有这张表上的那么差异大。</p>
 <p><img src="/img/d3200.jpg" alt="d3200"></p>
-<h3 id="-5fae-5355-ff08-5fae-578b-5355-53cd-ff09-">微单（微型单反）</h3>
+<h3 id="-">微单（微型单反）</h3>
 <p>我是有意把这个排名放在最后的，因为我觉得微单是普通用户享受摄影乐趣的最终归宿。具体原因可以再写一篇文章来阐述。</p>
-<table><br>   <tr><br>      <td>Model </td><br>      <td>Type </td><br>      <td>pricermb </td><br>      <td>ppratio</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 J1 </td><br>      <td>Hybrid </td><br>      <td>2319 </td><br>      <td>11.5</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN E-PM2 </td><br>      <td>Hybrid </td><br>      <td>2999 </td><br>      <td>2.75</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-3N </td><br>      <td>Hybrid </td><br>      <td>3099 </td><br>      <td>2.571429</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-5R </td><br>      <td>Hybrid </td><br>      <td>3580 </td><br>      <td>2.05</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN EPM1 </td><br>      <td>Hybrid </td><br>      <td>2499 </td><br>      <td>2</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 J2 </td><br>      <td>Hybrid </td><br>      <td>2859 </td><br>      <td>1.6</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 S1 </td><br>      <td>Hybrid </td><br>      <td>3182.3 </td><br>      <td>1.4375</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN EPL3 </td><br>      <td>Hybrid </td><br>      <td>2599 </td><br>      <td>1.25</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-6 </td><br>      <td>Hybrid </td><br>      <td>5076 </td><br>      <td>1.138889</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-5N </td><br>      <td>Hybrid </td><br>      <td>4999 </td><br>      <td>1.117647</td><br>   </tr><br>   <tr><br>      <td>Sony NEX-7 </td><br>      <td>Hybrid </td><br>      <td>6890 </td><br>      <td>1.1</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN E-PL5 </td><br>      <td>Hybrid </td><br>      <td>4199 </td><br>      <td>1.03125</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GF2 </td><br>      <td>Hybrid </td><br>      <td>3399 </td><br>      <td>0.888889</td><br>   </tr><br>   <tr><br>      <td>Olympus OM-D E-M5 </td><br>      <td>Hybrid </td><br>      <td>6380 </td><br>      <td>0.763158</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 V1 </td><br>      <td>Hybrid </td><br>      <td>3639 </td><br>      <td>0.727273</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GX1 </td><br>      <td>Hybrid </td><br>      <td>4099 </td><br>      <td>0.666667</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC-GH3 </td><br>      <td>Hybrid </td><br>      <td>9998 </td><br>      <td>0.659091</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GH2 </td><br>      <td>Hybrid </td><br>      <td>9400 </td><br>      <td>0.619048</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GF5 </td><br>      <td>Hybrid </td><br>      <td>2499 </td><br>      <td>0.6</td><br>   </tr><br>   <tr><br>      <td>Nikon 1 J3 </td><br>      <td>Hybrid </td><br>      <td>3670.9 </td><br>      <td>0.416667</td><br>   </tr><br>   <tr><br>      <td>Olympus PEN EP3 </td><br>      <td>Hybrid </td><br>      <td>3899 </td><br>      <td>0.230769</td><br>   </tr><br>   <tr><br>      <td>Panasonic Lumix DMC GF3 </td><br>      <td>Hybrid </td><br>      <td>3975 </td><br>      <td>0.107143</td><br>   </tr><br></table>
+<table>
+   <tr>
+      <td>Model </td>
+      <td>Type </td>
+      <td>pricermb </td>
+      <td>ppratio</td>
+   </tr>
+   <tr>
+      <td>Nikon 1 J1 </td>
+      <td>Hybrid </td>
+      <td>2319 </td>
+      <td>11.5</td>
+   </tr>
+   <tr>
+      <td>Olympus PEN E-PM2 </td>
+      <td>Hybrid </td>
+      <td>2999 </td>
+      <td>2.75</td>
+   </tr>
+   <tr>
+      <td>Sony NEX-3N </td>
+      <td>Hybrid </td>
+      <td>3099 </td>
+      <td>2.571429</td>
+   </tr>
+   <tr>
+      <td>Sony NEX-5R </td>
+      <td>Hybrid </td>
+      <td>3580 </td>
+      <td>2.05</td>
+   </tr>
+   <tr>
+      <td>Olympus PEN EPM1 </td>
+      <td>Hybrid </td>
+      <td>2499 </td>
+      <td>2</td>
+   </tr>
+   <tr>
+      <td>Nikon 1 J2 </td>
+      <td>Hybrid </td>
+      <td>2859 </td>
+      <td>1.6</td>
+   </tr>
+   <tr>
+      <td>Nikon 1 S1 </td>
+      <td>Hybrid </td>
+      <td>3182.3 </td>
+      <td>1.4375</td>
+   </tr>
+   <tr>
+      <td>Olympus PEN EPL3 </td>
+      <td>Hybrid </td>
+      <td>2599 </td>
+      <td>1.25</td>
+   </tr>
+   <tr>
+      <td>Sony NEX-6 </td>
+      <td>Hybrid </td>
+      <td>5076 </td>
+      <td>1.138889</td>
+   </tr>
+   <tr>
+      <td>Sony NEX-5N </td>
+      <td>Hybrid </td>
+      <td>4999 </td>
+      <td>1.117647</td>
+   </tr>
+   <tr>
+      <td>Sony NEX-7 </td>
+      <td>Hybrid </td>
+      <td>6890 </td>
+      <td>1.1</td>
+   </tr>
+   <tr>
+      <td>Olympus PEN E-PL5 </td>
+      <td>Hybrid </td>
+      <td>4199 </td>
+      <td>1.03125</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC GF2 </td>
+      <td>Hybrid </td>
+      <td>3399 </td>
+      <td>0.888889</td>
+   </tr>
+   <tr>
+      <td>Olympus OM-D E-M5 </td>
+      <td>Hybrid </td>
+      <td>6380 </td>
+      <td>0.763158</td>
+   </tr>
+   <tr>
+      <td>Nikon 1 V1 </td>
+      <td>Hybrid </td>
+      <td>3639 </td>
+      <td>0.727273</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC GX1 </td>
+      <td>Hybrid </td>
+      <td>4099 </td>
+      <td>0.666667</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC-GH3 </td>
+      <td>Hybrid </td>
+      <td>9998 </td>
+      <td>0.659091</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC GH2 </td>
+      <td>Hybrid </td>
+      <td>9400 </td>
+      <td>0.619048</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC GF5 </td>
+      <td>Hybrid </td>
+      <td>2499 </td>
+      <td>0.6</td>
+   </tr>
+   <tr>
+      <td>Nikon 1 J3 </td>
+      <td>Hybrid </td>
+      <td>3670.9 </td>
+      <td>0.416667</td>
+   </tr>
+   <tr>
+      <td>Olympus PEN EP3 </td>
+      <td>Hybrid </td>
+      <td>3899 </td>
+      <td>0.230769</td>
+   </tr>
+   <tr>
+      <td>Panasonic Lumix DMC GF3 </td>
+      <td>Hybrid </td>
+      <td>3975 </td>
+      <td>0.107143</td>
+   </tr>
+</table>
 
 <p><img src="/img/j1.jpg" alt="j1"></p>
 <p>好家伙，尼康又夺魁了，很意外。在日本市场，可能尼康J1很畅销，但在大陆这款相机是非常小众的。微单方面，用户群最大的就是奥林巴斯的PEN系列和索尼的Nex系列。两家的旗舰级机器，奥林巴斯OM-D E-M5和索尼Nex 7的性价比分别排在中下游和中游水平。而在入门微单方面，奥巴的E-PM2战胜了索尼Nex 3N，分列本榜亚季军，但差距不大。用户再选择的时候，就要重点考虑两家的镜头群问题了，当然，这也是买微单的时候最需要考虑的。此外，过去很长一段时间索尼家热销的Nex 5N已经退出了目前市场上最具性价比相机的竞争了，其后续机型Nex 5R已经取代了她。</p>
-<h3 id="-4fbf-643a-6027-">便携性</h3>
+<h3 id="-">便携性</h3>
 <p>如果将机身重量作为便携性标准加入到性价比中，那么排名会是什么样的呢？下次再来讨论吧，顺便讲讲我个人的一点点业余的拍摄经验。</p>
-<h3 id="-540e-8bb0-ff1a-">后记：</h3>
+<h3 id="-">后记：</h3>
 <p>请注意，本文中的价格数据时基于2013年5月17日的亚马逊中国的当日价格，并且基本所有相机都是机身价格，如果亚马逊中没有机身卖，那就是搭配狗头（最廉价）的套餐价格。所以，可能对结果产生影响，大家就当做娱乐看待，各家的粉丝也不要喷我。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
@@ -1111,14 +1578,14 @@ r1[,<span class="number">2</span>] = gsub(<span class="string">','</span>,<span 
 <p><img src="/img/c1.png" alt="R"></p>
 <p>单击图中左下区域，右键选择“全选”，复制文本框中的数据，由于连图片也一起复制了，因此我们要粘贴到新建的一个txt文档中，以清除图片，并保留原文档的排列格式。然后在txt文档中直接全选复制粘贴到新建的excel里（注意粘贴时点击excel的第一个单元格），不作任何处理，另存为文本（text tab delimited）格式到Rstudio的工作路径即可。</p>
 <p>下面就要转到Rstudio了，读取该txt文档，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>cd=read.table(<span class="string">"camera data.txt"</span>,header=<span class="literal">F</span>,sep=<span class="string">"\t"</span>)
 </pre></td></tr></table></figure>
 
 <p>你会发现有很多NA、空白和重复值，没关系，下一步就要取其精华了。</p>
 <p><img src="/img/c2.png" alt="R"></p>
 <p>先看每一款机型的名称、总分和排名共占有6个单元格，而整个表一共有1284行，因此共有1284/6=214款机型（当然这一步可以用函数代替，但我觉得对于格式杂乱的静态网页数据，还是具体问题具体分析的好）。下面就要写个循环来分别提取相机名称、相机总分和相机排名三列数据了。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -1150,20 +1617,23 @@ cd1=as.data.frame(cd1)
 colnames(cd1) = c(<span class="string">"ranks"</span>,<span class="string">"camera names"</span>,<span class="string">"overall scores"</span>)
 </pre></td></tr></table></figure>
 
-<p>此时的cd1就是这个样子了，<br><img src="/img/c3.png" alt="R"></p>
-<p>下面，我们开始提取dxomark.com上相机数据库的数据，因为里面有上市价格、相机类型、像素、重量、上市时间等数据（重量数据不全，价格数据不是现价，只做参考）。<br><img src="/img/c4.png" alt="R"></p>
+<p>此时的cd1就是这个样子了，
+<img src="/img/c3.png" alt="R"></p>
+<p>下面，我们开始提取dxomark.com上相机数据库的数据，因为里面有上市价格、相机类型、像素、重量、上市时间等数据（重量数据不全，价格数据不是现价，只做参考）。
+<img src="/img/c4.png" alt="R"></p>
 <p>像这样用鼠标选中数据区域，拉到最底下复制粘贴，和刚才的操作一样，该页面共有256款机型，包括了未测试的，我们选择每页显示50个项目，这样只需要重复操作6次就可得到所有数据，我承认这是非常笨的方法，只适合菜鸟。但我觉得对于这种非动态更新的网页静态数据，没有万金油的方法可以套，毕竟主动权掌握在网页设计者手中。所以，我认为掌握一些笨方法对于极小数据量是很有用的。然后我们就得到了，</p>
 <p><img src="/img/c5.png" alt="R"></p>
 <p>同样，也有很多空行和NA值，并且有几十款机型由于各种原因，DxOmark没有评分，因此我们只选需要的，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre>cdb=cdb[which(cdb$Mpix != <span class="string">'NA'</span>),] <span class="comment">#发现数据框规律，通过反选Mpix为NA的列</span>
 cdbtested=cdb[which(cdb$Image == <span class="string">'TESTED'</span>),] <span class="comment">#选择经过测试的机型</span>
 </pre></td></tr></table></figure>
 
-<p>恰巧，得到的cdbtested也是214款机器。<br><img src="/img/c6.png" alt="R"></p>
+<p>恰巧，得到的cdbtested也是214款机器。
+<img src="/img/c6.png" alt="R"></p>
 <p>接下来，要重新对cd1和cdbtested进行重新排列和合并。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -1174,13 +1644,13 @@ cdnew=cbind(cd1ordered,cdbtd[,-<span class="number">1</span>])
 </pre></td></tr></table></figure>
 
 <p>你会发现数据框是字符格式，而且有的单元格是数字+单位的形式，为了对数据进行分析，我们需要去掉单位，将其转换为numeric格式。例如，把portrait分数中的22 bits，改成22。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 </pre></td><td class="code"><pre>cdnew[,<span class="number">4</span>] = sub(<span class="string">'.....$'</span>,<span class="string">''</span>,cdnew[,<span class="number">4</span>])
 </pre></td></tr></table></figure>
 
 <p>其他依次类推。</p>
 <p>下面，我们要把需要进行数据运算分析的列，从<code>character</code>转换成<code>numeric</code>，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -1191,7 +1661,7 @@ cdnew1[,c(<span class="number">1</span>,<span class="number">2</span>,<span clas
 </pre></td></tr></table></figure>
 
 <p>并修改一些数据转换产生的错误，比如4:3大小的传感器，被R识别为某种运算，所有4:3的单元格都成了0.16875，因此，也要排除这些转换错误，还好，数据量比较小，容易发现。这可能是我对数据格式不熟悉，造成的，应该可以通过修改代码解决。然后选择</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 </pre></td><td class="code"><pre>cdnew1[which(cdnew1[,<span class="number">13</span>]==<span class="string">'0.16875'</span>),<span class="number">13</span>] = <span class="string">'4:3'</span>
 cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</span>),<span class="number">15</span>] = <span class="literal">NA</span> <span class="comment">#一些空值为0，我们也不需要，所以一并转换为NA</span>
@@ -1202,7 +1672,9 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
 <p>性价比指数 =  性能分数 / （价格 /  500 <em> 100）/  （机身重量 / 500 </em> 100）</p>
 <p>价格和机身重量要乘以100是为了转换成和性能分数一致的百分制（此处很值得研究）。</p>
 <p>然后我得到的结果是（代码就不放了），cdfinalscore越高，性价比越高。</p>
-<p><img src="/img/c7.png" alt="R"><br><img src="/img/c8.png" alt="R"><br>可见莱卡M9有多坑爹啊。</p>
+<p><img src="/img/c7.png" alt="R">
+<img src="/img/c8.png" alt="R">
+可见莱卡M9有多坑爹啊。</p>
 <p>以上仅供个人参考，大家可以根据自己的喜好，设置不同的参数分析，对排名影响还是挺大的。下一步，我都想学学Python，定期抓取亚马逊的价格数据了。哎，时间不够用啊，不能不务正业啊。如果，这一块能做好，搞个小网站赚钱还是有搞头的。</p>
 <p>P.S. 以上文中代码问题还请各位指正，纯新手和菜鸟，没有什么好的代码习惯。欢迎大家交流。</p>
 ]]></content>
@@ -1215,7 +1687,8 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
     <published>2013-05-01T00:00:00.000Z</published>
     <updated>2013-09-29T21:39:49.000Z</updated>
     <content type="html"><![CDATA[<p>今天是五一国际劳动节，据说，法国以所有日常的公共运输的停运和商家店铺的停业来庆祝这一劳动者的节日。紧接着的假期是5月8日的“二战胜利纪念日”和“耶稣升天节”。</p>
-<p>来到法国之后，大部分时间还都是在实验室和宿舍度过的，不期而至的假期对我来说，就是要提前去超市屯点食物，和规划一下实验进度，因为超市和实验室都会很准时的关闭，仅此而已。而我大部分的工作是在电脑上完成，所以假期对我分析数据、看文献、写论文来说没有什么影响。<br><a id="more"></a></p>
+<p>来到法国之后，大部分时间还都是在实验室和宿舍度过的，不期而至的假期对我来说，就是要提前去超市屯点食物，和规划一下实验进度，因为超市和实验室都会很准时的关闭，仅此而已。而我大部分的工作是在电脑上完成，所以假期对我分析数据、看文献、写论文来说没有什么影响。
+<a id="more"></a></p>
 <p>在国内的女友看来，我在法国的生活简直是松散极了。其实，很多时候我是不同意的，但每当这些对我来说莫名其妙的假期来临的时候，我会很愧疚，因为与此同时，她还在国内辛苦的上班中。今天，她刚刚结束了短暂的五一假期回上海，她说，</p>
 <blockquote>
 <p>要好好工作了。钱到用时方恨少，带了2000回去，两天就花完了。</p>
@@ -1258,12 +1731,14 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
     <id>http://yangliufr.com/2013/04/08/truth-of-chinese-fertilizer/</id>
     <published>2013-04-08T00:00:00.000Z</published>
     <updated>2013-09-27T17:05:10.000Z</updated>
-    <content type="html"><![CDATA[<p><em>译者的话：前几天那个已经被撤职的环保局长，用红豆煮的水也是红色的来解释地下水污染。今天看到新闻，中国近年来每6分钟就有一人被确诊为癌症。而关于水污染的报道更不鲜见了，所以我也能预料到我这篇译文没有任何点击量，愿意读这篇文章的人甚至比看我的zotero教程都更小众。麻木归麻木了，但该做的事情，我依然会做。绿色和平这个国际组织的报道还是有别于一般媒体的，和其他国际组织一样，其视角会有些不同，没有记者，如纪录片一样，但仍发人深思。</em><br><a id="more"></a><br>当谈及“食物”时，印入人们脑海中的可能是各种食品的营销广告。但在食品产业背后，有着那和化肥有关而又不堪描绘的丑陋的另一面。</p>
+    <content type="html"><![CDATA[<p><em>译者的话：前几天那个已经被撤职的环保局长，用红豆煮的水也是红色的来解释地下水污染。今天看到新闻，中国近年来每6分钟就有一人被确诊为癌症。而关于水污染的报道更不鲜见了，所以我也能预料到我这篇译文没有任何点击量，愿意读这篇文章的人甚至比看我的zotero教程都更小众。麻木归麻木了，但该做的事情，我依然会做。绿色和平这个国际组织的报道还是有别于一般媒体的，和其他国际组织一样，其视角会有些不同，没有记者，如纪录片一样，但仍发人深思。</em>
+<a id="more"></a>
+当谈及“食物”时，印入人们脑海中的可能是各种食品的营销广告。但在食品产业背后，有着那和化肥有关而又不堪描绘的丑陋的另一面。</p>
 <p>绿色和平（东亚）发起了一项调查活动，关注了中国最重要的磷肥生产地四川省，来揭示这一片不堪和难以下咽。</p>
 <p><a href="http://www.greenpeace.org/eastasia/living-with-danger-report/" target="_blank">调查结果</a>显示，中国有着非常普遍的严重环境问题，大量含有磷肥废料（磷石膏）的有毒化学物质，竟被开放地丢弃在了当地得几座村庄旁边。</p>
 <p>样品分析结果显示，氟化物（一种潜在的有毒物质）含量在当地几个采集点都超出了国家对有毒废弃物规定的安全标准。其中，有一处20米高的废渣，就临堆放在村庄旁边，废渣的沥出液中氟化物超出国标7倍之多。</p>
 <p>当地村民已经被磷肥生产企业和政府的不作为行为激怒了，自发组织购买了一辆铲车，开始了去除有毒废物的行动。</p>
-<p>下面这个纪录片名为“How China’s fertilizer industry is endangering villager lives（中国化肥工业正危及村民生命）”</p>
+<p>下面这个纪录片名为“How China&#39;s fertilizer industry is endangering villager lives（中国化肥工业正危及村民生命）”</p>
 <p>YouTube视频：<a href="http://www.youtube.com/watch?feature=player_embedded&amp;v=vZJBBldOTeQ" target="_blank">请点击</a></p>
 <p>尽管我们并不鼓励村民做出这种有潜在危险的行为，但村民用行动告诉大家，他们仍爱着这片土地和村庄，但他们的心在滴血。同时，这也在向当地政府释放出挑战的信号，对其不为人民服务的行为做出了警告。</p>
 <p>绿色和平（东亚）的这次调查所提供的视频证据，是对重工业化已经渗透进农业和食品生产系统中无法自拔的又一个鲜活事例。化工集约农业<a href="http://www.greenpeace.to/greenpeace/wp-content/uploads/2012/06/Tirado-and-Allsopp-2012-Phosphorus-in-Agriculture-Technical-Report-02-2012.pdf" target="_blank">使用了大量的合成化肥</a>，其生产中产生大量废弃物，对环境和人类生存造成了极大的破坏和威胁。</p>
@@ -1280,109 +1755,13 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
     <id>http://yangliufr.com/2013/04/03/zotero-1/</id>
     <published>2013-04-03T00:00:00.000Z</published>
     <updated>2013-09-28T13:42:20.000Z</updated>
-    <content type="html"><![CDATA[<p>第一集主要为新手介绍如何安装Zotero，以及基本的使用方法，内容很简单。为了观看更清晰，视频会分别存放在YouTube和Youku上，文章中贴出Youku的播放器（很不清晰），以及YouTube的播放地址以及百度盘的下载地址，欢迎转载，请注明出处即可。<br><a id="more"></a><br>推荐大家下载观看，或者点击优酷的右下角——返回优酷观看，会达到最佳效果，原片均为720P的清晰度。</p>
+    <content type="html"><![CDATA[<p>第一集主要为新手介绍如何安装Zotero，以及基本的使用方法，内容很简单。为了观看更清晰，视频会分别存放在YouTube和Youku上，文章中贴出Youku的播放器（很不清晰），以及YouTube的播放地址以及百度盘的下载地址，欢迎转载，请注明出处即可。
+<a id="more"></a>
+推荐大家下载观看，或者点击优酷的右下角——返回优酷观看，会达到最佳效果，原片均为720P的清晰度。</p>
 <p>本站再次更换了新的主题，主要为了让大家在博客中直接观看视频更方便，原主题的文章页宽度太窄。</p>
 <p>YouTube地址：<a href="https://www.youtube.com/watch?v=sC7OqGJdopg" target="_blank">点我</a></p>
 <p>百度盘下载地址：<a href="http://pan.baidu.com/share/link?shareid=458907&amp;uk=3859037351" target="_blank">点我</a></p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/文献管理软件/" term="文献管理软件"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[又放假了，这次是“复活节”]]></title>
-    <link href="http://yangliufr.com/2013/03/29/easter-r/"/>
-    <id>http://yangliufr.com/2013/03/29/easter-r/</id>
-    <published>2013-03-29T00:00:00.000Z</published>
-    <updated>2013-10-02T13:10:16.000Z</updated>
-    <content type="html"><![CDATA[<p>为什么说“又”呢，因为法国的假日太多了。<br><a id="more"></a></p>
-<h4 id="1-_-6cd5-56fd-4e00-5e74-6709-591a-5c11-5047-671f-ff1f-">1. 法国一年有多少假期？</h4>
-<p>对于我这种上班就是放假，放假还想上班，闲不住的人来说，法国的假期很人“抓狂“，来法国不到一年，没数过有多少假期，不过不<a href="http://fr.hujiang.com/new/p115379/" target="_blank">搜</a>不知道：</p>
-<blockquote>
-<p>法国共有11个法定假日，分别是国庆节、圣诞节、元旦、五一劳动节、万圣节、圣灵降临节、复活节、耶稣升天节、圣母升天节以及一战停战日和二战停战日。如果假日当天是星期二或星期四，那么这一天可以“带”上星期一或星期五与双休日连休。</p>
-</blockquote>
-<p>彻头彻尾的”懒人国“啊，不过如此弹丸之国的经济总量世界第五，也就暂且放他一马吧。尤其是我所在的图卢兹——空客航天城，作为非专业人士看来，就是一个普通的欧洲小城。</p>
-<h4 id="2-_-590d-6d3b-8282-662f-5e72-5417-7684-ff1f-53ef-4ee5-5403-5417-ff1f-">2. 复活节是干吗的？可以吃吗？</h4>
-<p>作为一个人文知识极度匮乏的理科生，一个在资本主义的水深火热中生存的无宗教信仰的社会主义好青年，复活节对我来说就是，不要去单位了。</p>
-<p>我专门查了下<a href="http://baike.baidu.com/view/1462.htm" target="_blank">复活节</a>（法语，La Pâque），</p>
-<blockquote>
-<p>复活节是纪念耶稣基督在十字架受刑死后复活的节日，西方信基督教的国家都过这个节。每年春分月圆之后第一个星期日。</p>
-</blockquote>
-<p>注意，在国内的时候知道西方国家的父亲节、母亲节，是某个月的第几个星期日，其不确定性只依赖”星期“这一个变量。但复活节可不一般，是综合了阳历、阴历、星期，三个变量的节日，其飘忽不定的特性和足球中后卫主罚禁区前任意球，球的飞行轨迹差不多。虽然复杂，但每年的挂历还得印，日记本还得生产，上面的节日都是印刷之前现场演算的吗？我小时候看挂历的时候真以为是这样的，直到今天看百度百科的时候，才知道，这个还有算法可以算的。</p>
-<blockquote>
-<p>年份只限于1900年到2099年</p>
-</blockquote>
-<ol>
-<li><p>设要求的那一年是Y年，从Y减去1900，其差记为N；</p>
-</li>
-<li><p>用19作除数去除N，余数记为A；</p>
-</li>
-<li><p>用4作除数去除N，不管余数，把商记为Q；</p>
-</li>
-<li><p>用19去除7A+1，把商记为B，不管余数；</p>
-</li>
-<li><p>用29去除11A+4-B，余数记为M；</p>
-</li>
-<li><p>用7去除N+Q+31-M，余数记为W；</p>
-</li>
-<li><p>计算25-M-W。</p>
-</li>
-</ol>
-<p>得出答数即可定出复活节的日期。若为正数，月份为4月；如为负数，月份为3月；若为0，则为3月31日。</p>
-<p>好吧，我读到这的时候，鼠标已经很自然的去点R studio了，因为我只会用简单的数据分析函数，还没用过R的自定义function功能，正巧dapeng同学前几天写了相关的文章，于是我参考了一下R in Nutshell，写了个自定义函数。</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-</pre></td><td class="code"><pre>easter &lt;- <span class="keyword">function</span>(x){
-  n &lt;- x - <span class="number">1900</span>
-  a &lt;- n %% <span class="number">19</span>
-  q &lt;- n %/% <span class="number">4</span>
-  b &lt;- (<span class="number">7</span>*a+<span class="number">1</span>) %/% <span class="number">19</span>
-  m &lt;- (<span class="number">11</span> * a + <span class="number">4</span> - b) %% <span class="number">29</span>
-  w &lt;- (n + q + <span class="number">31</span> - m) %% <span class="number">7</span>
-  d &lt;- <span class="number">25</span> - m - w
-  <span class="keyword">if</span>(d &gt; <span class="number">0</span> ){
-    print(paste(d,<span class="string">"April"</span>))
-  }<span class="keyword">else</span>{
-    print(<span class="string">"31, March"</span>)
-  }
-}
-</pre></td></tr></table></figure>
-
-<p>运行以上代码之后，就可以随便输入1900~2099之间的任意数字，得出那一年的复活节日期了，当然要用以下格式才行，比如我要看2013年的是哪一天：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>easter(<span class="number">2013</span>)
-</pre></td></tr></table></figure>
-
-<p>所得到的结果为：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>[<span class="number">1</span>] <span class="string">"31, March"</span>
-</pre></td></tr></table></figure>
-
-<p>好玩吧？所用到的关键函数是：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="keyword">function</span>() {}
-<span class="keyword">if</span>() { <span class="keyword">else</span> { } }
-paste()
-</pre></td></tr></table></figure>
-
-<p>以上就算做复活节的<a href="http://baike.baidu.com/view/24567.htm" target="_blank">彩蛋</a>吧，</p>
-<blockquote>
-<p>复活节彩蛋是复活节里最重要的食物象征，意味着生命的开始与延续。</p>
-</blockquote>
-<p>希望自己蹒跚学R的脚步能够延续地迈下去。</p>
-]]></content>
-    <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
   </entry>
 </feed>

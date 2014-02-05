@@ -74,7 +74,8 @@
   
   <div class="entry">
     
-      <p>用R时间久了，确实非常方便，因为很多自定义的东西可以写。可能其他商业统计软件也可以吧，但没有R开源，长话短说。<br><a id="more"></a></p>
+      <p>用R时间久了，确实非常方便，因为很多自定义的东西可以写。可能其他商业统计软件也可以吧，但没有R开源，长话短说。
+<a id="more"></a></p>
 <p>比较两组数据的均值有无显著差异时，要选择适当的检验对其进行分析，如下表：</p>
 <table>
 <thead>
@@ -100,7 +101,7 @@
 <p>所以，首先要确定你的数据是独立的（<code>unpaired</code>）还是配对的（<code>paired</code>）。举个例子，有两杯水，一杯是纯净水A，一杯是自来水B，实验第一天我们测一下其中氯离子浓度，十天后，再测一次。如果你要比较第十天，A与B之间的差异，就要进行独立检验；如果你要比较第一天的B和第十天的B有什么不同，那就要进行配对检验。</p>
 <p>选择好了数据形式之后，要检验其是否符合正态分布、方差齐性等t检验的零假设条件，才能最终确定使用哪种方法得到我们想要的p值。因此，这里就存在一个变数，如果各组数据都符合或都不符合零假设，都还好，就怕有的符合有的不符合，这样在有很多对数据都要进行两两比较时，就比较麻烦了。</p>
 <p>我就针对我的个人需求写了个小函数，减少了工作量，提高了成就感，即先用<code>levene</code>检验判断方差齐性，<code>p &gt; 0.05</code>的表示方差齐，然后才能进行t检验，否则进行相对应的非参数检验。在这里分享出来：</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -147,7 +148,7 @@
 </pre></td></tr></table></figure>
 
 <p>使用起来很简单，从数据框中选择两组数据，然后标记是独立样本（<code>TRUE</code> 或 <code>T</code>）还是配对样本（<code>FALSE</code> 或 <code>F</code>）。例如，</p>
-<figure class="highlight lang-r"><table><tr><td class="gutter"><pre>1
+<figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -213,7 +214,7 @@
   
     <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
   
-    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>10</small></li>
+    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>11</small></li>
   
     <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
   
@@ -229,6 +230,10 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>
+      </li>
+    
+      <li>
         <a href="/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/">在巴黎的一夜——参加中法建交50周年纪念晚会</a>
       </li>
     
@@ -242,10 +247,6 @@
     
       <li>
         <a href="/2013/12/05/how-to-cite-r-in-your-paper-or-publication/">如何用zotero在论文中引用R</a>
-      </li>
-    
-      <li>
-        <a href="/2013/10/04/my-view-of-south-korea/">我印象中的韩国：参加国际小型底栖生物会议有感</a>
       </li>
     
   </ul>
