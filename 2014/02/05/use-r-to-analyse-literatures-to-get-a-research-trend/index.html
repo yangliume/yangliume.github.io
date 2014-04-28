@@ -5,21 +5,26 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
   <title>菜鸟学R语言：结合文献数据库，分析学科发展概况 | Yang Liu fr</title>
-  <meta name="author" content="Yang Liu">
-  
-  <meta name="description" content="最近因为图卢兹总是下雨，河水水位居高不下，所以，我就赋闲了。我从来也不是一个务正业的人，有了时间，除了看文献之外，总要干点什么。这次时间充裕，加上导师让我不要着急，我心里只能嘀咕着，我可不想延期毕业。于是，有了时间自由支配，所以，就琢磨着完成一开始学R的时候想要完成的一个idea，就是，根据文献搜索结果，来进行分析预测学科发展走势。">
-  
-  
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <meta property="og:title" content="菜鸟学R语言：结合文献数据库，分析学科发展概况"/>
-  <meta property="og:site_name" content="Yang Liu fr"/>
-
-  <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+    <meta name="author" content="Yang Liu">
+  
+  
+    <meta name="description" content="最近因为图卢兹总是下雨，河水水位居高不下，所以，我就赋闲了。我从来也不是一个务正业的人，有了时间，除了看文献之外，总要干点什么。这次时间充裕，加上导师让我不要着急，我心里只能嘀咕着，我可不想延期毕业。于是，有了时间自由支配，所以，就琢磨着完成一开始学R的时候想要完成的一个idea，就是，根据文献搜索结果，来进行分析预测学科发展走势。">
+  
+  <meta content="article" property="og:type">
+<meta content="菜鸟学R语言：结合文献数据库，分析学科发展概况" property="og:title">
+<meta content="http://yangliufr.com/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/" property="og:url">
+<meta content="/img/literature-analysis-1.png" property="og:image">
+<meta content="Yang Liu fr" property="og:site_name">
+<meta content="最近因为图卢兹总是下雨，河水水位居高不下，所以，我就赋闲了。我从来也不是一个务正业的人，有了时间，除了看文献之外，总要干点什么。这次时间充裕，加上导师让我不要着急，我心里只能嘀咕着，我可不想延期毕业。于是，有了时间自由支配，所以，就琢磨着完成一开始学R的时候想要完成的一个idea，就是，根据文献搜索结果，来进行分析预测学科发展走势。" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+    <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
+  
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -35,35 +40,43 @@
 
 </head>
 
-
 <body>
   <div class="wrapper">
-    <header id="header"><div class="title">
-  <h1><a href="/">Yang Liu fr</a></h1>
-  <p><a href="/">a meiobenthologist&#39;s blog</a></p>
-</div>
-<nav class="nav">
-  <ul>
-    
-      <li><a href="/">首页</a></li>
-    
-      <li><a href="/archives">博文目录</a></li>
-    
-      <li><a href="/about">关于</a></li>
-    
-      <li><a href="/resume">简历</a></li>
-    
-      <li><a href="/atom.xml">RSS</a></li>
-    
-  </ul>
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Yang Liu fr</a></h1>
+    <p><a href="/">a meiobenthologist&#39;s blog</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">博文目录</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/resume">简历</a></li>
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
   <div class="clearfix"></div>
-</nav>
-<div class="clearfix"></div></header>
+</header>
     <div class="content"><article class="post">
   <header>
     
       <div class="icon"></div>
-      <time datetime="2014-02-05T00:00:00.000Z"><a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">2014 / 02 / 05</a></time>
+      <a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">
+  <time datetime="2014-02-05T00:00:00.000Z">
+    2014 / 02 / 05
+  </time>
+</a>
     
     
   
@@ -74,27 +87,26 @@
   
   <div class="entry">
     
-      <p>最近因为图卢兹总是下雨，河水水位居高不下，所以，我就赋闲了。我从来也不是一个务正业的人，有了时间，除了看文献之外，总要干点什么。这次时间充裕，加上导师让我不要着急，我心里只能嘀咕着，我可不想延期毕业。于是，有了时间自由支配，所以，就琢磨着完成一开始学R的时候想要完成的一个idea，就是，根据文献搜索结果，来进行分析预测学科发展走势。
-<a id="more"></a></p>
+      <p>最近因为图卢兹总是下雨，河水水位居高不下，所以，我就赋闲了。我从来也不是一个务正业的人，有了时间，除了看文献之外，总要干点什么。这次时间充裕，加上导师让我不要着急，我心里只能嘀咕着，我可不想延期毕业。于是，有了时间自由支配，所以，就琢磨着完成一开始学R的时候想要完成的一个idea，就是，根据文献搜索结果，来进行分析预测学科发展走势。<br><a id="more"></a></p>
 <p>当然，想法总是丰满，现实总是骨感的。经过两天的钻研，也只能摸到个text mining（文本挖掘）课堂之外楼道转角楼梯口的男厕所的冰山一角。我对这方面的兴趣和知识储备是呈反比的，但丝毫没有影响我不务正业的脚步。这次，我就讲讲思路，代码就不贴了，有兴趣的可以自己搞出来，或者想办法联系我，大牛的话，就当做看看儿时的自己吧。</p>
-<h3 id="-endnote-">从EndNote中导出文献数据</h3>
+<h3 id="从EndNote中导出文献数据">从EndNote中导出文献数据</h3>
 <p>为什么要用EndNote呢？我曾花了不少时间研究抓取谷歌学术的搜索结果，但是每次都很快被谷歌封掉IP。原因是，我没有对脚本进行浏览器伪装，和设置每次请求的间隔时间等。本着结果导向的思想，我转向了EndNote强大的软件内文献数据库搜索功能。</p>
 <p>所以，第一步就是确定你要搜索的关键词，在这里，我比较关注“meiofauna”，于是就在title或者keywords，或者全文中对此关键词进行搜索，得到包含它的文献题录。</p>
 <p><img src="/img/literature-analysis-1.png" alt="literature-analysis-1"></p>
 <p>我总共得到了623条文献题录，ctrl+A全选转移到library的某个group里面，然后点击这个group，再点击左上角的file——export，另存为xml格式文件即可。这样就把所有的文献题录都保存到一个文件中了。</p>
-<h3 id="-r-xml-">抓取有用信息的工作都由R的XML包来完成</h3>
+<h3 id="抓取有用信息的工作都由R的XML包来完成">抓取有用信息的工作都由R的XML包来完成</h3>
 <p>这里不赘述了，我以前的几篇博文中提到过如何抓取网页数据，其中最主要的就是xpath的知识，firefox和chrome中都有插件可以找到网页中某个node的地址，这次是保存下来的文件，和之前稍有不同，也就是说不能偷懒了，建议大家去<a href="http://www.w3school.com.cn/xpath/" target="_blank">w3cschool的网站</a>看看。没有什么难点，除了这些具体的用哪个包，还有就是代码习惯，很重要很重要，很多时间出现bug，都是因为数据格式不对，很多变量保存来保存去的，用了一些function之后，格式就变了，所以，这种习惯需要一点一点养成，我还差得远呢，毕竟不是天天写。</p>
-<h3 id="-">用什么方法去分析抓取下来的数据呢？</h3>
+<h3 id="用什么方法去分析抓取下来的数据呢？">用什么方法去分析抓取下来的数据呢？</h3>
 <p>我抓取下来的数据包括了每篇论文的标题、出版日期、摘要、作者单位地址，这四项最主要的内容。其中摘要是一个庞大的语料库，我也试着做了一下词频分析，但我做着做着，就感觉知识匮乏，搞不下去了。我的想法很简单，就是看横坐标时间为单位，某一些关键词的词频是随时间增大还是减少。我能把这些都实现，但是这个结果是不是真实的，还是需要强大的模型思维来奠基。</p>
 <p>于是，我转而关注作者的单位地址，从中提取出国家名称，从而计算国家名称出现的频率，看其随时间变化的趋势，这样，也能从时间跨度上了解某方向的进展，可以间接帮助自己以后去哪儿找博后定方向。</p>
 <p>这样，思路逐渐清晰。我问了谷歌，哪儿有全球国家名称列表，找到了个网站，用<code>readHTMLTable</code>这个函数来读取了国家名称，再用<code>grepl</code>来判断地址文本中是否含有某个国家的名称。这一步我要说一下，我原本的思路是，把地址文本分词，然后用<code>match</code>来判断，但这样处理的精确度完全依赖于分词的方法，而题录信息里的地址文本不是标准的有句号的文章，有的逗号后面有空格，有的没有空格或者多个空格，所以，很难用一种方法得到所有国家名称的匹配，再加上像south africa这样的国家，就让你不能用space作为分词依据。因此，在尝试了很长时间后，我放弃了。而现在用的<code>grepl</code>这个方法很有效，让我用5行代码就搞定了原来的几十行。</p>
-<h3 id="-googlevis-">用<code>googleVis</code>画图</h3>
+<h3 id="用googleVis画图">用<code>googleVis</code>画图</h3>
 <p>这里参考了某大神的博客（需翻墙<a href="http://xccds1977.blogspot.fr/2011/09/test_901.html" target="_blank">link</a>），就没有使用<code>rworldmap</code>这个包，而使用了<code>googleVis</code>。因为前者要求在画图时，把国家名称转化为国家代码，虽然有<code>countrycode</code>这个包可以转换，但还是不如<code>googleVis</code>方便。于是，一气呵成，完成了以下以年代划分的五张图。</p>
 <p>1970~2014年，对meiofauna有研究的国家示意图。</p>
-<html><!-- IntensityMap generated in R 3.0.2 by googleVis 0.4.7 package -->  <!-- Thu Feb 06 00:34:13 2014 -->      <!-- jsHeader -->  <script type="text/javascript">     function gvisDataIntensityMapID22f07e9551de () {  var data = new google.visualization.DataTable();  var datajson =  [   [   &quot;AU&quot;,  0,  7,  2,  3,  5   ],  [   &quot;AT&quot;,  1,  1,  1,  0,  2   ],  [   &quot;BE&quot;,  3,  11,  11,  5,  23   ],  [   &quot;BR&quot;,  0,  4,  6,  4,  9   ],  [   &quot;CA&quot;,  2,  9,  3,  4,  6   ],  [   &quot;CL&quot;,  0,  0,  1,  2,  1   ],  [   &quot;CN&quot;,  1,  2,  0,  2,  3   ],  [   &quot;CR&quot;,  0,  1,  0,  1,  1   ],  [   &quot;HR&quot;,  2,  4,  2,  1,  2   ],  [   &quot;DK&quot;,  3,  1,  2,  0,  6   ],  [   &quot;EG&quot;,  1,  3,  0,  0,  1   ],  [   &quot;GB&quot;,  2,  13,  11,  11,  17   ],  [   &quot;FI&quot;,  1,  3,  2,  4,  2   ],  [   &quot;FR&quot;,  3,  13,  6,  6,  13   ],  [   &quot;DE&quot;,  3,  13,  14,  7,  18   ],  [   &quot;GR&quot;,  0,  1,  0,  0,  1   ],  [   &quot;HK&quot;,  1,  1,  1,  2,  1   ],  [   &quot;IN&quot;,  3,  11,  6,  4,  13   ],  [   &quot;ID&quot;,  0,  0,  0,  0,  1   ],  [   &quot;IR&quot;,  0,  1,  0,  0,  1   ],  [   &quot;IT&quot;,  4,  9,  13,  3,  16   ],  [   &quot;JM&quot;,  0,  0,  0,  0,  1   ],  [   &quot;JP&quot;,  0,  0,  0,  0,  3   ],  [   &quot;KE&quot;,  0,  0,  0,  0,  2   ],  [   &quot;LV&quot;,  0,  0,  0,  0,  1   ],  [   &quot;ML&quot;,  0,  0,  0,  0,  3   ],  [   &quot;MX&quot;,  0,  1,  1,  1,  1   ],  [   &quot;NL&quot;,  1,  8,  2,  2,  5   ],  [   &quot;NO&quot;,  0,  0,  1,  0,  2   ],  [   &quot;PL&quot;,  2,  5,  4,  0,  6   ],  [   &quot;PT&quot;,  0,  1,  2,  1,  3   ],  [   &quot;RU&quot;,  1,  1,  1,  0,  1   ],  [   &quot;SA&quot;,  0,  0,  0,  1,  1   ],  [   &quot;ZA&quot;,  6,  13,  8,  6,  5   ],  [   &quot;ES&quot;,  3,  8,  6,  2,  5   ],  [   &quot;SE&quot;,  2,  4,  6,  2,  11   ],  [   &quot;TZ&quot;,  0,  0,  0,  0,  1   ],  [   &quot;TH&quot;,  0,  0,  0,  0,  1   ],  [   &quot;TR&quot;,  0,  0,  0,  0,  1   ],  [   &quot;US&quot;,  18,  34,  24,  9,  33   ],  [   &quot;VE&quot;,  0,  0,  1,  0,  1   ],  [   &quot;RS&quot;,  0,  0,  0,  2,  2   ]   ];  data.addColumn(&#39;string&#39;,&#39;country1&#39;);  data.addColumn(&#39;number&#39;,&#39;1970~1980&#39;);  data.addColumn(&#39;number&#39;,&#39;1980~1990&#39;);  data.addColumn(&#39;number&#39;,&#39;1990~2000&#39;);  data.addColumn(&#39;number&#39;,&#39;2000~2010&#39;);  data.addColumn(&#39;number&#39;,&#39;2010~2014&#39;);  data.addRows(datajson);  return(data);  }     function drawChartIntensityMapID22f07e9551de() {  var data = gvisDataIntensityMapID22f07e9551de();  var options = {};  options[&quot;width&quot;] =    600;  options[&quot;colors&quot;] = [&#39;#4682b4&#39;, &#39;#4682b4&#39;, &#39;#4682b4&#39;, &#39;#4682b4&#39;, &#39;#4682b4&#39;];          var chart = new google.visualization.IntensityMap(      document.getElementById(&#39;IntensityMapID22f07e9551de&#39;)      );      chart.draw(data,options);          }         (function() {  var pkgs = window.<strong>gvisPackages = window.</strong>gvisPackages || [];  var callbacks = window.<strong>gvisCallbacks = window.</strong>gvisCallbacks || [];  var chartid = &quot;intensitymap&quot;;      var i, newPackage = true;  for (i = 0; newPackage &amp;&amp; i &lt; pkgs.length; i++) {  if (pkgs[i] === chartid)  newPackage = false;  }  if (newPackage)    pkgs.push(chartid);      callbacks.push(drawChartIntensityMapID22f07e9551de);  })();  function displayChartIntensityMapID22f07e9551de() {    var pkgs = window.<strong>gvisPackages = window.</strong>gvisPackages || [];    var callbacks = window.<strong>gvisCallbacks = window.</strong>gvisCallbacks || [];    window.clearTimeout(window.<strong>gvisLoad);    window.</strong>gvisLoad = setTimeout(function() {    var pkgCount = pkgs.length;    google.load(&quot;visualization&quot;, &quot;1&quot;, { packages:pkgs, callback: function() {    if (pkgCount != pkgs.length) {    return;  }  while (callbacks.length &gt; 0)  callbacks.shift()();  } });  }, 100);  }     </script>     <!-- jsChart -->    <script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartIntensityMapID22f07e9551de"></script>     <!-- divChart -->      <div id="IntensityMapID22f07e9551de"    style="width: 600px; height: 500px;">  </div></html>
+<html><!-- IntensityMap generated in R 3.0.2 by googleVis 0.4.7 package -->  <!-- Thu Feb 06 00:34:13 2014 -->      <!-- jsHeader -->  <script type="text/javascript">     function gvisDataIntensityMapID22f07e9551de () {  var data = new google.visualization.DataTable();  var datajson =  [   [   “AU”,  0,  7,  2,  3,  5   ],  [   “AT”,  1,  1,  1,  0,  2   ],  [   “BE”,  3,  11,  11,  5,  23   ],  [   “BR”,  0,  4,  6,  4,  9   ],  [   “CA”,  2,  9,  3,  4,  6   ],  [   “CL”,  0,  0,  1,  2,  1   ],  [   “CN”,  1,  2,  0,  2,  3   ],  [   “CR”,  0,  1,  0,  1,  1   ],  [   “HR”,  2,  4,  2,  1,  2   ],  [   “DK”,  3,  1,  2,  0,  6   ],  [   “EG”,  1,  3,  0,  0,  1   ],  [   “GB”,  2,  13,  11,  11,  17   ],  [   “FI”,  1,  3,  2,  4,  2   ],  [   “FR”,  3,  13,  6,  6,  13   ],  [   “DE”,  3,  13,  14,  7,  18   ],  [   “GR”,  0,  1,  0,  0,  1   ],  [   “HK”,  1,  1,  1,  2,  1   ],  [   “IN”,  3,  11,  6,  4,  13   ],  [   “ID”,  0,  0,  0,  0,  1   ],  [   “IR”,  0,  1,  0,  0,  1   ],  [   “IT”,  4,  9,  13,  3,  16   ],  [   “JM”,  0,  0,  0,  0,  1   ],  [   “JP”,  0,  0,  0,  0,  3   ],  [   “KE”,  0,  0,  0,  0,  2   ],  [   “LV”,  0,  0,  0,  0,  1   ],  [   “ML”,  0,  0,  0,  0,  3   ],  [   “MX”,  0,  1,  1,  1,  1   ],  [   “NL”,  1,  8,  2,  2,  5   ],  [   “NO”,  0,  0,  1,  0,  2   ],  [   “PL”,  2,  5,  4,  0,  6   ],  [   “PT”,  0,  1,  2,  1,  3   ],  [   “RU”,  1,  1,  1,  0,  1   ],  [   “SA”,  0,  0,  0,  1,  1   ],  [   “ZA”,  6,  13,  8,  6,  5   ],  [   “ES”,  3,  8,  6,  2,  5   ],  [   “SE”,  2,  4,  6,  2,  11   ],  [   “TZ”,  0,  0,  0,  0,  1   ],  [   “TH”,  0,  0,  0,  0,  1   ],  [   “TR”,  0,  0,  0,  0,  1   ],  [   “US”,  18,  34,  24,  9,  33   ],  [   “VE”,  0,  0,  1,  0,  1   ],  [   “RS”,  0,  0,  0,  2,  2   ]   ];  data.addColumn(‘string’,’country1’);  data.addColumn(‘number’,’1970~1980’);  data.addColumn(‘number’,’1980~1990’);  data.addColumn(‘number’,’1990~2000’);  data.addColumn(‘number’,’2000~2010’);  data.addColumn(‘number’,’2010~2014’);  data.addRows(datajson);  return(data);  }     function drawChartIntensityMapID22f07e9551de() {  var data = gvisDataIntensityMapID22f07e9551de();  var options = {};  options[“width”] =    600;  options[“colors”] = [‘#4682b4’, ‘#4682b4’, ‘#4682b4’, ‘#4682b4’, ‘#4682b4’];          var chart = new google.visualization.IntensityMap(      document.getElementById(‘IntensityMapID22f07e9551de’)      );      chart.draw(data,options);          }         (function() {  var pkgs = window.<strong>gvisPackages = window.</strong>gvisPackages || [];  var callbacks = window.<strong>gvisCallbacks = window.</strong>gvisCallbacks || [];  var chartid = “intensitymap”;      var i, newPackage = true;  for (i = 0; newPackage &amp;&amp; i &lt; pkgs.length; i++) {  if (pkgs[i] === chartid)  newPackage = false;  }  if (newPackage)    pkgs.push(chartid);      callbacks.push(drawChartIntensityMapID22f07e9551de);  })();  function displayChartIntensityMapID22f07e9551de() {    var pkgs = window.<strong>gvisPackages = window.</strong>gvisPackages || [];    var callbacks = window.<strong>gvisCallbacks = window.</strong>gvisCallbacks || [];    window.clearTimeout(window.<strong>gvisLoad);    window.</strong>gvisLoad = setTimeout(function() {    var pkgCount = pkgs.length;    google.load(“visualization”, “1”, { packages:pkgs, callback: function() {    if (pkgCount != pkgs.length) {    return;  }  while (callbacks.length &gt; 0)  callbacks.shift()();  } });  }, 100);  }     </script>     <!-- jsChart -->    <script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartIntensityMapID22f07e9551de"></script>     <!-- divChart -->      <div id="IntensityMapID22f07e9551de"    style="width: 600px; height: 500px;">  </div></html>
 
 
-<h3 id="-">结论</h3>
+<h3 id="结论">结论</h3>
 <p>初步分析可以看出，美国一直处于领先地位，德国、法国、西班牙、意大利和加拿大是仅次于美国，处于第二梯队，南美洲也从无到有持续发展着，非洲的南非一枝独秀，亚洲的印度是第一名，中国以及东亚国家在这方面非常落后，澳大利亚一直不温不火，应该也可以算是第二梯队。如果欧洲以欧盟为单位计算的话，应该会和美国持平。</p>
 <p>所以，国内还是很需要研究meiofauna的人才的。</p>
 <p><strong>后话：</strong></p>
@@ -106,9 +118,8 @@
     
       
       
-  
   <div class="tags">
-    <a href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
+    <a class="tags-link" href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
   </div>
 
     
@@ -118,101 +129,12 @@
 
 
 <section id="comment">
-  <h1 class="title">留言</h1>
+  <h1 class="title">评论</h1>
   <div id="disqus_thread">
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 </div>
-  </div>
-  <div class="widget-wrapper">
-    <aside id="sidebar">
-  
-  
-    
-      
-      
-    
-      
-      
-
-<div class="widget tag first">
-  <h3 class="title">标签</h3>
-  <ul class="entry">
-  
-    <li><a href="/tags/Journal Club/">Journal Club</a><small>1</small></li>
-  
-    <li><a href="/tags/Mac/">Mac</a><small>1</small></li>
-  
-    <li><a href="/tags/一些思考/">一些思考</a><small>15</small></li>
-  
-    <li><a href="/tags/文献管理软件/">文献管理软件</a><small>1</small></li>
-  
-    <li><a href="/tags/科技的那些事/">科技的那些事</a><small>4</small></li>
-  
-    <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
-  
-    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>11</small></li>
-  
-    <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
-  
-    <li><a href="/tags/音乐/">音乐</a><small>1</small></li>
-  
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget recent-posts">
-  <h3 class="title">最近的文章</h3>
-  <ul class="entry">
-    
-      <li>
-        <a href="/2014/03/12/lyric-i-love-you-by-yang-liu/">写了一首歌的歌词</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/05/my-hands-with-the-smell-of-roses/">与人玫瑰，手有余香</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/02/use-maverick-macos-in-windows-7-to-increase-productivity/">Mac OS(Maverick):生产力提高的一剂良药</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>
-      </li>
-    
-      <li>
-        <a href="/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/">在巴黎的一夜——参加中法建交50周年纪念晚会</a>
-      </li>
-    
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget blogroll">
-  <h3 class="title">友情链接</h3>
-  <ul class="entry">
-  
-    
-    <li><a href="https://tumutanzi.com/" target="_blank">tumutanzi</a></li>
-  
-    
-    <li><a href="http://dapengde.com" target="_blank">dapengde</a></li>
-  
-  </ul>
-</div>
-
-    
-  
-</aside>
-<div class="clearfix"></div>
   </div>
   <footer id="footer"><div class="copyright">
   
@@ -225,7 +147,8 @@
   Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
 </div>
 <div class="clearfix"></div></footer>
-  <script src="/js/scale.fix.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 

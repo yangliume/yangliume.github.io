@@ -153,7 +153,7 @@ article .gallery:hover img {
   -ms-transition: all 0.8s;
   transition: all 0.8s;
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   article .gallery:hover img {
     -webkit-transform: none;
     -moz-transform: none;
@@ -384,7 +384,7 @@ article .entry pre {
   color: #f8f8f2;
   margin: 0 -30px 16px;
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   article .entry pre {
     margin: 0 -20px 16px;
     padding: 10px 20px;
@@ -529,7 +529,7 @@ article footer .tags:before {
   padding: 0 30px;
   margin: 0 0 10px 0;
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   .archive-year {
     padding: 0 20px;
   }
@@ -641,7 +641,7 @@ article footer .tags:before {
     text-align: left;
   }
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   #header {
     padding: 15px 20px;
   }
@@ -672,7 +672,7 @@ figure.highlight {
   padding: 0 30px;
   background: #3a3c42;
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   figure.highlight {
     margin: 0 -20px 16px;
     padding: 0 20px;
@@ -681,7 +681,7 @@ figure.highlight {
 figure.highlight pre {
   margin: 0 -30px 0px;
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   figure.highlight pre {
     margin: 0 -20px 0px;
   }
@@ -697,7 +697,7 @@ figure.highlight td {
 figure.highlight .gutter {
   width: 40px;
 }
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   figure.highlight .gutter {
     display: none;
   }

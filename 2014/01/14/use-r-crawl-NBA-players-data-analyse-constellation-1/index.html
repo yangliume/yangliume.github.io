@@ -5,21 +5,26 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
   <title>用R抓取NBA球员数据 | Yang Liu fr</title>
-  <meta name="author" content="Yang Liu">
-  
-  <meta name="description" content="上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇博文，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。">
-  
-  
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <meta property="og:title" content="用R抓取NBA球员数据"/>
-  <meta property="og:site_name" content="Yang Liu fr"/>
-
-  <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+    <meta name="author" content="Yang Liu">
+  
+  
+    <meta name="description" content="上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇博文，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。">
+  
+  <meta content="article" property="og:type">
+<meta content="用R抓取NBA球员数据" property="og:title">
+<meta content="http://yangliufr.com/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/" property="og:url">
+<meta content="/img/basketball-reference-1.png" property="og:image">
+<meta content="Yang Liu fr" property="og:site_name">
+<meta content="上周末抽了一天时间学习django，可惜自己编程基础不好，对python语法很不熟悉，搞得自己灰头土脸，没啥成就感。搜到了一篇博文，博主是在虎扑体育任职，文中简要描述了如何用django框架创建app来抓取NBA球员数据的例子。我依葫芦画瓢都没能复制成功，在R中一个script就搞定一切的思路，在其他真正的编程语言面前，顿显R在网页动态呈现方面的软肋。" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+    <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
+  
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -35,35 +40,43 @@
 
 </head>
 
-
 <body>
   <div class="wrapper">
-    <header id="header"><div class="title">
-  <h1><a href="/">Yang Liu fr</a></h1>
-  <p><a href="/">a meiobenthologist&#39;s blog</a></p>
-</div>
-<nav class="nav">
-  <ul>
-    
-      <li><a href="/">首页</a></li>
-    
-      <li><a href="/archives">博文目录</a></li>
-    
-      <li><a href="/about">关于</a></li>
-    
-      <li><a href="/resume">简历</a></li>
-    
-      <li><a href="/atom.xml">RSS</a></li>
-    
-  </ul>
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Yang Liu fr</a></h1>
+    <p><a href="/">a meiobenthologist&#39;s blog</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">博文目录</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/resume">简历</a></li>
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
   <div class="clearfix"></div>
-</nav>
-<div class="clearfix"></div></header>
+</header>
     <div class="content"><article class="post">
   <header>
     
       <div class="icon"></div>
-      <time datetime="2014-01-14T00:00:00.000Z"><a href="/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/">2014 / 01 / 14</a></time>
+      <a href="/2014/01/14/use-r-crawl-NBA-players-data-analyse-constellation-1/">
+  <time datetime="2014-01-14T00:00:00.000Z">
+    2014 / 01 / 14
+  </time>
+</a>
     
     
   
@@ -81,7 +94,7 @@
 <p>R应该是我计算机语言中的母语，虽然大学里学过fortran，但为了考试学的知识毕竟不是那么牢固。我学习R的过程，就是先有问题，再去寻找R中可能的解决方案的，然后在这个过程中慢慢体会这门语言的过程。感觉就像老板拍脑门要做个什么事，就告诉下属去做，然后给我结果一样，只不过我既是老板又是下属。</p>
 <p>接着第一段说，有了学django的挫败感之后，我为了寻找慰藉，又打开了Rstudio，希望能找回那顺畅熟悉的感觉。果然，同样的事情，很快就解决了，可谓驾轻就熟。可能django里牵扯到更多的编程思想，从model.py，view.py到setting.py，admin.py，这些只是网页后台框架，还要写app的model.py。在我上手试用后，感觉非常生涩，对library、function、model的命名规则不太习惯，说白了，压根没入门。所以，我还要多花时间去啃着块骨头。</p>
 <p>好了，以上都是本文的题外话或者前情提要吧。我既然又用回R来抓取数据了，就将代码分享出来吧。</p>
-<h3 id="-">先分析再抓取</h3>
+<h3 id="先分析再抓取">先分析再抓取</h3>
 <p>点开球员页面的<a href="http://www.basketball-reference.com/players/" target="_blank">链接</a>，发现是按照姓名排序的。</p>
 <p><img src="/img/basketball-reference-1.png" alt="basketball-reference-1"></p>
 <p>而且，点进去某个字母链接，就可以直接得到所有的球员，这是最赞的，也是对抓取技能要求最低的了。所以，第一步就要抓取这个页面上的所有字母链接，再打开每个字母链接，抓取所有数据。很纳闷，居然NBA球员没有姓Xavier的，导致X字母下面居然没有一个人。</p>
@@ -111,7 +124,7 @@ data_player_all = sapply(url_player_all, <span class="keyword">function</span>(x
 
 <p>在表中有粗体的名字，意思是现役球员，也可以单独标注出来，这里我就通过判断是否在2014年还在服役来确定是否现役，最后结果比直接抓取现役球员要少，可能因为有的球员有伤病，或者被下放到低级联赛锻炼一年等原因，合同停滞在2012/13年，大概有一百多位这样的球员。</p>
 <p><img src="/img/basketball-reference-2.png" alt="basketball-reference-2"></p>
-<h3 id="-">将抓取的表数据格式化</h3>
+<h3 id="将抓取的表数据格式化">将抓取的表数据格式化</h3>
 <p>我不知道python的scrapy或者beautifulsoup是什么样，R抓取的网页数据，如果想拿来做数据分析，似乎都要这个过程，把抓下来的html节点，<code>as.numeric(as.character())</code>一下，不知道有木有更简便的方法啊？</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
@@ -142,7 +155,7 @@ data_player_all_full$height = as.numeric(as.character(data_player_all_full$heigh
 </pre></td></tr></table></figure>
 
 <p>这一段纯粹为了擦屁股，但为了能分析数据，也是很至关重要的。</p>
-<h3 id="-nba-">哪个星座的NBA球员最多？</h3>
+<h3 id="哪个星座的NBA球员最多？">哪个星座的NBA球员最多？</h3>
 <p>知道我有多无聊了吧。数据里的出生日期是英文格式，所以又需要把它转成数字格式，我没找到有函数可以方便的转换，应该没有这么智能的，于是还是手动转吧。</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
@@ -258,9 +271,8 @@ constellation = <span class="keyword">function</span>(x,y){
     
       
       
-  
   <div class="tags">
-    <a href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
+    <a class="tags-link" href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
   </div>
 
     
@@ -270,101 +282,12 @@ constellation = <span class="keyword">function</span>(x,y){
 
 
 <section id="comment">
-  <h1 class="title">留言</h1>
+  <h1 class="title">评论</h1>
   <div id="disqus_thread">
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 </div>
-  </div>
-  <div class="widget-wrapper">
-    <aside id="sidebar">
-  
-  
-    
-      
-      
-    
-      
-      
-
-<div class="widget tag first">
-  <h3 class="title">标签</h3>
-  <ul class="entry">
-  
-    <li><a href="/tags/Journal Club/">Journal Club</a><small>1</small></li>
-  
-    <li><a href="/tags/Mac/">Mac</a><small>1</small></li>
-  
-    <li><a href="/tags/一些思考/">一些思考</a><small>15</small></li>
-  
-    <li><a href="/tags/文献管理软件/">文献管理软件</a><small>1</small></li>
-  
-    <li><a href="/tags/科技的那些事/">科技的那些事</a><small>4</small></li>
-  
-    <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
-  
-    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>11</small></li>
-  
-    <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
-  
-    <li><a href="/tags/音乐/">音乐</a><small>1</small></li>
-  
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget recent-posts">
-  <h3 class="title">最近的文章</h3>
-  <ul class="entry">
-    
-      <li>
-        <a href="/2014/03/12/lyric-i-love-you-by-yang-liu/">写了一首歌的歌词</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/05/my-hands-with-the-smell-of-roses/">与人玫瑰，手有余香</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/02/use-maverick-macos-in-windows-7-to-increase-productivity/">Mac OS(Maverick):生产力提高的一剂良药</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>
-      </li>
-    
-      <li>
-        <a href="/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/">在巴黎的一夜——参加中法建交50周年纪念晚会</a>
-      </li>
-    
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget blogroll">
-  <h3 class="title">友情链接</h3>
-  <ul class="entry">
-  
-    
-    <li><a href="https://tumutanzi.com/" target="_blank">tumutanzi</a></li>
-  
-    
-    <li><a href="http://dapengde.com" target="_blank">dapengde</a></li>
-  
-  </ul>
-</div>
-
-    
-  
-</aside>
-<div class="clearfix"></div>
   </div>
   <footer id="footer"><div class="copyright">
   
@@ -377,7 +300,8 @@ constellation = <span class="keyword">function</span>(x,y){
   Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
 </div>
 <div class="clearfix"></div></footer>
-  <script src="/js/scale.fix.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 

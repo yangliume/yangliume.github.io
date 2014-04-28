@@ -5,22 +5,28 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
   <title>菜鸟学R语言：用R分析哪款相机性价比最高 | Yang Liu fr</title>
-  <meta name="author" content="Yang Liu">
-  
-  <meta name="description" content="题目起得很大。本文只是博主为了学习R和解决一些实际问题而写的，只用了R中最简单的函数，希望读者不要有误会。
-之所以想分析比较“哪款相机（机身）性价比最高”，主要是因为最近有几个同学都打算买相机了，毕竟在欧洲景点很多，买个好相机来留下精彩的瞬间。我也是刚摄影入门，有点自己的心得，因为还是学生，收入微薄，不可能尝试很多好机器和镜头，然后再主观评测器材的好坏，一是没钱，二是没这个辨别能力。所以，我就想能否有个客观的数据分析能够指导我们选购呢？那就不得不说法国DxO实验室了。">
-  
-  
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <meta property="og:title" content="菜鸟学R语言：用R分析哪款相机性价比最高"/>
-  <meta property="og:site_name" content="Yang Liu fr"/>
-
-  <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+    <meta name="author" content="Yang Liu">
+  
+  
+    <meta name="description" content="题目起得很大。本文只是博主为了学习R和解决一些实际问题而写的，只用了R中最简单的函数，希望读者不要有误会。
+之所以想分析比较“哪款相机（机身）性价比最高”，主要是因为最近有几个同学都打算买相机了，毕竟在欧洲景点很多，买个好相机来留下精彩的瞬间。我也是刚摄影入门，有点自己的心得，因为还是学生，收入微薄，不可能尝试很多好机器和镜头，然后再主观评测器材的好坏，一是没钱，二是没这个辨别能力。所以，我就想能">
+  
+  <meta content="article" property="og:type">
+<meta content="菜鸟学R语言：用R分析哪款相机性价比最高" property="og:title">
+<meta content="http://yangliufr.com/2013/05/06/r-camera-1/" property="og:url">
+<meta content="/img/c1.png" property="og:image">
+<meta content="Yang Liu fr" property="og:site_name">
+<meta content="题目起得很大。本文只是博主为了学习R和解决一些实际问题而写的，只用了R中最简单的函数，希望读者不要有误会。
+之所以想分析比较“哪款相机（机身）性价比最高”，主要是因为最近有几个同学都打算买相机了，毕竟在欧洲景点很多，买个好相机来留下精彩的瞬间。我也是刚摄影入门，有点自己的心得，因为还是学生，收入微薄，不可能尝试很多好机器和镜头，然后再主观评测器材的好坏，一是没钱，二是没这个辨别能力。所以，我就想能" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+    <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
+  
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -36,35 +42,43 @@
 
 </head>
 
-
 <body>
   <div class="wrapper">
-    <header id="header"><div class="title">
-  <h1><a href="/">Yang Liu fr</a></h1>
-  <p><a href="/">a meiobenthologist&#39;s blog</a></p>
-</div>
-<nav class="nav">
-  <ul>
-    
-      <li><a href="/">首页</a></li>
-    
-      <li><a href="/archives">博文目录</a></li>
-    
-      <li><a href="/about">关于</a></li>
-    
-      <li><a href="/resume">简历</a></li>
-    
-      <li><a href="/atom.xml">RSS</a></li>
-    
-  </ul>
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Yang Liu fr</a></h1>
+    <p><a href="/">a meiobenthologist&#39;s blog</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">博文目录</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/resume">简历</a></li>
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
   <div class="clearfix"></div>
-</nav>
-<div class="clearfix"></div></header>
+</header>
     <div class="content"><article class="post">
   <header>
     
       <div class="icon"></div>
-      <time datetime="2013-05-06T00:00:00.000Z"><a href="/2013/05/06/r-camera-1/">2013 / 05 / 06</a></time>
+      <a href="/2013/05/06/r-camera-1/">
+  <time datetime="2013-05-06T00:00:00.000Z">
+    2013 / 05 / 06
+  </time>
+</a>
     
     
   
@@ -124,10 +138,8 @@ cd1=as.data.frame(cd1)
 colnames(cd1) = c(<span class="string">"ranks"</span>,<span class="string">"camera names"</span>,<span class="string">"overall scores"</span>)
 </pre></td></tr></table></figure>
 
-<p>此时的cd1就是这个样子了，
-<img src="/img/c3.png" alt="R"></p>
-<p>下面，我们开始提取dxomark.com上相机数据库的数据，因为里面有上市价格、相机类型、像素、重量、上市时间等数据（重量数据不全，价格数据不是现价，只做参考）。
-<img src="/img/c4.png" alt="R"></p>
+<p>此时的cd1就是这个样子了，<br><img src="/img/c3.png" alt="R"></p>
+<p>下面，我们开始提取dxomark.com上相机数据库的数据，因为里面有上市价格、相机类型、像素、重量、上市时间等数据（重量数据不全，价格数据不是现价，只做参考）。<br><img src="/img/c4.png" alt="R"></p>
 <p>像这样用鼠标选中数据区域，拉到最底下复制粘贴，和刚才的操作一样，该页面共有256款机型，包括了未测试的，我们选择每页显示50个项目，这样只需要重复操作6次就可得到所有数据，我承认这是非常笨的方法，只适合菜鸟。但我觉得对于这种非动态更新的网页静态数据，没有万金油的方法可以套，毕竟主动权掌握在网页设计者手中。所以，我认为掌握一些笨方法对于极小数据量是很有用的。然后我们就得到了，</p>
 <p><img src="/img/c5.png" alt="R"></p>
 <p>同样，也有很多空行和NA值，并且有几十款机型由于各种原因，DxOmark没有评分，因此我们只选需要的，</p>
@@ -137,8 +149,7 @@ colnames(cd1) = c(<span class="string">"ranks"</span>,<span class="string">"came
 cdbtested=cdb[which(cdb$Image == <span class="string">'TESTED'</span>),] <span class="comment">#选择经过测试的机型</span>
 </pre></td></tr></table></figure>
 
-<p>恰巧，得到的cdbtested也是214款机器。
-<img src="/img/c6.png" alt="R"></p>
+<p>恰巧，得到的cdbtested也是214款机器。<br><img src="/img/c6.png" alt="R"></p>
 <p>接下来，要重新对cd1和cdbtested进行重新排列和合并。</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
@@ -179,9 +190,7 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
 <p>性价比指数 =  性能分数 / （价格 /  500 <em> 100）/  （机身重量 / 500 </em> 100）</p>
 <p>价格和机身重量要乘以100是为了转换成和性能分数一致的百分制（此处很值得研究）。</p>
 <p>然后我得到的结果是（代码就不放了），cdfinalscore越高，性价比越高。</p>
-<p><img src="/img/c7.png" alt="R">
-<img src="/img/c8.png" alt="R">
-可见莱卡M9有多坑爹啊。</p>
+<p><img src="/img/c7.png" alt="R"><br><img src="/img/c8.png" alt="R"><br>可见莱卡M9有多坑爹啊。</p>
 <p>以上仅供个人参考，大家可以根据自己的喜好，设置不同的参数分析，对排名影响还是挺大的。下一步，我都想学学Python，定期抓取亚马逊的价格数据了。哎，时间不够用啊，不能不务正业啊。如果，这一块能做好，搞个小网站赚钱还是有搞头的。</p>
 <p>P.S. 以上文中代码问题还请各位指正，纯新手和菜鸟，没有什么好的代码习惯。欢迎大家交流。</p>
 
@@ -191,9 +200,8 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
     
       
       
-  
   <div class="tags">
-    <a href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
+    <a class="tags-link" href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
   </div>
 
     
@@ -203,101 +211,12 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
 
 
 <section id="comment">
-  <h1 class="title">留言</h1>
+  <h1 class="title">评论</h1>
   <div id="disqus_thread">
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 </div>
-  </div>
-  <div class="widget-wrapper">
-    <aside id="sidebar">
-  
-  
-    
-      
-      
-    
-      
-      
-
-<div class="widget tag first">
-  <h3 class="title">标签</h3>
-  <ul class="entry">
-  
-    <li><a href="/tags/Journal Club/">Journal Club</a><small>1</small></li>
-  
-    <li><a href="/tags/Mac/">Mac</a><small>1</small></li>
-  
-    <li><a href="/tags/一些思考/">一些思考</a><small>15</small></li>
-  
-    <li><a href="/tags/文献管理软件/">文献管理软件</a><small>1</small></li>
-  
-    <li><a href="/tags/科技的那些事/">科技的那些事</a><small>4</small></li>
-  
-    <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
-  
-    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>11</small></li>
-  
-    <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
-  
-    <li><a href="/tags/音乐/">音乐</a><small>1</small></li>
-  
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget recent-posts">
-  <h3 class="title">最近的文章</h3>
-  <ul class="entry">
-    
-      <li>
-        <a href="/2014/03/12/lyric-i-love-you-by-yang-liu/">写了一首歌的歌词</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/05/my-hands-with-the-smell-of-roses/">与人玫瑰，手有余香</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/02/use-maverick-macos-in-windows-7-to-increase-productivity/">Mac OS(Maverick):生产力提高的一剂良药</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>
-      </li>
-    
-      <li>
-        <a href="/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/">在巴黎的一夜——参加中法建交50周年纪念晚会</a>
-      </li>
-    
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget blogroll">
-  <h3 class="title">友情链接</h3>
-  <ul class="entry">
-  
-    
-    <li><a href="https://tumutanzi.com/" target="_blank">tumutanzi</a></li>
-  
-    
-    <li><a href="http://dapengde.com" target="_blank">dapengde</a></li>
-  
-  </ul>
-</div>
-
-    
-  
-</aside>
-<div class="clearfix"></div>
   </div>
   <footer id="footer"><div class="copyright">
   
@@ -310,7 +229,8 @@ cdnew1[which(cdnew1[,<span class="number">15</span>]==<span class="number">0</sp
   Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
 </div>
 <div class="clearfix"></div></footer>
-  <script src="/js/scale.fix.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 

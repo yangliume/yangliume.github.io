@@ -5,26 +5,36 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
   <title>菜鸟学R语言：用R做数据分析（零基础）之数据类型 | Yang Liu fr</title>
-  <meta name="author" content="Yang Liu">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   
-  <meta name="description" content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
+    <meta name="author" content="Yang Liu">
+  
+  
+    <meta name="description" content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
 
 为上课做好笔记
 梳理R相关的基础知识
 分享自己的学习心得体会
 与其他初学者一起交流">
   
+  <meta content="article" property="og:type">
+<meta content="菜鸟学R语言：用R做数据分析（零基础）之数据类型" property="og:title">
+<meta content="http://yangliufr.com/2013/09/29/r-introduction-i/" property="og:url">
+<meta property="og:image">
+<meta content="Yang Liu fr" property="og:site_name">
+<meta content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
+
+为上课做好笔记
+梳理R相关的基础知识
+分享自己的学习心得体会
+与其他初学者一起交流" property="og:description">
+<meta content="summary" name="twitter:card">
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <meta property="og:title" content="菜鸟学R语言：用R做数据分析（零基础）之数据类型"/>
-  <meta property="og:site_name" content="Yang Liu fr"/>
-
-  <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
+  
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -40,35 +50,43 @@
 
 </head>
 
-
 <body>
   <div class="wrapper">
-    <header id="header"><div class="title">
-  <h1><a href="/">Yang Liu fr</a></h1>
-  <p><a href="/">a meiobenthologist&#39;s blog</a></p>
-</div>
-<nav class="nav">
-  <ul>
-    
-      <li><a href="/">首页</a></li>
-    
-      <li><a href="/archives">博文目录</a></li>
-    
-      <li><a href="/about">关于</a></li>
-    
-      <li><a href="/resume">简历</a></li>
-    
-      <li><a href="/atom.xml">RSS</a></li>
-    
-  </ul>
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Yang Liu fr</a></h1>
+    <p><a href="/">a meiobenthologist&#39;s blog</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">博文目录</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/resume">简历</a></li>
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
   <div class="clearfix"></div>
-</nav>
-<div class="clearfix"></div></header>
+</header>
     <div class="content"><article class="post">
   <header>
     
       <div class="icon"></div>
-      <time datetime="2013-09-29T21:52:40.000Z"><a href="/2013/09/29/r-introduction-i/">2013 / 09 / 29</a></time>
+      <a href="/2013/09/29/r-introduction-i/">
+  <time datetime="2013-09-29T21:52:40.000Z">
+    2013 / 09 / 29
+  </time>
+</a>
     
     
   
@@ -89,8 +107,8 @@
 </li>
 </ol>
 <hr>
-<h2 id="r-">R 基础知识</h2>
-<h3 id="-">四则运算</h3>
+<h2 id="R_基础知识">R 基础知识</h2>
+<h3 id="四则运算">四则运算</h3>
 <figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -124,8 +142,8 @@
 
 <p>以上就是运行结果。</p>
 <hr>
-<h2 id="r-object-r-">R object (R 的对象)</h2>
-<h3 id="vector-">vector (向量)</h3>
+<h2 id="R_object_(R_的对象)">R object (R 的对象)</h2>
+<h3 id="vector_(向量)">vector (向量)</h3>
 <p>向量（<code>vector</code>）是R中最基本的对象。R的对象中大部分能且只能包含同一类的若干个元素，但是<code>list</code>除外，可以包含若干类的若干个元素，这也是为什么要有<code>list</code>的原因。常见的向量有：</p>
 <ul>
 <li>字符向量</li>
@@ -212,7 +230,7 @@ NAs introduced by coercion
 </pre></td></tr></table></figure>
 
 <hr>
-<h3 id="matrix-">matrix （矩阵）</h3>
+<h3 id="matrix_（矩阵）">matrix （矩阵）</h3>
 <p>矩阵（pl. matrices）具有维度（dimension）属性（attribute）的向量。该维度属性本身是一个长度为2的整数向量（nrow,ncol），行数和列数。</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre>1
 2
@@ -301,9 +319,8 @@ y <span class="number">10</span> <span class="number">11</span> <span class="num
     
       
       
-  
   <div class="tags">
-    <a href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
+    <a class="tags-link" href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
   </div>
 
     
@@ -313,101 +330,12 @@ y <span class="number">10</span> <span class="number">11</span> <span class="num
 
 
 <section id="comment">
-  <h1 class="title">留言</h1>
+  <h1 class="title">评论</h1>
   <div id="disqus_thread">
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 </div>
-  </div>
-  <div class="widget-wrapper">
-    <aside id="sidebar">
-  
-  
-    
-      
-      
-    
-      
-      
-
-<div class="widget tag first">
-  <h3 class="title">标签</h3>
-  <ul class="entry">
-  
-    <li><a href="/tags/Journal Club/">Journal Club</a><small>1</small></li>
-  
-    <li><a href="/tags/Mac/">Mac</a><small>1</small></li>
-  
-    <li><a href="/tags/一些思考/">一些思考</a><small>15</small></li>
-  
-    <li><a href="/tags/文献管理软件/">文献管理软件</a><small>1</small></li>
-  
-    <li><a href="/tags/科技的那些事/">科技的那些事</a><small>4</small></li>
-  
-    <li><a href="/tags/绿色和平/">绿色和平</a><small>3</small></li>
-  
-    <li><a href="/tags/菜鸟学R语言/">菜鸟学R语言</a><small>11</small></li>
-  
-    <li><a href="/tags/读书笔记/">读书笔记</a><small>2</small></li>
-  
-    <li><a href="/tags/音乐/">音乐</a><small>1</small></li>
-  
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget recent-posts">
-  <h3 class="title">最近的文章</h3>
-  <ul class="entry">
-    
-      <li>
-        <a href="/2014/03/12/lyric-i-love-you-by-yang-liu/">写了一首歌的歌词</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/05/my-hands-with-the-smell-of-roses/">与人玫瑰，手有余香</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/02/use-maverick-macos-in-windows-7-to-increase-productivity/">Mac OS(Maverick):生产力提高的一剂良药</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>
-      </li>
-    
-      <li>
-        <a href="/2014/01/28/one-night-in-paris-the-so-called-50-anniversary-ceremony-of-fr-cn-HH/">在巴黎的一夜——参加中法建交50周年纪念晚会</a>
-      </li>
-    
-  </ul>
-</div>
-
-    
-      
-      
-
-<div class="widget blogroll">
-  <h3 class="title">友情链接</h3>
-  <ul class="entry">
-  
-    
-    <li><a href="https://tumutanzi.com/" target="_blank">tumutanzi</a></li>
-  
-    
-    <li><a href="http://dapengde.com" target="_blank">dapengde</a></li>
-  
-  </ul>
-</div>
-
-    
-  
-</aside>
-<div class="clearfix"></div>
   </div>
   <footer id="footer"><div class="copyright">
   
@@ -420,7 +348,8 @@ y <span class="number">10</span> <span class="number">11</span> <span class="num
   Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
 </div>
 <div class="clearfix"></div></footer>
-  <script src="/js/scale.fix.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 
