@@ -4,7 +4,7 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-04-28T15:22:28.361Z</updated>
+  <updated>2014-05-05T07:33:04.981Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
@@ -16,7 +16,7 @@
     <link href="http://yangliufr.com/2014/04/28/use-r-do-bibliometric-analysis/"/>
     <id>http://yangliufr.com/2014/04/28/use-r-do-bibliometric-analysis/</id>
     <published>2014-04-28T00:00:00.000Z</published>
-    <updated>2014-04-28T15:07:13.000Z</updated>
+    <updated>2014-04-30T14:56:07.000Z</updated>
     <content type="html"><![CDATA[<p>三个月前，我发了篇博客<a href="http://yangliufr.com/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。</p>
 <a id="more"></a>
 
@@ -30,249 +30,15 @@
 <p>好了，这就算是完成了第一步。接下来就都是代码了，大家按需汲取吧。</p>
 <h3 id="从XML文件中提取数据">从XML文件中提取数据</h3>
 <p>为了更有目的的分析关于porn的已发表论文，下面的代码是为了得到一个图和一个表，图是每年的论文发表量的柱状图，表是top30的发表最多的国家排名。我预计日本和美国会居于首位，主要基于我对这两个国家porn数量和质量的了解，请不要email我关于porn的下载地址的问题。好了，开始吧。</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-</pre></td><td class="code"><pre><span class="comment">## to get title, date, journal title, author affiliation, abstract, keyword, country name from a xml file exported from EndNote</span>
-
-<span class="comment">### 1. #### extract the country which the author comes from of each article</span>
-
-<span class="comment">##  a function about how to extract country name from a text</span>
-country = readHTMLTable(<span class="string">"http://www.projectvisa.com/fullcountrylist.asp"</span>, stringsAsFactors=<span class="literal">F</span>)[[<span class="number">2</span>]]
-
-<span class="comment"># add USA / insert USA etc.</span>
-insertRow &lt;- <span class="keyword">function</span>(existingDF, newrow, r) {
-  existingDF[seq(r+<span class="number">1</span>,nrow(existingDF)+<span class="number">1</span>),] &lt;- existingDF[seq(r,nrow(existingDF)),]
-  <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(newrow)){
-    existingDF[r,i] &lt;- newrow[i]
-  }
-  existingDF
-}
-<span class="comment">## end</span>
-
-<span class="comment">### this part just for perfecting the country list</span>
-country = insertRow(country, c(<span class="string">"USA"</span>,<span class="string">"North America"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"England"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"Northern Ireland"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"Yugoslavia"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"Scotland"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"Wales"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"Fed Rep Ger"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country = insertRow(country, c(<span class="string">"Dem Rep Ger"</span>,<span class="string">"Europe"</span>), <span class="number">223</span>)
-country$countryname = country$Countryname
-
-country[which(country$Countryname == <span class="string">'Hong Kong'</span>),<span class="number">3</span>] = <span class="string">'China'</span>
-country[which(country$Countryname == <span class="string">'England'</span>),<span class="number">3</span>] = <span class="string">'Britain'</span>
-country[which(country$Countryname == <span class="string">'Northern Ireland'</span>),<span class="number">3</span>] = <span class="string">'Britain'</span>
-country[which(country$Countryname == <span class="string">'Yugoslavia'</span>),<span class="number">3</span>] = <span class="string">'Serbia and Montenegro'</span>
-country[which(country$Countryname == <span class="string">'Fed Rep Ger'</span>),<span class="number">3</span>] = <span class="string">'Germany'</span>
-country[which(country$Countryname == <span class="string">'Scotland'</span>),<span class="number">3</span>] = <span class="string">'Britain'</span>
-country[which(country$Countryname == <span class="string">'Wales'</span>),<span class="number">3</span>] = <span class="string">'Britain'</span>
-country[which(country$Countryname == <span class="string">'Dem Rep Ger'</span>),<span class="number">3</span>] = <span class="string">'Germany'</span>
-<span class="comment">### end</span>
-
-<span class="comment">#### a function to determine which country the study represent, from the author address</span>
-addr.country = <span class="keyword">function</span>(df_address){
-  df_address = as.character(df_address)
-  tmp = <span class="literal">NULL</span>
-  <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(country$countryname))
-  {
-    <span class="keyword">if</span>(grepl(as.character(country[i,<span class="number">1</span>]), df_address)) tmp = c(tmp, country[i,<span class="number">3</span>])
-  }
-  paste(tmp, collapse=<span class="string">","</span>)
-}
-<span class="comment">### end</span>
-
-<span class="comment">#####2. ### a function to get the whole dataframe from xml file.</span>
-<span class="keyword">require</span>(XML)
-getdf = <span class="keyword">function</span>(dir){
-  count = xmlElementSummary(dir)
-  df_parse = xmlTreeParse(dir, useInternalNodes = <span class="literal">TRUE</span>)
-  
-  <span class="comment">######## get a dataframe including all the information</span>
-  df = data.frame(title=character(),
-                  date=character(), 
-                  journal_title=character(),
-                  address=character(),
-                  author=character(),
-                  abstract=character(),
-                  keyword=character(),
-                  stringsAsFactors=<span class="literal">FALSE</span>)
-  <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:count[<span class="number">2</span>]$attributes$database[[<span class="number">1</span>]]){
-    df.title = as.character(xmlValue(getNodeSet(df_parse, paste(<span class="string">"//record["</span>, i ,<span class="string">"]/titles/title/style/text()"</span>))[[<span class="number">1</span>]]))
-    df.date = as.character(xmlValue(getNodeSet(df_parse, paste(<span class="string">"//record["</span>, i ,<span class="string">"]/dates/year/style/text()"</span>))[[<span class="number">1</span>]]))
-    df.journal_title = as.character(xmlValue(getNodeSet(df_parse, paste(<span class="string">"//record["</span>, i ,<span class="string">"]/periodical/full-title/style/text()"</span>))[[<span class="number">1</span>]]))
-    df.address = as.character(xmlValue(getNodeSet(df_parse, paste(<span class="string">"//record["</span>,i,<span class="string">"]/auth-address/style/text()"</span>))[[<span class="number">1</span>]]))
-    df.author = paste(sapply(getNodeSet(df_parse, paste(<span class="string">"//record["</span>, i ,<span class="string">"]/contributors/authors/author/style/text()"</span>)), 
-                             FUN=<span class="keyword">function</span>(x) as.character(xmlValue(x))), collapse=<span class="string">";"</span>)
-    df.abstract = as.character(xmlValue(getNodeSet(df_parse, paste(<span class="string">"//record["</span>, i ,<span class="string">"]/abstract/style/text()"</span>))[[<span class="number">1</span>]]))
-    df.keyword = paste(sapply(getNodeSet(df_parse, paste(<span class="string">"//record["</span>, i ,<span class="string">"]/keywords/keyword/style/text()"</span>)), 
-                              FUN=<span class="keyword">function</span>(x) as.character(xmlValue(x))),collapse=<span class="string">","</span>)
-    
-    df[i,] = cbind(<span class="keyword">if</span>(length(df.title) != <span class="number">0</span> ) df.title <span class="keyword">else</span> <span class="string">""</span>, 
-                   <span class="keyword">if</span>(length(df.date) != <span class="number">0</span> ) df.date <span class="keyword">else</span> <span class="string">""</span>, 
-                   <span class="keyword">if</span>(length(df.journal_title) != <span class="number">0</span> ) df.journal_title <span class="keyword">else</span> <span class="string">""</span>,
-                   <span class="keyword">if</span>(length(df.address) != <span class="number">0</span> ) df.address <span class="keyword">else</span> <span class="string">""</span>,
-                   <span class="keyword">if</span>(length(df.author) != <span class="number">0</span> ) df.author <span class="keyword">else</span> <span class="string">""</span>,
-                   <span class="keyword">if</span>(length(df.abstract) != <span class="number">0</span> ) df.abstract <span class="keyword">else</span> <span class="string">""</span>,
-                   <span class="keyword">if</span>(length(df.keyword) != <span class="number">0</span> ) df.keyword <span class="keyword">else</span> <span class="string">""</span>
-    )
-  }
-  
-  <span class="comment">#### choose the country where the majority authors come from</span>
-  <span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(df$address)){df$country[i] = addr.country(df$address[i])}
-
-  df$date = as.numeric(df$date)
-  df
-}
-<span class="comment">## end</span>
-
-df = getdf(<span class="string">"/user/.../porn.xml"</span>) <span class="comment"># 得到一个dataframe</span>
-</pre></td></tr></table></figure>
+<script src="https://gist.github.com/yangliume/11368803.js"></script>
 
 <p>好了，最重要的事情已经完成了，当然，根据需要，你可以添加其他变量，如times cited，isbn，language等，这取决于你得到的xml文件跟你所搜索的关键词。有了这三个变量，我们可以通过一些技巧（正则等）得到被引用次数，引文数，影响因子，期刊分类等，也可以根据affiliation里的国家名，对其进行提取匹配，得到每篇文章由哪些国家合作完成的。这些就是后话了，我会陆续将代码贴出来。</p>
 <p>下面就先画第一幅图，每年发表的关于porn的文章数量。</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="keyword">require</span>(ggplot2)
-df.fig1 = data.frame(table(df$date))
-df.fig1$Var1 = as.numeric(as.character(df.fig1$Var1))
-df.fig1 = df.fig1[order(df.fig1$Var1, decreasing=<span class="literal">F</span>),]
-<span class="keyword">require</span>(ggplot)
-ggplot(df.fig1, aes(x = Var1, y = Freq))+
-  geom_bar(stat=<span class="string">"identity"</span>)+
-  xlab(<span class="string">"Time: year"</span>)+
-  ylab(<span class="string">"Frequencies"</span>)
-</pre></td></tr></table></figure>
+<script src="https://gist.github.com/yangliume/4f1392dee2293114baa1.js"></script>
 
 <p><img src="/img/fig1.png" alt="fig1"></p>
 <p>然后是表1，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="keyword">require</span>(ggplot2)
-df.table.country = <span class="literal">NULL</span>
-<span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">1</span>:length(df$country))
-{
-  tmp = unique(as.character(strsplit(as.character(df$country[i]), <span class="string">","</span>)[[<span class="number">1</span>]]))
-  df.table.country = c(df.table.country, tmp)
-}
-
-df.table.country = data.frame(table(df.table.country))
-colnames(df.table.country)[<span class="number">1</span>] = <span class="string">"country"</span>
-df.table.country = df.table.country[order(df.table.country$Freq, decreasing= <span class="literal">T</span>),]
-row.names(df.table.country) = <span class="literal">NULL</span>
-df.table.country.top30 = df.table.country[<span class="number">1</span>:<span class="number">30</span>,]
-</pre></td></tr></table></figure>
+<script src="https://gist.github.com/yangliume/72db4e5ce0b8a9cb89eb.js"></script>
 
 <p><img src="/img/table1.png" alt="table1"></p>
 <p>出人意料的是，我们平时不太了解的泰国夺得桂冠，美国紧随其后，高出第二集团的法国三倍，而中国则有24篇，超过了日本的14篇。看来，日本在porn方面的学术研究很少，可能因为其研究早已成熟，并产业化。</p>
