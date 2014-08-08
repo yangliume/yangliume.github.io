@@ -4,13 +4,33 @@
   <subtitle><![CDATA[a meiobenthologist's blog]]></subtitle>
   <link href="http://yangliufr.com/atom.xml" rel="self"/>
   <link href="http://yangliufr.com"/>
-  <updated>2014-07-31T15:44:41.488Z</updated>
+  <updated>2014-08-08T08:15:16.579Z</updated>
   <id>http://yangliufr.com/</id>
   <author>
     <name><![CDATA[Yang Liu]]></name>
     <email><![CDATA[youngleoyzu@gmail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[Crash Course 十分钟生态学 上线网易公开课]]></title>
+    <link href="http://yangliufr.com/2014/07/31/crash-course-ecology-chinese-subtitle-translated-on-163-open-courses/"/>
+    <id>http://yangliufr.com/2014/07/31/crash-course-ecology-chinese-subtitle-translated-on-163-open-courses/</id>
+    <published>2014-07-31T00:00:00.000Z</published>
+    <updated>2014-08-08T08:13:44.000Z</updated>
+    <content type="html"><![CDATA[<p>这会是一篇非常短的博客。希望大家点开之后不要失望。</p>
+<a id="more"></a>
+
+<blockquote>
+<p>Crash Course是Hank Green和John Green两兄弟在youtube上制作的一系列课程。讲师：Hank Green<br>职业：企业家，音乐家，博主。和他的兄弟John Green一起，在Youtube上开创了Crash Course和SciShow。该项目获得了YouTube“原创频道”项目的资助。</p>
+</blockquote>
+<object width="640" height="360"><param name="movie" value="http://swf.ws.126.net/openplayer/v02/-0-2_MA1VI2FUB_MA1VJ08VF-vimg1_ws_126_net//image/snapshot_movie/2014/8/P/1/MA1VJ04P1-.swf"></param><param name="allowScriptAccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="http://swf.ws.126.net/openplayer/v02/-0-2_MA1VI2FUB_MA1VJ08VF-vimg1_ws_126_net//image/snapshot_movie/2014/8/P/1/MA1VJ04P1-.swf" type="application/x-shockwave-flash" width="640" height="360" allowFullScreen="true" wmode="transparent" allowScriptAccess="always"></embed></object>
+
+<p>以上是对Crash Course这个公开课的介绍，相较其他名校公开课来讲，这个系列是以通俗易懂，惟妙惟肖和语速快而有趣著称，每一集都只有十分钟左右，让大家在短时间内高效并搞笑地接受知识的洗礼。</p>
+<p>我能够参与生态学系列翻译工作，主要是受到了<a href="http://www.weibo.com/u/2004104451?topnav=1&amp;wvr=5&amp;topsug=1" target="_blank">@糖醋陈皮</a>的邀请，他是在知乎上找到我的，想起来这已经是去年十月份的事情了。我本来以为这家伙是个博士还是某媒体在职人员，没想到后来的接触发现，他居然还没读大学，正在准备出国读本科！！！他小小年纪已经会自己写脚本学以致用了，而且自己翻译的化学、生物系列，正在翻译历史系列，我去！！！我等真是被死死的拍在了沙滩上。</p>
+<p>对于该系列，我负责了共5集的翻译，和最后所有的校对工作。由于第一次做校对，有个体会就是，刚开始看到不符合自己语言习惯的译法，我会去改，但想想其实应该尊重原译者；但有些生硬的直译，我会改成中国人习惯的意译，否则在短短的几秒钟内，观众是难以理解的。所以，我觉得，校对比翻译还要难，尤其是当这个校对还是处女座的时候。</p>
+<p>好了，网易目前还在压制其余的视频当中，他们也要进行校对和流程要走。话说，他们连个纪念品都不给的说，还要自己厚脸皮要，而且已经没有了，让我等着等着等着。</p>
+]]></content>
+  </entry>
   <entry>
     <title type="html"><![CDATA[埃博拉病毒——从文献计量角度展示其研究现状]]></title>
     <link href="http://yangliufr.com/2014/07/31/ebola-virus-what-bibliometric-analysis-could-tell-you/"/>
@@ -1242,24 +1262,5 @@ install.packages(<span class="string">"psych"</span>) <span class="comment">## N
 <p>最后，大家可以根据需要修改。</p>
 ]]></content>
     <category scheme="http://yangliufr.com/tags/菜鸟学R语言/" term="菜鸟学R语言"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[农药：中药里的秘制配方？]]></title>
-    <link href="http://yangliufr.com/2013/06/29/pesticide-formula-in-chinese-medicine/"/>
-    <id>http://yangliufr.com/2013/06/29/pesticide-formula-in-chinese-medicine/</id>
-    <published>2013-06-28T23:13:40.000Z</published>
-    <updated>2013-09-29T21:41:24.000Z</updated>
-    <content type="html"><![CDATA[<p>传统中草药有着很高的医药价值，但绿色和平-东亚的一项调查显示，这些中草药有很多农药残留，反而对人体健康又潜在危害。</p>
-<p>在中国，这些草药产品每天都会被搬上千家万户的餐桌上，早已成为中国烹饪文化遗产。人们会在汤或茶里放人参、红枣或者菊花，来治疗各种疾病。<br><a id="more"></a><br>不仅仅在中国，其他国家希望把中草药当做替代疗法的人们也非常多，<a href="http://www.who.int/bulletin/volumes/86/8/07-042820/en/" target="_blank">每年全球的市场价值达600亿美元</a>，增长迅速。</p>
-<p>但在这份研究报告中，《中草药：给人治病的药剂还是杀虫剂？》，对65个中草药产品进行了抽样调查，发现所有产品中都有一定量的农药残留，而且有些农药是中国明令禁止使用的。</p>
-<p><img src="/img/pesticideherb_thumb.jpg" alt="herb-pesticide"></p>
-<p>很多中草药产品是在化学集约农业的模式下培养出来的，早就不是野生采摘的了，所以现在很难找到无毒无害食物。检测报告显示，很多被世界卫生组织认定的高毒性物质都又被监测出来，而且残留浓度已经超过欧洲食品安全标准。这类有害物可以在人体内进行生物积累，慢性农药中毒会导致痴呆、荷尔蒙紊乱和丧失生育功能。</p>
-<p><img src="/img/pesticideherb1_thumb.jpg" alt="herb-pesticide"></p>
-<p>绿色和平-东亚正在督促中国政府严格监管控制非法农药的使用，并提供减少农药使用量的时间表，承诺彻底根除农药在农业生产中的应用。此外，绿色和平组织呼吁中国政府将更多资金投入到生态农业的实践中去。</p>
-<p>而生态农业项目也是绿色和平组织正在极力推广的，详见网页：</p>
-<p><a href="http://www.greenpeace.org/international/en/campaigns/agriculture/solution-ecological-farming/" target="_blank">http://www.greenpeace.org/international/en/campaigns/agriculture/solution-ecological-farming/</a></p>
-<p>本文编译自<a href="greenpeace.org">greenpeace.org</a></p>
-]]></content>
-    <category scheme="http://yangliufr.com/tags/绿色和平/" term="绿色和平"/>
   </entry>
 </feed>
