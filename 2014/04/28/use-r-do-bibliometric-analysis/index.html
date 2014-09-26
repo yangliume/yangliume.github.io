@@ -12,18 +12,26 @@
   
     <meta name="description" content="三个月前，我发了篇博客菜鸟学R语言：结合文献数据库，分析学科发展概况，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。">
   
-  <meta content="article" property="og:type">
-<meta content="菜鸟学R语言：用R做文献分析、计量教程——以porn为例" property="og:title">
-<meta content="http://yangliufr.com/2014/04/28/use-r-do-bibliometric-analysis/" property="og:url">
-<meta content="/img/porn-endnote1.png" property="og:image">
-<meta content="Yang Liu fr" property="og:site_name">
-<meta content="三个月前，我发了篇博客菜鸟学R语言：结合文献数据库，分析学科发展概况，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。" property="og:description">
-<meta content="summary" name="twitter:card">
+  <meta name="description" content="三个月前，我发了篇博客菜鸟学R语言：结合文献数据库，分析学科发展概况，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="菜鸟学R语言：用R做文献分析、计量教程——以porn为例">
+<meta property="og:url" content="http://yangliufr.com/2014/04/28/use-r-do-bibliometric-analysis/">
+<meta property="og:site_name" content="Yang Liu fr">
+<meta property="og:description" content="三个月前，我发了篇博客菜鸟学R语言：结合文献数据库，分析学科发展概况，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。">
+<meta property="og:image" content="/img/porn-endnote1.png">
+<meta property="og:image" content="/img/save as xml.png">
+<meta property="og:image" content="/img/fig1.png">
+<meta property="og:image" content="/img/table1.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="菜鸟学R语言：用R做文献分析、计量教程——以porn为例">
+<meta name="twitter:description" content="三个月前，我发了篇博客菜鸟学R语言：结合文献数据库，分析学科发展概况，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。">
+
   
     <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
   
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
+
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 <script type="text/javascript">
@@ -71,7 +79,7 @@
     
       <div class="icon"></div>
       <a href="/2014/04/28/use-r-do-bibliometric-analysis/">
-  <time datetime="2014-04-28T00:00:00.000Z">
+  <time datetime="2014-04-27T22:00:00.000Z">
     2014 / 04 / 28
   </time>
 </a>
@@ -85,12 +93,12 @@
   
   <div class="entry">
     
-      <p>三个月前，我发了篇博客<a href="http://yangliufr.com/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。</p>
+      <p>三个月前，我发了篇博客<a href="http://yangliufr.com/2014/02/05/use-r-to-analyse-literatures-to-get-a-research-trend/" target="_blank" rel="external">菜鸟学R语言：结合文献数据库，分析学科发展概况</a>，文中介绍了思路和初步结果，但没有贴出代码。最近，我已经开始着手将分析结果整理一下写篇论文了，也想借写博文的机会，重新梳理一下自己的思路。也借这个机会将我的方法分享给大家，共同学习交流。</p>
 <a id="more"></a>
 
 <p>如果读者你通过搜索看到我的这篇文章，那么你不是图书馆情报分析人员，就是和我一样的有这个想法的普通学生，这很好。我的方法或者思路只适用于以下这种情况，即，用户已经确定了要搜索的关键词，可以是一个，也可以是多个，这些关键词要能足够代表你想要研究的方向，而且尽可能的避免关键词的重复（跨学科）定义，或者无代表性的关键词，除非你有意想研究很大很广的方向，也未尝不可。在确定了关键词后，我们就可以开始第一步了。</p>
 <h3 id="用EndNote获取包含文献题录信息的XML文件">用EndNote获取包含文献题录信息的XML文件</h3>
-<p><strong>要用桌面版的EndNote</strong>。我注意到有位美籍华人科学家陈超美早就开发出一款基于Web of Science的<a href="http://cluster.cis.drexel.edu/~cchen/citespace/" target="_blank">文献计量分析软件</a>，而且已经有很多发表的论文使用这款软件。我尝试使用过这款软件，我不知道是不是我没有完全看懂了说明书，它获取包含题录信息文件的方法是，登录WoS网页版，手动分批下载txt文件，因为网页版有每次只能提取500条题录的限制，在这种情况下，如果你需要获取上万条题录，那么这将是非常耗时的一项任务。鉴于我们普通屌丝暂时没有硕士生或本科生帮忙，我推荐大家看一下我的方法。<br>在桌面版EndNote中搜索你要的关键词，如果是多个关键词，没关系，EndNote自带去重功能（点击顶部菜单reference，选择find duplicate即可）。下面我以porn<em>（</em>，代表匹配所有例如pornograph,pornography等单词，这种正则表达式要先验证唯一性和可代表性，porn*尚未被验证）为例。</p>
+<p><strong>要用桌面版的EndNote</strong>。我注意到有位美籍华人科学家陈超美早就开发出一款基于Web of Science的<a href="http://cluster.cis.drexel.edu/~cchen/citespace/" target="_blank" rel="external">文献计量分析软件</a>，而且已经有很多发表的论文使用这款软件。我尝试使用过这款软件，我不知道是不是我没有完全看懂了说明书，它获取包含题录信息文件的方法是，登录WoS网页版，手动分批下载txt文件，因为网页版有每次只能提取500条题录的限制，在这种情况下，如果你需要获取上万条题录，那么这将是非常耗时的一项任务。鉴于我们普通屌丝暂时没有硕士生或本科生帮忙，我推荐大家看一下我的方法。<br>在桌面版EndNote中搜索你要的关键词，如果是多个关键词，没关系，EndNote自带去重功能（点击顶部菜单reference，选择find duplicate即可）。下面我以porn<em>（</em>，代表匹配所有例如pornograph,pornography等单词，这种正则表达式要先验证唯一性和可代表性，porn*尚未被验证）为例。</p>
 <p>首先，我选择的是PubMed数据库，因为我的Web of Science数据库有问题，可以搜索，但是无法提取，会出现error reading record错误。如果你的网络允许，推荐用Web of Science Core Collection数据库搜索，因为这个最全。</p>
 <p><img src="/img/porn-endnote1.png" alt="porn-endnote1"></p>
 <p>我得到了1472条题录，然后我创建一个group，名为porn，把搜索到的题录全选拖进这个分组，左键点击这个分组，然后从顶部菜单选择file-export，在保存时，选择save as xml。</p>

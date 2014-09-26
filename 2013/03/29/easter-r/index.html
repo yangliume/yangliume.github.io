@@ -12,18 +12,22 @@
   
     <meta name="description" content="为什么说“又”呢，因为法国的假日太多了。">
   
-  <meta content="article" property="og:type">
-<meta content="又放假了，这次是“复活节”" property="og:title">
-<meta content="http://yangliufr.com/2013/03/29/easter-r/" property="og:url">
-<meta property="og:image">
-<meta content="Yang Liu fr" property="og:site_name">
-<meta content="为什么说“又”呢，因为法国的假日太多了。" property="og:description">
-<meta content="summary" name="twitter:card">
+  <meta name="description" content="为什么说“又”呢，因为法国的假日太多了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="又放假了，这次是“复活节”">
+<meta property="og:url" content="http://yangliufr.com/2013/03/29/easter-r/">
+<meta property="og:site_name" content="Yang Liu fr">
+<meta property="og:description" content="为什么说“又”呢，因为法国的假日太多了。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="又放假了，这次是“复活节”">
+<meta name="twitter:description" content="为什么说“又”呢，因为法国的假日太多了。">
+
   
     <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
   
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
+
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 <script type="text/javascript">
@@ -71,7 +75,7 @@
     
       <div class="icon"></div>
       <a href="/2013/03/29/easter-r/">
-  <time datetime="2013-03-29T00:00:00.000Z">
+  <time datetime="2013-03-28T23:00:00.000Z">
     2013 / 03 / 29
   </time>
 </a>
@@ -87,14 +91,14 @@
     
       <p>为什么说“又”呢，因为法国的假日太多了。<br><a id="more"></a></p>
 <h4 id="1-_法国一年有多少假期？">1. 法国一年有多少假期？</h4>
-<p>对于我这种上班就是放假，放假还想上班，闲不住的人来说，法国的假期很人“抓狂“，来法国不到一年，没数过有多少假期，不过不<a href="http://fr.hujiang.com/new/p115379/" target="_blank">搜</a>不知道：</p>
+<p>对于我这种上班就是放假，放假还想上班，闲不住的人来说，法国的假期很人“抓狂“，来法国不到一年，没数过有多少假期，不过不<a href="http://fr.hujiang.com/new/p115379/" target="_blank" rel="external">搜</a>不知道：</p>
 <blockquote>
 <p>法国共有11个法定假日，分别是国庆节、圣诞节、元旦、五一劳动节、万圣节、圣灵降临节、复活节、耶稣升天节、圣母升天节以及一战停战日和二战停战日。如果假日当天是星期二或星期四，那么这一天可以“带”上星期一或星期五与双休日连休。</p>
 </blockquote>
 <p>彻头彻尾的”懒人国“啊，不过如此弹丸之国的经济总量世界第五，也就暂且放他一马吧。尤其是我所在的图卢兹——空客航天城，作为非专业人士看来，就是一个普通的欧洲小城。</p>
 <h4 id="2-_复活节是干吗的？可以吃吗？">2. 复活节是干吗的？可以吃吗？</h4>
 <p>作为一个人文知识极度匮乏的理科生，一个在资本主义的水深火热中生存的无宗教信仰的社会主义好青年，复活节对我来说就是，不要去单位了。</p>
-<p>我专门查了下<a href="http://baike.baidu.com/view/1462.htm" target="_blank">复活节</a>（法语，La Pâque），</p>
+<p>我专门查了下<a href="http://baike.baidu.com/view/1462.htm" target="_blank" rel="external">复活节</a>（法语，La Pâque），</p>
 <blockquote>
 <p>复活节是纪念耶稣基督在十字架受刑死后复活的节日，西方信基督教的国家都过这个节。每年春分月圆之后第一个星期日。</p>
 </blockquote>
@@ -120,56 +124,18 @@
 </ol>
 <p>得出答数即可定出复活节的日期。若为正数，月份为4月；如为负数，月份为3月；若为0，则为3月31日。</p>
 <p>好吧，我读到这的时候，鼠标已经很自然的去点R studio了，因为我只会用简单的数据分析函数，还没用过R的自定义function功能，正巧dapeng同学前几天写了相关的文章，于是我参考了一下R in Nutshell，写了个自定义函数。</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-</pre></td><td class="code"><pre>easter &lt;- <span class="keyword">function</span>(x){
-  n &lt;- x - <span class="number">1900</span>
-  a &lt;- n %% <span class="number">19</span>
-  q &lt;- n %/% <span class="number">4</span>
-  b &lt;- (<span class="number">7</span>*a+<span class="number">1</span>) %/% <span class="number">19</span>
-  m &lt;- (<span class="number">11</span> * a + <span class="number">4</span> - b) %% <span class="number">29</span>
-  w &lt;- (n + q + <span class="number">31</span> - m) %% <span class="number">7</span>
-  d &lt;- <span class="number">25</span> - m - w
-  <span class="keyword">if</span>(d &gt; <span class="number">0</span> ){
-    print(paste(d,<span class="string">"April"</span>))
-  }<span class="keyword">else</span>{
-    print(<span class="string">"31, March"</span>)
-  }
-}
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">easter &lt;- <span class="keyword">function</span>(x){</div><div class="line">  n &lt;- x - <span class="number">1900</span></div><div class="line">  a &lt;- n %% <span class="number">19</span></div><div class="line">  q &lt;- n %/% <span class="number">4</span></div><div class="line">  b &lt;- (<span class="number">7</span>*a+<span class="number">1</span>) %/% <span class="number">19</span></div><div class="line">  m &lt;- (<span class="number">11</span> * a + <span class="number">4</span> - b) %% <span class="number">29</span></div><div class="line">  w &lt;- (n + q + <span class="number">31</span> - m) %% <span class="number">7</span></div><div class="line">  d &lt;- <span class="number">25</span> - m - w</div><div class="line">  <span class="keyword">if</span>(d &gt; <span class="number">0</span> ){</div><div class="line">    print(paste(d,<span class="string">"April"</span>))</div><div class="line">  }<span class="keyword">else</span>{</div><div class="line">    print(<span class="string">"31, March"</span>)</div><div class="line">  }</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>运行以上代码之后，就可以随便输入1900~2099之间的任意数字，得出那一年的复活节日期了，当然要用以下格式才行，比如我要看2013年的是哪一天：</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>easter(<span class="number">2013</span>)
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">easter(<span class="number">2013</span>)</div></pre></td></tr></table></figure>
 
 <p>所得到的结果为：</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>[<span class="number">1</span>] <span class="string">"31, March"</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">1</span>] <span class="string">"31, March"</span></div></pre></td></tr></table></figure>
 
 <p>好玩吧？所用到的关键函数是：</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="keyword">function</span>() {}
-<span class="keyword">if</span>() { <span class="keyword">else</span> { } }
-paste()
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span>() {}</div><div class="line"><span class="keyword">if</span>() { <span class="keyword">else</span> { } }</div><div class="line">paste()</div></pre></td></tr></table></figure>
 
-<p>以上就算做复活节的<a href="http://baike.baidu.com/view/24567.htm" target="_blank">彩蛋</a>吧，</p>
+<p>以上就算做复活节的<a href="http://baike.baidu.com/view/24567.htm" target="_blank" rel="external">彩蛋</a>吧，</p>
 <blockquote>
 <p>复活节彩蛋是复活节里最重要的食物象征，意味着生命的开始与延续。</p>
 </blockquote>

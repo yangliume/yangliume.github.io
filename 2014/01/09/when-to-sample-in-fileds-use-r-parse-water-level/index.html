@@ -12,18 +12,23 @@
   
     <meta name="description" content="新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。">
   
-  <meta content="article" property="og:type">
-<meta content="可以去河里采样了吗？" property="og:title">
-<meta content="http://yangliufr.com/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/" property="og:url">
-<meta content="/img/Garonne-water-level.png" property="og:image">
-<meta content="Yang Liu fr" property="og:site_name">
-<meta content="新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。" property="og:description">
-<meta content="summary" name="twitter:card">
+  <meta name="description" content="新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可以去河里采样了吗？">
+<meta property="og:url" content="http://yangliufr.com/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/">
+<meta property="og:site_name" content="Yang Liu fr">
+<meta property="og:description" content="新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。">
+<meta property="og:image" content="/img/Garonne-water-level.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可以去河里采样了吗？">
+<meta name="twitter:description" content="新学期开始啦！第一篇论文终于写完了，导师和我已经改了无数遍，基本定稿了，正在等待其他作者通读一遍，认为没问题就要投了。下面的任务就是开始新的实验，我需要去加龙河的河床上去采样，生物膜、河水、底泥啥的。但如果水位超过一定程度，就不安全，我们就要等水位降下来，才再跟司机约时间去。">
+
   
     <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
   
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
+
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 <script type="text/javascript">
@@ -71,7 +76,7 @@
     
       <div class="icon"></div>
       <a href="/2014/01/09/when-to-sample-in-fileds-use-r-parse-water-level/">
-  <time datetime="2014-01-09T00:00:00.000Z">
+  <time datetime="2014-01-08T23:00:00.000Z">
     2014 / 01 / 09
   </time>
 </a>
@@ -91,27 +96,7 @@
 <p>法国政府网站上有各个水文站公布的数据的，我们一般打开网站看看水位超过0.8m没有，就可以决定要不要去了。</p>
 <p><img src="/img/Garonne-water-level.png" alt="Garonne water level from France goverment"></p>
 <p>网站上也很贴心的给出了表格数据，每天、每三天和每七天的数据，看到table，我就想抓。于是就写了个非常简单的脚本。</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre><span class="keyword">library</span>(XML)
-
-station_url = <span class="string">"http://www.vigicrues.gouv.fr/niveau3.php?idstation=1818&typegraphe=h&AffProfondeur=24&nbrstations=5&ong=2&Submit=Refaire+le+tableau+-+Valider+la+s%C3%A9lection"</span> <span class="comment">#the site we care about</span>
-table_station_url = as.data.frame(readHTMLTable(station_url)[<span class="number">1</span>])
-table_station_url[,<span class="number">2</span>] = as.numeric(as.character(table_station_url[,<span class="number">2</span>]))
-<span class="keyword">if</span>(mean(table_station_url[,<span class="number">2</span>]) &gt;= <span class="number">0.8</span>){
-  print(<span class="string">"No way! It's dangerous!"</span>)
-  }<span class="keyword">else</span>{
-    print(<span class="string">"Yeah! It's ready to go!!"</span>)
-}
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">library</span>(XML)</div><div class="line"></div><div class="line">station_url = <span class="string">"http://www.vigicrues.gouv.fr/niveau3.php?idstation=1818&typegraphe=h&AffProfondeur=24&nbrstations=5&ong=2&Submit=Refaire+le+tableau+-+Valider+la+s%C3%A9lection"</span> <span class="comment">#the site we care about</span></div><div class="line">table_station_url = as.data.frame(readHTMLTable(station_url)[<span class="number">1</span>])</div><div class="line">table_station_url[,<span class="number">2</span>] = as.numeric(as.character(table_station_url[,<span class="number">2</span>]))</div><div class="line"><span class="keyword">if</span>(mean(table_station_url[,<span class="number">2</span>]) &gt;= <span class="number">0.8</span>){</div><div class="line">  print(<span class="string">"No way! It's dangerous!"</span>)</div><div class="line">  }<span class="keyword">else</span>{</div><div class="line">    print(<span class="string">"Yeah! It's ready to go!!"</span>)</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>每天在R里面运行一下这个脚本即可。其实，这有点画蛇添足，因为从实用角度讲，我其实点一下网页也能知道能不能去的。说白了，就是闲的。</p>
 <p>题外话，最近在学python，从头学，因为我还挺喜欢抓取网站数据的。有国内同学想做奢侈品代购，我也写了个R脚本，抓取prada官网的价格和有无存货（里面对我来说，稍微有点技术含量的就是，找到了个有规律的json地址，于是存货与否就搞定了）。但这都只是凤毛麟角，要抓取不学python怎么行？</p>

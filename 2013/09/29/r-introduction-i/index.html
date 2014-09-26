@@ -17,23 +17,37 @@
 分享自己的学习心得体会
 与其他初学者一起交流">
   
-  <meta content="article" property="og:type">
-<meta content="菜鸟学R语言：用R做数据分析（零基础）之数据类型" property="og:title">
-<meta content="http://yangliufr.com/2013/09/29/r-introduction-i/" property="og:url">
-<meta property="og:image">
-<meta content="Yang Liu fr" property="og:site_name">
-<meta content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
+  <meta name="description" content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
 
 为上课做好笔记
 梳理R相关的基础知识
 分享自己的学习心得体会
-与其他初学者一起交流" property="og:description">
-<meta content="summary" name="twitter:card">
+与其他初学者一起交流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="菜鸟学R语言：用R做数据分析（零基础）之数据类型">
+<meta property="og:url" content="http://yangliufr.com/2013/09/29/r-introduction-i/">
+<meta property="og:site_name" content="Yang Liu fr">
+<meta property="og:description" content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
+
+为上课做好笔记
+梳理R相关的基础知识
+分享自己的学习心得体会
+与其他初学者一起交流">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="菜鸟学R语言：用R做数据分析（零基础）之数据类型">
+<meta name="twitter:description" content="接着上一篇来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：
+
+为上课做好笔记
+梳理R相关的基础知识
+分享自己的学习心得体会
+与其他初学者一起交流">
+
   
     <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
   
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
+
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 <script type="text/javascript">
@@ -95,7 +109,7 @@
   
   <div class="entry">
     
-      <p>接着<a href="http://yangliufr.com/2013/09/24/r-introduction/">上一篇</a>来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：</p>
+      <p>接着<a href="http://yangliufr.com/2013/09/24/r-introduction/" target="_blank" rel="external">上一篇</a>来介绍。第一周课的内容还没有总结完，争取有所收获。关于如何安装R以及可选安装的RStudio等，这里不做介绍了。市面上有很多中英文教材了，我也是看着那些教材教程过来的，网络上的资源更是丰富，我遇到的很多偏门的问题都可以搜索到，所以我只是在踏着前辈们走过的路再走一遍而已。我写这个教程的目的：</p>
 <ol>
 <li>为上课做好笔记</li>
 <li>梳理R相关的基础知识</li>
@@ -107,36 +121,10 @@
 <hr>
 <h2 id="R_基础知识">R 基础知识</h2>
 <h3 id="四则运算">四则运算</h3>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="comment"># Basic mathematical operations</span>
-<span class="number">3</span> + <span class="number">4</span>
-<span class="number">5</span> * <span class="number">5</span>
-<span class="number">12</span> / <span class="number">3</span>
-<span class="number">5</span>^<span class="number">5</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Basic mathematical operations</span></div><div class="line"><span class="number">3</span> + <span class="number">4</span></div><div class="line"><span class="number">5</span> * <span class="number">5</span></div><div class="line"><span class="number">12</span> / <span class="number">3</span></div><div class="line"><span class="number">5</span>^<span class="number">5</span></div></pre></td></tr></table></figure>
 
 <p>这几行代码就充分展现出了R的优势之一，<strong>即时互动</strong>。大家只要在console中输入以上一行代码，就可以直接得到结果，省去了传统语言编译的过程（并不是说R中不存在编译）。</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>&gt; <span class="number">3</span> + <span class="number">4</span>
-[<span class="number">1</span>] <span class="number">7</span>
-&gt; <span class="number">5</span> * <span class="number">5</span>
-[<span class="number">1</span>] <span class="number">25</span>
-&gt; <span class="number">12</span> / <span class="number">3</span>
-[<span class="number">1</span>] <span class="number">4</span>
-&gt; <span class="number">5</span>^<span class="number">5</span>
-[<span class="number">1</span>] <span class="number">3125</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="number">3</span> + <span class="number">4</span></div><div class="line">[<span class="number">1</span>] <span class="number">7</span></div><div class="line">&gt; <span class="number">5</span> * <span class="number">5</span></div><div class="line">[<span class="number">1</span>] <span class="number">25</span></div><div class="line">&gt; <span class="number">12</span> / <span class="number">3</span></div><div class="line">[<span class="number">1</span>] <span class="number">4</span></div><div class="line">&gt; <span class="number">5</span>^<span class="number">5</span></div><div class="line">[<span class="number">1</span>] <span class="number">3125</span></div></pre></td></tr></table></figure>
 
 <p>以上就是运行结果。</p>
 <hr>
@@ -151,163 +139,33 @@
 <li>逻辑向量</li>
 </ul>
 <p>下面来创建一个含有数值1,3,5,7的向量</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>&gt; v &lt;- c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>) <span class="comment">#c() 是combine，集合的意思</span>
-&gt; x &lt;- c(<span class="number">0.5</span>, <span class="number">0.6</span>) <span class="comment">## numeric</span>
-&gt; x &lt;- c(<span class="literal">TRUE</span>, <span class="literal">FALSE</span>) <span class="comment">## logical</span>
-&gt; x &lt;- c(<span class="literal">T</span>, <span class="literal">F</span>) <span class="comment">## logical</span>
-&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>) <span class="comment">## character</span>
-&gt; x &lt;- <span class="number">9</span>:<span class="number">29</span> <span class="comment">## integer</span>
-&gt; x &lt;- c(<span class="number">1</span>+<span class="number">0i</span>, <span class="number">2</span>+<span class="number">4i</span>) <span class="comment">## complex</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; v &lt;- c(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>) <span class="comment">#c() 是combine，集合的意思</span></div><div class="line">&gt; x &lt;- c(<span class="number">0.5</span>, <span class="number">0.6</span>) <span class="comment">## numeric</span></div><div class="line">&gt; x &lt;- c(<span class="literal">TRUE</span>, <span class="literal">FALSE</span>) <span class="comment">## logical</span></div><div class="line">&gt; x &lt;- c(<span class="literal">T</span>, <span class="literal">F</span>) <span class="comment">## logical</span></div><div class="line">&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>) <span class="comment">## character</span></div><div class="line">&gt; x &lt;- <span class="number">9</span>:<span class="number">29</span> <span class="comment">## integer</span></div><div class="line">&gt; x &lt;- c(<span class="number">1</span>+<span class="number">0i</span>, <span class="number">2</span>+<span class="number">4i</span>) <span class="comment">## complex</span></div></pre></td></tr></table></figure>
 
 <p>但，如果把两种向量<code>c()</code>到一起，会得到什么样的向量集合呢？</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span>
-&gt; y &lt;- c(<span class="literal">TRUE</span>, <span class="number">2</span>) <span class="comment">## numeric</span>
-&gt; y &lt;- c(<span class="string">"a"</span>, <span class="literal">TRUE</span>) <span class="comment">## character</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; y &lt;- c(<span class="number">1.7</span>, <span class="string">"a"</span>) <span class="comment">## character</span></div><div class="line">&gt; y &lt;- c(<span class="literal">TRUE</span>, <span class="number">2</span>) <span class="comment">## numeric</span></div><div class="line">&gt; y &lt;- c(<span class="string">"a"</span>, <span class="literal">TRUE</span>) <span class="comment">## character</span></div></pre></td></tr></table></figure>
 
 <p>你会发现，这时向量集会被强制（coercion）转成同一类，为了符合向量的定义。这时，如果你需要提取其中的<strong>假向量</strong>用于运算，那就需要<code>as.**</code>functions，其中<code>**</code>可以是<code>numeric``logical``character``complex</code>等。如下，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>&gt; x &lt;- <span class="number">0</span>:<span class="number">6</span>
-&gt; class(x) <span class="comment">#class()用于查看向量的类</span>
-[<span class="number">1</span>] <span class="string">"integer"</span>
-&gt; as.numeric(x)
-[<span class="number">1</span>] <span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span>
-&gt; as.logical(x)
-[<span class="number">1</span>] <span class="literal">FALSE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span>
-&gt; as.character(x)
-[<span class="number">1</span>] <span class="string">"0"</span> <span class="string">"1"</span> <span class="string">"2"</span> <span class="string">"3"</span> <span class="string">"4"</span> <span class="string">"5"</span> <span class="string">"6"</span>
-&gt; as.complex(x)
-[<span class="number">1</span>] <span class="number">0</span>+<span class="number">0i</span> <span class="number">1</span>+<span class="number">0i</span> <span class="number">2</span>+<span class="number">0i</span> <span class="number">3</span>+<span class="number">0i</span> <span class="number">4</span>+<span class="number">0i</span> <span class="number">5</span>+<span class="number">0i</span> <span class="number">6</span>+<span class="number">0i</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt; x &lt;- <span class="number">0</span>:<span class="number">6</span></div><div class="line">&gt; class(x) <span class="comment">#class()用于查看向量的类</span></div><div class="line">[<span class="number">1</span>] <span class="string">"integer"</span></div><div class="line">&gt; as.numeric(x)</div><div class="line">[<span class="number">1</span>] <span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span></div><div class="line">&gt; as.logical(x)</div><div class="line">[<span class="number">1</span>] <span class="literal">FALSE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span> <span class="literal">TRUE</span></div><div class="line">&gt; as.character(x)</div><div class="line">[<span class="number">1</span>] <span class="string">"0"</span> <span class="string">"1"</span> <span class="string">"2"</span> <span class="string">"3"</span> <span class="string">"4"</span> <span class="string">"5"</span> <span class="string">"6"</span></div><div class="line">&gt; as.complex(x)</div><div class="line">[<span class="number">1</span>] <span class="number">0</span>+<span class="number">0i</span> <span class="number">1</span>+<span class="number">0i</span> <span class="number">2</span>+<span class="number">0i</span> <span class="number">3</span>+<span class="number">0i</span> <span class="number">4</span>+<span class="number">0i</span> <span class="number">5</span>+<span class="number">0i</span> <span class="number">6</span>+<span class="number">0i</span></div></pre></td></tr></table></figure>
 
 <p>如果使用<code>as.**</code>function把某类向量转化为另一类，则会得到<code>NA</code>s。如，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)
-&gt; as.numeric(x)
-[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
-Warning message:
-NAs introduced by coercion
-&gt; as.logical(x)
-[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; x &lt;- c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)</div><div class="line">&gt; as.numeric(x)</div><div class="line">[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line">Warning message:</div><div class="line">NAs introduced by coercion</div><div class="line">&gt; as.logical(x)</div><div class="line">[<span class="number">1</span>] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span></div></pre></td></tr></table></figure>
 
 <p>有时你可能还需要空白向量，可以用<code>vector()</code>来创建，例如创建一个长度为10的数值向量<code>x</code>，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)
-&gt; x
-[<span class="number">1</span>] <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; x &lt;- vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)</div><div class="line">&gt; x</div><div class="line">[<span class="number">1</span>] <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span></div></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="matrix_（矩阵）">matrix （矩阵）</h3>
 <p>矩阵（pl. matrices）具有维度（dimension）属性（attribute）的向量。该维度属性本身是一个长度为2的整数向量（nrow,ncol），行数和列数。</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre>&gt; m &lt;- matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
-&gt; m
-[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
-[<span class="number">1</span>,] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
-[<span class="number">2</span>,] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span>
-&gt; dim(m)
-[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span>
-&gt; attributes(m)
-$dim
-[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&gt; m &lt;- matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)</div><div class="line">&gt; m</div><div class="line">[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]</div><div class="line">[<span class="number">1</span>,] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line">[<span class="number">2</span>,] <span class="literal">NA</span> <span class="literal">NA</span> <span class="literal">NA</span></div><div class="line">&gt; dim(m)</div><div class="line">[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span></div><div class="line">&gt; attributes(m)</div><div class="line">$dim</div><div class="line">[<span class="number">1</span>] <span class="number">2</span> <span class="number">3</span></div></pre></td></tr></table></figure>
 
 <p>在R中建矩阵是遵从<strong>列优先（column-wise）</strong>的原则，即，优先按照顺序从左上角开始向右一列一列地填充。如，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>&gt; m &lt;- matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)
-&gt; m
-[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
-[<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt; m &lt;- matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)</div><div class="line">&gt; m</div><div class="line">[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]</div><div class="line">[<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span></div><div class="line">[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span></div></pre></td></tr></table></figure>
 
 <p>在了解了这个特性之后，我们就可使用<code>dim()</code>来为向量集创建矩阵了，大家只要注意<strong>列优先</strong>原则即可，如，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>&gt; m &lt;- <span class="number">1</span>:<span class="number">10</span>
-&gt; m
-[<span class="number">1</span>] <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span> <span class="number">10</span>
-&gt; dim(m) &lt;- c(<span class="number">2</span>, <span class="number">5</span>)
-&gt; m
-[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>] [,<span class="number">4</span>] [,<span class="number">5</span>]
-[<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; m &lt;- <span class="number">1</span>:<span class="number">10</span></div><div class="line">&gt; m</div><div class="line">[<span class="number">1</span>] <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span> <span class="number">10</span></div><div class="line">&gt; dim(m) &lt;- c(<span class="number">2</span>, <span class="number">5</span>)</div><div class="line">&gt; m</div><div class="line">[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>] [,<span class="number">4</span>] [,<span class="number">5</span>]</div><div class="line">[<span class="number">1</span>,] <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span></div><div class="line">[<span class="number">2</span>,] <span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">10</span></div></pre></td></tr></table></figure>
 
 <p>此外，在R中，你也可以使用<code>cbind()</code>（column-binding）和<code>rbind()</code>（row-binding）functions来创建矩阵。如，</p>
-<figure class="highlight r"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>&gt; x &lt;- <span class="number">1</span>:<span class="number">3</span>
-&gt; y &lt;- <span class="number">10</span>:<span class="number">12</span>
-&gt; cbind(x, y)
-x y
-[<span class="number">1</span>,] <span class="number">1</span> <span class="number">10</span>
-[<span class="number">2</span>,] <span class="number">2</span> <span class="number">11</span>
-[<span class="number">3</span>,] <span class="number">3</span> <span class="number">12</span>
-&gt; rbind(x, y)
-[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]
-x <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>
-y <span class="number">10</span> <span class="number">11</span> <span class="number">12</span>
-</pre></td></tr></table></figure>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&gt; x &lt;- <span class="number">1</span>:<span class="number">3</span></div><div class="line">&gt; y &lt;- <span class="number">10</span>:<span class="number">12</span></div><div class="line">&gt; cbind(x, y)</div><div class="line">x y</div><div class="line">[<span class="number">1</span>,] <span class="number">1</span> <span class="number">10</span></div><div class="line">[<span class="number">2</span>,] <span class="number">2</span> <span class="number">11</span></div><div class="line">[<span class="number">3</span>,] <span class="number">3</span> <span class="number">12</span></div><div class="line">&gt; rbind(x, y)</div><div class="line">[,<span class="number">1</span>] [,<span class="number">2</span>] [,<span class="number">3</span>]</div><div class="line">x <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></div><div class="line">y <span class="number">10</span> <span class="number">11</span> <span class="number">12</span></div></pre></td></tr></table></figure>
 
 <p>好了，今天就到这里吧，可能这种方式对那些以结果为导向的初学者来说，进度太慢，而且枯燥乏味吧。但是，我想对于想要学好R的零基础同学来说，这样会给大家一个更全面完整的认识吧。我个人认为，还是好好了解这些基础知识更好点，因为我之前就是结果导向，有时为了除bug，会耗费很长时间，其实就是类似的对<strong>对象</strong>、<strong>向量</strong>等基础知识一知半解造成的。如今，返回来再看这个会给自己建立一个体系，饶有趣味。</p>
 
