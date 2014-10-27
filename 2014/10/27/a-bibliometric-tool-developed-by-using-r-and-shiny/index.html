@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>A bibliometric tool developed by using R and shiny package | Yang Liu fr</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Yang Liu">
+  
+  
+    <meta name="description" content="To provide an easier way to summarise your customed EndNote library, I developed this tool and shared with my colleagues. Now, I decide to share its basic functions with you, presenting a thought of w">
+  
+  <meta name="description" content="To provide an easier way to summarise your customed EndNote library, I developed this tool and shared with my colleagues. Now, I decide to share its basic functions with you, presenting a thought of w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A bibliometric tool developed by using R and shiny package">
+<meta property="og:url" content="http://yangliufr.com/2014/10/27/a-bibliometric-tool-developed-by-using-r-and-shiny/">
+<meta property="og:site_name" content="Yang Liu fr">
+<meta property="og:description" content="To provide an easier way to summarise your customed EndNote library, I developed this tool and shared with my colleagues. Now, I decide to share its basic functions with you, presenting a thought of w">
+<meta property="og:image" content="/img/endnote.png">
+<meta property="og:image" content="/img/ups.png">
+<meta property="og:image" content="/img/ecolab.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A bibliometric tool developed by using R and shiny package">
+<meta name="twitter:description" content="To provide an easier way to summarise your customed EndNote library, I developed this tool and shared with my colleagues. Now, I decide to share its basic functions with you, presenting a thought of w">
+
+  
+    <link rel="alternate" href="/atom.xml" title="Yang Liu fr" type="application/atom+xml">
+  
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44434779-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">Yang Liu fr</a></h1>
+    <p><a href="/">a meiobenthologist&#39;s blog</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">博文目录</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/resume">简历</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/10/27/a-bibliometric-tool-developed-by-using-r-and-shiny/">
+  <time datetime="2014-10-26T23:00:00.000Z">
+    2014 / 10 / 27
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">A bibliometric tool developed by using R and shiny package</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>To <strong>provide an easier way to summarise your customed EndNote library</strong>, I developed this tool and shared with my colleagues. Now, I decide to share its basic functions with you, presenting a thought of what I and R language can contribute to bibliometric analysis which is “widely” used by librarians and small group of scientists.<br><a id="more"></a></p>
+<p><strong>You can take a look by <a href="https://yangliufr.shinyapps.io/a-bibliometric-tool/" target="_blank" rel="external">click here</a>, there are the same tutorial as here.</strong></p>
+<h2 id="How_to_use_it">How to use it</h2>
+<p><img src="/img/endnote.png" alt="endnote"></p>
+<p><strong>A licensed EndNote desktop software is required.</strong></p>
+<p>If you don’t have a EndNote desktop, you could download a 30 day free trial version <a href="http://endnote.com/" target="_blank" rel="external">here</a>.</p>
+<ol>
+<li>Open EndNote. You’d better search certain keywords that could represent a certain research field (this is on your own, not included in this tutorial) in Web of Science (TS) database or other ones (e.g. Pubmed). Or, if you prefer to summarise your collected library, you go directly next.</li>
+<li>Select all the references you just retrieved or preselect, click “File” upleft at the menu bar, click “Export”, a dialogue will pop up, enter the file name, modify the default file type from “Text only” to “XML”, leave the output style default, click “Save”, then you are half way there.</li>
+<li>Yes, you are in the right place. Just upload the XML file in your computer hard drive you just exported by click the button right of this tutorial. After finishing uploading, click the “Basic stats” tab to have a good look of the results. <strong>ATTENTION the size of the XML file would be better smaller than 30 MB (i.e. proximate 5000 references)</strong>; depending on the network connection and unpredicted/unknown numbers of simultaneous connections on this free web server, you could be waiting for <strong>several minutes</strong> and have a blank tab, during which please be patient and you’ll not be regret.</li>
+</ol>
+<p><strong>If you really don’t want to install a EndNote right now, I provide a XML file including all the papers about Ebola virus, <a href="https://drive.google.com/file/d/0B84yv0Cv1E0pTG5fb1h0b1Z5elE/" target="_blank" rel="external">click here</a>, you could download it and take a glance at my app without any risk of fault purchase of EndNote.</strong></p>
+<h2 id="What_you_can_get?">What you can get?</h2>
+<ol>
+<li>A line chart showing you the yearly trend of the numbers of selected publication.</li>
+<li>A pie chart showing you what languages the publications written in.</li>
+<li>A table given the top 30 most frequently occurred journals and their counts.</li>
+<li>A table given the top 30 keywords most frequently defined by the authors.</li>
+<li>A world map represented the numbers of authors in every country according to authors’ affiliation.</li>
+<li>A line chart give you the yearly trend of top 10 keywords</li>
+</ol>
+<p>You could drag and resize your browser (at least IE9+ and other popular browsers) to take a look at these charts, because I set up the width 800 pixels. Hope you enjoy them!</p>
+<p>Are you intrigued and want to get more? Please contact:</p>
+<p>Email: <strong>youngleoyzu#gmail.com</strong></p>
+<p><strong>Any advices to improve this app would be appreciated. Welcome to perfect this app together!</strong></p>
+<p>Notice: this app does not store any user data including the xml file uploaded by the users, no copyrights conflicted.</p>
+<h2 id="About">About</h2>
+<h3 id="Update:">Update:</h3>
+<ul>
+<li><p>Version 0.1.1 Oct.26 2014 - add “world map” and “keyword trend” functional tabs</p>
+</li>
+<li><p>Version 0.1.0 Oct.25 2014 - published online</p>
+</li>
+</ul>
+<h3 id="Personal_contacts:">Personal contacts:</h3>
+<ul>
+<li>email youngleoyzu#gmail.com</li>
+<li>weibo <a href="http://www.weibo.com/shanmusunny" target="_blank" rel="external">@shanmusunny</a></li>
+<li>my blog (in Chinese) <a href="http://yangliufr.com/" target="_blank" rel="external">http://yangliufr.com</a></li>
+</ul>
+<p>Now, I am a 3rd year PhD student in Université de Toulouse and EcoLab (Laboratoire écologie fonctionnelle et environnement).</p>
+<p><img src="/img/ups.png" alt="ups"> <img src="/img/ecolab.png" alt="ecolab"></p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/菜鸟学R语言/">菜鸟学R语言</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">评论</h1>
+  <div class="ds-thread" data-title="A bibliometric tool developed by using R and shiny package">
+  </div>
+</section>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Yang Liu</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'yangliume' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

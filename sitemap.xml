@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://yangliufr.com/2014/10/27/a-bibliometric-tool-developed-by-using-r-and-shiny/</loc>
+    <lastmod>2014-10-27T14:05:21.000Z</lastmod>
+  </url>
+  <url>
     <loc>http://yangliufr.com/2014/10/19/a-meiofauna-paper-published-on-nature-communication/</loc>
     <lastmod>2014-10-19T20:26:13.000Z</lastmod>
   </url>
